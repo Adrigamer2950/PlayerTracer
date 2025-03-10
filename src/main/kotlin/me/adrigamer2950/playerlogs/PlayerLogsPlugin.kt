@@ -1,9 +1,8 @@
-package me.adrigamer2950.ppt
+package me.adrigamer2950.playerlogs
 
 import me.adrigamer2950.adriapi.api.APIPlugin
 
-
-class PaperPluginTemplate : APIPlugin() {
+class PlayerLogsPlugin : APIPlugin() {
 
     override fun onPreLoad() {
         val preLoadTime = System.currentTimeMillis()
