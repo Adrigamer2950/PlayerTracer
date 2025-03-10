@@ -17,10 +17,10 @@ plugins {
 val versionIsBeta = (properties["version"] as String).lowercase().contains("beta")
 
 group = "me.adrigamer2950"
-version = properties["version"] as String /*+
+version = properties["version"] as String +
         if (versionIsBeta)
             "-${getGitCommitHash()}"
-        else ""*/
+        else ""
 
 repositories {
     mavenCentral()
