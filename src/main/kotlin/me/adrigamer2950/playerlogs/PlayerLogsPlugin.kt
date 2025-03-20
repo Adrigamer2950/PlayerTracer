@@ -5,6 +5,9 @@ import me.adrigamer2950.adriapi.api.APIPlugin
 class PlayerLogsPlugin : APIPlugin() {
 
     override fun onPreLoad() {
+        // Enabled while still in development
+        isDebug = true
+
         val preLoadTime = System.currentTimeMillis()
 
         logger.info("&6Loaded in ${System.currentTimeMillis() - preLoadTime}ms")
