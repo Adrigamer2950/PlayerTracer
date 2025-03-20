@@ -6,7 +6,8 @@ import xyz.jpenilla.runtask.task.AbstractRun
 import java.io.ByteArrayOutputStream
 
 plugins {
-    kotlin("jvm")
+    kotlin("jvm") version libs.versions.kotlin.get()
+    kotlin("plugin.serialization") version libs.versions.kotlin.get()
     alias(libs.plugins.shadow)
     alias(libs.plugins.plugin.yml)
     alias(libs.plugins.run.server)
@@ -40,6 +41,9 @@ dependencies {
     compileOnly(libs.adriapi)
 
     implementation(kotlin("stdlib-jdk8"))
+    implementation(kotlin("reflect"))
+
+    implementation(libs.kotlinx.serialization.json)
 }
 
 val targetJavaVersion = (properties["java-version"] as String).toInt()
@@ -60,7 +64,11 @@ bukkit {
 }
 
 tasks.build {
-    dependsOn("shadowJar")
+    finalizedBy("shadowJar")
+}
+
+tasks.shadowJar {
+    archiveClassifier.set("")
 }
 
 tasks.withType<JavaCompile>().configureEach {
@@ -68,6 +76,8 @@ tasks.withType<JavaCompile>().configureEach {
         options.release = targetJavaVersion
         options.encoding = "UTF-8"
     }
+
+    enabled = false
 }
 
 java {
