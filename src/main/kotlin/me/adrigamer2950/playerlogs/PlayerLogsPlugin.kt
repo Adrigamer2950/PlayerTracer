@@ -1,6 +1,7 @@
 package me.adrigamer2950.playerlogs
 
 import me.adrigamer2950.adriapi.api.APIPlugin
+import me.adrigamer2950.playerlogs.util.Asserts
 
 class PlayerLogsPlugin : APIPlugin() {
 
@@ -9,6 +10,8 @@ class PlayerLogsPlugin : APIPlugin() {
         isDebug = true
 
         val preLoadTime = System.currentTimeMillis()
+
+        Asserts.setLogger(this.logger)
 
         logger.info("&6Loaded in ${System.currentTimeMillis() - preLoadTime}ms")
     }
