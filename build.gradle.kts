@@ -38,7 +38,7 @@ dependencies {
 
     compileOnly(libs.paper.api)
 
-    compileOnly(libs.adriapi)
+    implementation(libs.adriapi)
 
     implementation(kotlin("stdlib-jdk8"))
     implementation(kotlin("reflect"))
@@ -60,7 +60,6 @@ bukkit {
     website = properties["website"] as String
     description = properties["description"] as String
     foliaSupported = true
-    depend = listOf("AdriAPI")
 }
 
 tasks.build {
@@ -174,9 +173,6 @@ tasks.named<RunServer>("runServer").configure {
     downloadPlugins {
         // ViaVersion
         hangar("ViaVersion", "5.2.0")
-
-        // AdriAPI
-        modrinth("adriapi", "2.3.0")
     }
 }
 
