@@ -70,22 +70,8 @@ tasks.shadowJar {
     archiveClassifier.set("")
 }
 
-tasks.withType<JavaCompile>().configureEach {
-    if (targetJavaVersion >= 10 || JavaVersion.current().isJava10Compatible) {
-        options.release = targetJavaVersion
-        options.encoding = "UTF-8"
-    }
-
-    enabled = false
-}
-
-java {
-    val javaVersion = JavaVersion.toVersion(targetJavaVersion)
-    sourceCompatibility = javaVersion
-    targetCompatibility = javaVersion
-    if (JavaVersion.current() < javaVersion) {
-        toolchain.languageVersion = JavaLanguageVersion.of(targetJavaVersion)
-    }
+kotlin {
+    jvmToolchain(targetJavaVersion)
 }
 
 fun getJarFile(): File? {
