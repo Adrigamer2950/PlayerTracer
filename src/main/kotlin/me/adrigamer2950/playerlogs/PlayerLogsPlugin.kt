@@ -6,6 +6,7 @@ import me.adrigamer2950.playerlogs.util.Asserts
 
 class PlayerLogsPlugin : APIPlugin() {
 
+    val logsProvider = LogsProvider(this.logger)
     val logsManager = LogsManager(this)
 
     override fun onPreLoad() {
