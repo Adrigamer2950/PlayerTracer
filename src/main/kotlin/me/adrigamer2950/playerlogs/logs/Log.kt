@@ -4,42 +4,37 @@ import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer
 import java.sql.Timestamp
 import java.time.Instant
-import kotlinx.serialization.Serializable
 import org.bukkit.OfflinePlayer
-
-typealias Serializable = Serializable
+import org.bukkit.entity.Player
+import java.util.UUID
 
 /**
  * Represents a log entry.
- * Every subclass should have the [Serializable] annotation.
  */
-@Serializable
-sealed class Log(val logMessage: String, val player: OfflinePlayer?, val timestamp: Long) {
-    constructor(logMessage: String, player: OfflinePlayer?) : this(logMessage, player, Timestamp.from(Instant.now()).time)
+abstract class Log(val message: String, player: OfflinePlayer, val timestamp: Long) {
+    constructor(message: String, player: OfflinePlayer) : this(message, player, Timestamp.from(Instant.now()).time)
+
+    val playerUUID = player.uniqueId // Player's UUID
 }
 
 /**
  * Represents a log entry relating a player joining the server.
  */
-@Serializable
-data class JoinServerLog(private val _player: OfflinePlayer) : Log("Joined the server", _player)
+class JoinServerLog(player: Player) : Log("Joined the server", player)
 
 /**
  * Represents a log entry relating a player leaving the server.
  */
-@Serializable
-data class LeaveServerLog(private val _player: OfflinePlayer) : Log("Leaved the server", _player)
+class LeaveServerLog(player: Player) : Log("Leaved the server", player)
 
 /**
  * Represents a log entry relating a player chatting.
  */
-@Serializable
-data class ChatLog(private val _player: OfflinePlayer, val message: String) : Log("Chat: $message", _player) {
-    constructor(player: OfflinePlayer, chatMessage: Component) : this(player, LegacyComponentSerializer.legacyAmpersand().serialize(chatMessage))
+class ChatLog(player: Player, chatMessage: String) : Log("Chat: $chatMessage", player) {
+    constructor(player: Player, chatMessage: Component) : this(player, LegacyComponentSerializer.legacyAmpersand().serialize(chatMessage))
 }
 
 /**
  * Represents a log entry relating a player executing a command.
  */
-@Serializable
-data class CommandLog(private val _player: OfflinePlayer, val command: String) : Log("Executed command: $command", _player)
+class CommandLog(player: Player, command: String) : Log("Executed command: $command", player)
