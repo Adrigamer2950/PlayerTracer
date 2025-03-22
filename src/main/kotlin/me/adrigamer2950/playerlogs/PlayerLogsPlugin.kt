@@ -1,9 +1,12 @@
 package me.adrigamer2950.playerlogs
 
 import me.adrigamer2950.adriapi.api.APIPlugin
+import me.adrigamer2950.playerlogs.logs.*
 import me.adrigamer2950.playerlogs.util.Asserts
 
 class PlayerLogsPlugin : APIPlugin() {
+
+    val logsManager = LogsManager(this)
 
     override fun onPreLoad() {
         // Enabled while still in development
@@ -12,6 +15,10 @@ class PlayerLogsPlugin : APIPlugin() {
         val preLoadTime = System.currentTimeMillis()
 
         Asserts.setLogger(this.logger)
+
+        this.logsProvider.registerLog(
+            JoinServerLog::class, LeaveServerLog::class, ChatLog::class, CommandLog::class
+        )
 
         logger.info("&6Loaded in ${System.currentTimeMillis() - preLoadTime}ms")
     }
