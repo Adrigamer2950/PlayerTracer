@@ -6,7 +6,6 @@ import java.sql.Timestamp
 import java.time.Instant
 import org.bukkit.OfflinePlayer
 import org.bukkit.entity.Player
-import java.util.UUID
 
 /**
  * Represents a log entry.

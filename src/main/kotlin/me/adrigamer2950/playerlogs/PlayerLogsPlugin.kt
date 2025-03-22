@@ -27,6 +27,8 @@ class PlayerLogsPlugin : APIPlugin() {
     override fun onPostLoad() {
         val postLoadTime = System.currentTimeMillis()
 
+        registerListener(LogsListener(this))
+
         listOf(
             "&e-------------------------------------------------------",
             "&eTHIS PLUGIN IS STILL &lUNDER DEVELOPMENT&r&e, SO IT'S",
