@@ -20,7 +20,7 @@ to a more detailed list of actions a player is doing, and has done.
 > You need Java 17+ to use this plugin. If you are using a lower version consider upgrading
 
 # TODOs
-- [ ] Store logs in a database (MySQL/MariaDB, SQLite, H2, YAML)
+- [ ] Store logs in a database (MySQL/MariaDB, SQLite, H2)
 - [ ] In-Game Log viewer
 - [ ] API
 - [ ] Modules (extensions which could be used to add more logs
