@@ -1,27 +1,17 @@
 package me.adrigamer2950.playerlogs.util
 
-import me.adrigamer2950.adriapi.api.logger.Logger
-import org.jetbrains.annotations.ApiStatus.Internal
-
-@Internal
-object Asserts {
-
-    private lateinit var logger: Logger
-
-    fun setLogger(logger: Logger) {
-        this.logger = logger
-    }
-
-    /**
-     * @return True if condition is false
-     */
-    fun assert(comment: String, condition: () -> Boolean): Boolean {
-        if (condition.invoke()) return false
-
-        logger.error("Assertion failed", AssertionException(comment))
-
-        return true
+fun assertTrue(condition: Boolean, message: String): Boolean {
+    return assertTrue(condition) {
+        throw AssertionError(message)
     }
 }
 
-class AssertionException(message: String) : RuntimeException(message)
+@JvmOverloads
+fun assertTrue(condition: Boolean, action: () -> Unit = {
+    throw AssertionError("Assertion failed")
+}): Boolean {
+    if (condition) return true
+
+    action.invoke()
+    return false
+}
