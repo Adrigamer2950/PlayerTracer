@@ -11,7 +11,7 @@ class PlayerLogsPlugin : APIPlugin() {
 
     override fun onPreLoad() {
         // Enabled while still in development
-        isDebug = true
+        debug = true
 
         val preLoadTime = System.currentTimeMillis()
 

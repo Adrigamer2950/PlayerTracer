@@ -1,9 +1,9 @@
 package me.adrigamer2950.playerlogs.logs
 
-import me.adrigamer2950.adriapi.api.logger.APILogger
+import me.adrigamer2950.adriapi.api.logger.Logger
 import kotlin.reflect.KClass
 
-class LogsProvider(private val logger: APILogger) {
+class LogsProvider(private val logger: Logger) {
 
     private val logs: MutableSet<KClass<out Log>> = mutableSetOf()
 

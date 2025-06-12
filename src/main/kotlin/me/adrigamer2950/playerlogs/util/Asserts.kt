@@ -1,14 +1,14 @@
 package me.adrigamer2950.playerlogs.util
 
-import me.adrigamer2950.adriapi.api.logger.APILogger
+import me.adrigamer2950.adriapi.api.logger.Logger
 import org.jetbrains.annotations.ApiStatus.Internal
 
 @Internal
 object Asserts {
 
-    private lateinit var logger: APILogger
+    private lateinit var logger: Logger
 
-    fun setLogger(logger: APILogger) {
+    fun setLogger(logger: Logger) {
         this.logger = logger
     }
 
