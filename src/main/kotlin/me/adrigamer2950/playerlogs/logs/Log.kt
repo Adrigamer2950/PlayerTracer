@@ -24,7 +24,7 @@ class JoinServerLog(player: Player) : Log("Joined the server", player)
 /**
  * Represents a log entry relating a player leaving the server.
  */
-class LeaveServerLog(player: Player) : Log("Leaved the server", player)
+class LeaveServerLog(player: Player) : Log("Left the server", player)
 
 /**
  * Represents a log entry relating a player chatting.
