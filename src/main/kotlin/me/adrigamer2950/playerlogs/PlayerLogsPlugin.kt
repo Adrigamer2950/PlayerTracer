@@ -14,9 +14,7 @@ class PlayerLogsPlugin : APIPlugin() {
 
         val preLoadTime = System.currentTimeMillis()
 
-        this.logsProvider.registerLog(
-            JoinServerLog::class, LeaveServerLog::class, ChatLog::class, CommandLog::class
-        )
+        this.logsProvider.registerLog(JoinServerLog::class, LeaveServerLog::class, ChatLog::class, CommandLog::class)
 
         logger.info("&6Loaded in ${System.currentTimeMillis() - preLoadTime}ms")
     }
