@@ -41,9 +41,16 @@ dependencies {
     implementation(libs.adriapi)
 
     implementation(kotlin("stdlib-jdk8"))
-    implementation(kotlin("reflect"))
 
     implementation(libs.kotlinx.serialization.json)
+
+    // Database
+    implementation(libs.exposed.core)
+    implementation(libs.exposed.crypt)
+    implementation(libs.exposed.dao)
+    implementation(libs.exposed.jdbc)
+    implementation(libs.exposed.json)
+    implementation(libs.h2)
 }
 
 val targetJavaVersion = (properties["java-version"] as String).toInt()
@@ -82,8 +89,7 @@ fun getJarFile(): File? {
 fun getGitCommitHash(): String {
     val byteOut = ByteArrayOutputStream()
 
-    @Suppress("DEPRECATION")
-    exec {
+    @Suppress("DEPRECATION") exec {
         commandLine = "git rev-parse --short HEAD".split(" ")
         standardOutput = byteOut
     }

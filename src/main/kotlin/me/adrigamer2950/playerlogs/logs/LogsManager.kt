@@ -8,8 +8,6 @@ class LogsManager(private val plugin: PlayerLogsPlugin) {
         if (!plugin.logsProvider.isLogRegistered(log::class))
             throw IllegalArgumentException("Log class isn't registered")
 
-        // TODO ADD LOG TO DATABASE
-
-        plugin.logger.debug("Added log: $log")
+        plugin.database.addLog(log)
     }
 }

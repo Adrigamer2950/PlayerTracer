@@ -5,6 +5,8 @@ jetbrains-annotations = "26.0.1"
 paper-api = "1.18.2-R0.1-SNAPSHOT"
 adriapi = "2.5.0"
 kotlinx-serialization-json = "1.8.0"
+exposed = "0.60.0"
+h2 = "2.2.224"
 
 # Plugins
 shadow = "8.3.6"
@@ -18,6 +20,12 @@ jetbrains-annotations = { group = "org.jetbrains", name = "annotations", version
 paper-api = { group = "io.papermc.paper", name = "paper-api", version.ref = "paper-api" }
 adriapi = { group = "me.adrigamer2950", name = "AdriAPI", version.ref = "adriapi" }
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinx-serialization-json" }
+exposed-core = { group = "org.jetbrains.exposed", name = "exposed-core", version.ref = "exposed" }
+exposed-crypt = { group = "org.jetbrains.exposed", name = "exposed-crypt", version.ref = "exposed" }
+exposed-dao = { group = "org.jetbrains.exposed", name = "exposed-dao", version.ref = "exposed" }
+exposed-jdbc = { group = "org.jetbrains.exposed", name = "exposed-jdbc", version.ref = "exposed" }
+exposed-json = { group = "org.jetbrains.exposed", name = "exposed-json", version.ref = "exposed" }
+h2 = { group = "com.h2database", name = "h2", version.ref = "h2" }
 
 [plugins]
 plugin-yml = { id = "net.minecrell.plugin-yml.bukkit", version.ref = "plugin-yml" }

@@ -1,12 +1,14 @@
 package me.adrigamer2950.playerlogs
 
 import me.adrigamer2950.adriapi.api.APIPlugin
+import me.adrigamer2950.playerlogs.database.impl.H2Database
 import me.adrigamer2950.playerlogs.logs.*
 
 class PlayerLogsPlugin : APIPlugin() {
 
     val logsProvider = LogsProvider(this.logger)
     val logsManager = LogsManager(this)
+    val database = H2Database(this)
 
     override fun onPreLoad() {
         // Enabled while still in development
@@ -15,6 +17,8 @@ class PlayerLogsPlugin : APIPlugin() {
         val preLoadTime = System.currentTimeMillis()
 
         this.logsProvider.registerLog(JoinServerLog::class, LeaveServerLog::class, ChatLog::class, CommandLog::class)
+
+        database.connect()
 
         logger.info("&6Loaded in ${System.currentTimeMillis() - preLoadTime}ms")
     }
