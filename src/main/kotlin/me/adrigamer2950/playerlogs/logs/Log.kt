@@ -10,8 +10,8 @@ import org.bukkit.entity.Player
 /**
  * Represents a log entry.
  */
-abstract class Log(val message: String, player: OfflinePlayer, val timestamp: ULong) {
-    constructor(message: String, player: OfflinePlayer) : this(message, player, Timestamp.from(Instant.now()).time.toULong())
+abstract class Log(val message: String, player: OfflinePlayer, val timestamp: Long) {
+    constructor(message: String, player: OfflinePlayer) : this(message, player, Timestamp.from(Instant.now()).time)
 
     val playerUUID = player.uniqueId // Player's UUID
 }
