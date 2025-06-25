@@ -6,6 +6,11 @@ import me.adrigamer2950.playerlogs.logs.*
 
 class PlayerLogsPlugin : APIPlugin() {
 
+    companion object {
+        lateinit var instance: PlayerLogsPlugin
+            private set
+    }
+
     val logsProvider = LogsProvider(this.logger)
     val logsManager = LogsManager(this)
     val database = H2Database(this)
@@ -13,6 +18,7 @@ class PlayerLogsPlugin : APIPlugin() {
     override fun onPreLoad() {
         // Enabled while still in development
         debug = true
+        instance = this
 
         val preLoadTime = System.currentTimeMillis()
 
