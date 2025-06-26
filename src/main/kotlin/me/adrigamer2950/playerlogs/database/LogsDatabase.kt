@@ -16,7 +16,6 @@ import kotlin.reflect.KClass
 import kotlin.reflect.full.isSubclassOf
 
 // TODO: Add support for SQLite, MySQL, etc..
-// TODO: Add a cache for logs to avoid makes queries every time something is logged
 abstract class LogsDatabase(protected val plugin: PlayerLogsPlugin) {
 
     private val logger: Logger = plugin.logger
