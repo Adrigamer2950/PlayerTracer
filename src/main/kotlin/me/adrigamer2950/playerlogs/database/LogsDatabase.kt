@@ -6,7 +6,7 @@ import me.adrigamer2950.playerlogs.database.tables.LogsTable
 import me.adrigamer2950.playerlogs.logs.Log
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
-import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.inList
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.isNotNull
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.insert
@@ -57,7 +57,7 @@ abstract class LogsDatabase(protected val plugin: PlayerLogsPlugin) {
     }
 
     @Suppress("UNCHECKED_CAST")
-    fun getLogs(playerUUID: UUID): List<Log> {
+    fun getLogs(vararg uuids: UUID): List<Log> {
         return transaction(database) {
             val logs = mutableListOf<Log>()
 
@@ -65,7 +65,7 @@ abstract class LogsDatabase(protected val plugin: PlayerLogsPlugin) {
             LogsTable.select(LogsTable.id, LogsTable.`class`, LogsTable.data)
                 .where(
                     LogsTable.data.isNotNull() and LogsTable.`class`.isNotNull()
-                            and (LogsTable.playerUUID eq playerUUID.toString()))
+                            and (LogsTable.playerUUID inList uuids.map { it.toString() }))
                 .mapNotNull {
                     val `class` = Class.forName(it[LogsTable.`class`]).kotlin
 
