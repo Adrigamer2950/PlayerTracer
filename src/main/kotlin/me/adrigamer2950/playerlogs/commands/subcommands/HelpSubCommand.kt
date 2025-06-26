@@ -15,7 +15,7 @@ class HelpSubCommand(private val parent: Command) : AbstractPLCommand("help", "S
 
         parent.subCommands.filter { it is AbstractPLCommand }.map { it as AbstractPLCommand }.forEach {
             user.sendMessage(
-                "&7/${it.getDisplayName(commandName)} &8- &7${it.commandDescription}"
+                "&7/${it.getDisplayName(commandName)} &8- &7${it.description}"
             )
         }
     }

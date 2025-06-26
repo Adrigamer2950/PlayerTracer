@@ -15,8 +15,5 @@ abstract class AbstractPLCommand(
     mutableListOf()
 ) {
 
-    val commandDescription: String
-        get() = super.getDescription()
-
     abstract fun getDisplayName(rootCommandName: String): String
 }
