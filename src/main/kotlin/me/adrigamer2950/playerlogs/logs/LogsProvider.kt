@@ -6,8 +6,12 @@ import kotlin.reflect.KClass
 
 class LogsProvider(private val logger: Logger) {
 
-    private val logs: MutableSet<LogGsonPair> = mutableSetOf()
+    val logs: MutableSet<LogGsonPair> = mutableSetOf()
 
+    /**
+     * @throws IllegalArgumentException If the class is not a valid log class or if its id is already registered
+     */
+    @Throws(IllegalArgumentException::class)
     fun registerLog(vararg classes: KClass<out Log>, jsonParser: Gson = Gson()) {
         classes.forEach {
             if (isLogRegistered(it)) return@forEach
@@ -16,9 +20,15 @@ class LogsProvider(private val logger: Logger) {
                 throw IllegalArgumentException("Invalid log class. Must not be a local or a class of an anonymous object")
             }
 
+            val duplicated = logs.firstOrNull { log -> getId(log.`class`) == getId(it) }
+
+            if (duplicated != null) {
+                throw IllegalArgumentException("A log type with ID '${getId(it)}' is already registered: ${duplicated.`class`.qualifiedName}")
+            }
+
             logs.add(LogGsonPair(it, jsonParser))
 
-            logger.debug("Registered log ${it.qualifiedName}")
+            logger.debug("Registered log ${it.qualifiedName} with id ${getId(it)}")
         }
     }
 
@@ -39,6 +49,17 @@ class LogsProvider(private val logger: Logger) {
         // Decode object from JSON
         return pair.gson.fromJson(json, `class`.java)
     }
+
+    /**
+     * @throws NoSuchFieldException If the class does not have a static field called `id`
+     */
+    @Throws(NoSuchFieldException::class)
+    fun getId(`class`: KClass<out Log>): String {
+        // Return the ID of the log class
+        return `class`.java.getField("ID").get(null) as String
+    }
+
+    fun getLogClassById(id: String): KClass<out Log>? = logs.firstOrNull { getId(it.`class`) == id }?.`class`
 }
 
 class LogGsonPair(val `class`: KClass<out Log>, val gson: Gson)
