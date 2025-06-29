@@ -12,7 +12,7 @@ class MainCommand : AbstractCommand(
     PlayerLogsPlugin.instance,
     "playerlogs",
     "Main command for PlayerLogs plugin",
-    listOf("pl", "plogs"),
+    listOf("pl", "plogs", "log", "logs"),
     mutableListOf()
 ) {
 
