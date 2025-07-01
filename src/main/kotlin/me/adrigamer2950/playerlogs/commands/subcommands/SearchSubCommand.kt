@@ -58,6 +58,11 @@ class SearchSubCommand : AbstractPLCommand("search", "Searches logs based on a q
                     return
                 }
             } else if (it.startsWith("t:")) {
+                if (after != null) {
+                    user.sendMessage("&cYou can only use the 't:' prefix once in a query")
+                    return
+                }
+
                 after = TimeUtil.parseDuration(it.removePrefix("t:"))
             } else {
                 user.sendMessage("&cInvalid query part: $it")
