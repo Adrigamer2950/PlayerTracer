@@ -26,6 +26,7 @@ class SearchSubCommand : AbstractPLCommand("search", "Searches logs based on a q
         var uuids = mutableListOf<UUID>()
         val actions = mutableListOf<KClass<out Log>>()
         var after: Timestamp? = null
+        var afterS: String? = null
 
         // Parse args into UUIDs and actions to search for
         args.forEach {
@@ -63,7 +64,8 @@ class SearchSubCommand : AbstractPLCommand("search", "Searches logs based on a q
                     return
                 }
 
-                after = TimeUtil.parseDuration(it.removePrefix("t:"))
+                afterS = it.removePrefix("t:")
+                after = TimeUtil.parseDuration(afterS)
             } else {
                 user.sendMessage("&cInvalid query part: $it")
                 return
@@ -80,6 +82,8 @@ class SearchSubCommand : AbstractPLCommand("search", "Searches logs based on a q
             user.sendMessage("&cYou must specify at least one action with 'a:' prefix.")
             return
         }
+
+        user.sendMessage("&7Searching logs for &6${uuids.size} &7player(s) with &6${actions.size} &7action(s)${if (afterS != null) " after &6$afterS" else ""}")
 
         // Get results
         val results = LogQuery(uuids.toTypedArray(), actions, after).getResults()
