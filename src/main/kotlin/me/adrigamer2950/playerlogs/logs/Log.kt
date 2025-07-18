@@ -11,7 +11,7 @@ import org.bukkit.entity.Player
 
 /**
  * Represents a log entry.
- * It MUST have a static field called `id` which is a unique identifier to use when querying logs
+ * It MUST have a static field called `info` of type [LogInfo] that contains basic information about the log
  */
 abstract class Log(val message: String, player: OfflinePlayer, val timestamp: Long) {
     constructor(message: String, player: OfflinePlayer) : this(message, player, Timestamp.from(Instant.now()).time)
