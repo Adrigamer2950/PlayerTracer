@@ -1,5 +1,7 @@
 package me.adrigamer2950.playerlogs.database
 
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import me.adrigamer2950.adriapi.api.logger.Logger
 import me.adrigamer2950.playerlogs.PlayerLogsPlugin
 import me.adrigamer2950.playerlogs.database.tables.LogsTable
@@ -78,6 +80,12 @@ abstract class LogsDatabase(protected val plugin: PlayerLogsPlugin) {
                 }
 
             return@transaction logs
+        }
+    }
+
+    suspend fun getLogsAsync(vararg uuids: UUID): List<Log> {
+        return withContext(Dispatchers.IO) {
+            getLogs(*uuids)
         }
     }
 }

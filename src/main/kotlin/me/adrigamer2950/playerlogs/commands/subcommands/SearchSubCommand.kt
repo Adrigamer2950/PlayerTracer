@@ -1,5 +1,6 @@
 package me.adrigamer2950.playerlogs.commands.subcommands
 
+import kotlinx.coroutines.Dispatchers
 import me.adrigamer2950.adriapi.api.user.User
 import me.adrigamer2950.playerlogs.PlayerLogsPlugin
 import me.adrigamer2950.playerlogs.commands.AbstractPLCommand
@@ -7,6 +8,7 @@ import me.adrigamer2950.playerlogs.commands.MainCommand
 import me.adrigamer2950.playerlogs.logs.Log
 import me.adrigamer2950.playerlogs.logs.LogQuery
 import me.adrigamer2950.playerlogs.util.TimeUtil
+import me.adrigamer2950.playerlogs.util.launchCoroutine
 import org.bukkit.Bukkit
 import java.sql.Timestamp
 import java.util.*
@@ -16,6 +18,8 @@ class SearchSubCommand(val parent: MainCommand) : AbstractPLCommand("search", "S
 
     companion object {
         val cache: MutableMap<UUID?, List<Log>> = mutableMapOf()
+
+        val searching: MutableSet<UUID?> = mutableSetOf()
     }
 
     override fun getDisplayName(rootCommandName: String): String = "$rootCommandName search &c<query>"
@@ -77,29 +81,44 @@ class SearchSubCommand(val parent: MainCommand) : AbstractPLCommand("search", "S
 
         // Basic checks
         if (uuids.isEmpty()) {
-            user.sendMessage("&cYou must specify a user with 'u:' prefix.")
+            user.sendMessage("&cYou must specify a user with 'u:' prefix")
             return
         }
 
         if (actions.isEmpty()) {
-            user.sendMessage("&cYou must specify at least one action with 'a:' prefix.")
+            user.sendMessage("&cYou must specify at least one action with 'a:' prefix")
             return
         }
 
-        user.sendMessage("&7Searching logs for &6${uuids.size} &7player(s) with &6${actions.size} &7action(s)${if (afterS != null) " after &6$afterS" else ""}")
+        val searcherUUID = if (user.isConsole()) null else user.getPlayerOrNull()!!.uniqueId
 
-        // Get results
-        val results = LogQuery(uuids.toTypedArray(), actions, after).getResults()
-
-        if (results.isEmpty()) {
-            user.sendMessage("&cNo data found")
+        if (searching.contains(searcherUUID)) {
+            user.sendMessage("&cYou are already searching logs. Please wait for the previous search to finish")
             return
         }
 
-        cache.put(if (user.isConsole()) null else user.getPlayerOrNull()!!.uniqueId, results)
+        user.sendMessage(
+            "&7Searching logs asynchronously for &6${uuids.size} &7player(s) with &6${actions.size} &7action(s)${if (afterS != null) " after &6$afterS" else ""}",
+            "&7This may take a while"
+        )
 
-        parent.subCommands.firstOrNull { it.info.name == "page" }?.execute(user, arrayOf("1"), commandName) ?: run {
-            user.sendMessage("&cThere was an error trying to paginate the results. Pagination command not found")
+        searching.add(searcherUUID)
+
+        launchCoroutine(Dispatchers.Default) {
+            // Get results
+            val results = LogQuery(uuids.toTypedArray(), actions, after).getResults()
+
+            if (results.isEmpty()) {
+                user.sendMessage("&cNo data found")
+                return@launchCoroutine
+            }
+
+            cache.put(searcherUUID, results)
+            searching.remove(searcherUUID)
+
+            parent.subCommands.firstOrNull { it.info.name == "page" }?.execute(user, arrayOf("1"), commandName) ?: run {
+                user.sendMessage("&cThere was an error trying to paginate the results. Pagination command not found")
+            }
         }
     }
 

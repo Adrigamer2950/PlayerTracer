@@ -19,8 +19,8 @@ class LogQuery(
         }
     }
 
-    fun getResults(): List<Log> {
-        return PlayerLogsPlugin.instance.database.getLogs(*uuids).filter { log ->
+    suspend fun getResults(): List<Log> {
+        return PlayerLogsPlugin.instance.database.getLogsAsync(*uuids).filter { log ->
             actions.contains(log::class)
         }.filter { if (after != null) Timestamp(it.timestamp).after(after) else true }
     }
