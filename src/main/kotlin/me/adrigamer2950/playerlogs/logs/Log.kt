@@ -25,7 +25,8 @@ abstract class Log(val message: String, player: OfflinePlayer, val timestamp: Lo
 class JoinServerLog(player: Player) : Log("Joined the server", player) {
 
     companion object {
-        const val ID = "join"
+        @JvmField
+        val metadata = LogInfo("join", "Triggered when a player connects to the server")
     }
 }
 
@@ -35,7 +36,8 @@ class JoinServerLog(player: Player) : Log("Joined the server", player) {
 class LeaveServerLog(player: Player) : Log("Left the server", player) {
 
     companion object {
-        const val ID = "leave"
+        @JvmField
+        val metadata = LogInfo("leave", "Triggered when a player quits the server")
     }
 }
 
@@ -46,7 +48,8 @@ class ChatLog(player: Player, chatMessage: String) : Log("Chat: $chatMessage", p
     constructor(player: Player, chatMessage: Component) : this(player, LegacyComponentSerializer.legacyAmpersand().serialize(chatMessage))
 
     companion object {
-        const val ID = "chat"
+        @JvmField
+        val metadata = LogInfo("chat", "Triggered when a player sends a message into the chat")
     }
 }
 
@@ -56,6 +59,7 @@ class ChatLog(player: Player, chatMessage: String) : Log("Chat: $chatMessage", p
 class CommandLog(player: Player, command: String) : Log("Executed command: $command", player) {
 
     companion object {
-        const val ID = "command"
+        @JvmField
+        val metadata = LogInfo("command", "Triggered when a player tries to execute a command")
     }
 }

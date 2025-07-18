@@ -51,12 +51,23 @@ class LogsProvider(private val logger: Logger) {
     }
 
     /**
-     * @throws NoSuchFieldException If the class does not have a static field called `id`
+     * @throws NoSuchFieldException If the class does not have a static field called `INFO`
+     * @throws ClassCastException If the field is not of type LogInfo
      */
     @Throws(NoSuchFieldException::class)
     fun getId(`class`: KClass<out Log>): String {
         // Return the ID of the log class
-        return `class`.java.getField("ID").get(null) as String
+        return getInfo(`class`).id
+    }
+
+    /**
+     * @throws NoSuchFieldException If the class does not have a static field called `INFO`
+     * @throws ClassCastException If the field is not of type LogInfo
+     */
+    @Throws(NoSuchFieldException::class, ClassCastException::class)
+    fun getInfo(`class`: KClass<out Log>): LogInfo {
+        // Return the ID of the log class
+        return `class`.java.getField("metadata").get(null) as LogInfo
     }
 
     fun getLogClassById(id: String): KClass<out Log>? = logs.firstOrNull { getId(it.`class`) == id }?.`class`
