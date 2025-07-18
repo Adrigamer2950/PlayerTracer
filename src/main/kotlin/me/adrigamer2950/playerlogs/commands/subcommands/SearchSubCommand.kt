@@ -98,8 +98,7 @@ class SearchSubCommand(val parent: MainCommand) : AbstractPLCommand("search", "S
         }
 
         user.sendMessage(
-            "&7Searching logs asynchronously for &6${uuids.size} &7player(s) with &6${actions.size} &7action(s)${if (afterS != null) " after &6$afterS" else ""}",
-            "&7This may take a while"
+            "&7Searching logs asynchronously for &6${uuids.size} &7player(s) with &6${actions.size} &7action(s)${if (afterS != null) " after &6$afterS" else ""}... This may take a while",
         )
 
         searching.add(searcherUUID)
