@@ -7,7 +7,6 @@ import java.io.ByteArrayOutputStream
 
 plugins {
     kotlin("jvm") version libs.versions.kotlin.get()
-    kotlin("plugin.serialization") version libs.versions.kotlin.get()
     alias(libs.plugins.shadow)
     alias(libs.plugins.plugin.yml)
     alias(libs.plugins.run.server)
@@ -41,8 +40,6 @@ dependencies {
     implementation(libs.adriapi)
 
     implementation(kotlin("stdlib-jdk8"))
-
-    implementation(libs.kotlinx.serialization.json)
 
     // Database
     implementation(libs.exposed.core)
