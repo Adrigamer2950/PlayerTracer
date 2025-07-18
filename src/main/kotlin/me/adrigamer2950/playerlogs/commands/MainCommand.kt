@@ -9,6 +9,7 @@ import me.adrigamer2950.playerlogs.commands.subcommands.PageSubCommand
 import me.adrigamer2950.playerlogs.commands.subcommands.SearchSubCommand
 import me.adrigamer2950.playerlogs.util.add
 
+// TODO: Add permissions
 @Suppress("unused")
 @AutoRegister
 class MainCommand : AbstractCommand(
