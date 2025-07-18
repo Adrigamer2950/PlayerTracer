@@ -3,17 +3,20 @@ package me.adrigamer2950.playerlogs.commands.subcommands
 import me.adrigamer2950.adriapi.api.user.User
 import me.adrigamer2950.playerlogs.PlayerLogsPlugin
 import me.adrigamer2950.playerlogs.commands.AbstractPLCommand
+import me.adrigamer2950.playerlogs.commands.MainCommand
 import me.adrigamer2950.playerlogs.logs.Log
 import me.adrigamer2950.playerlogs.logs.LogQuery
 import me.adrigamer2950.playerlogs.util.TimeUtil
-import net.kyori.adventure.text.minimessage.MiniMessage
 import org.bukkit.Bukkit
 import java.sql.Timestamp
 import java.util.*
 import kotlin.reflect.KClass
 
-// TODO: Implement a paging system for results
-class SearchSubCommand : AbstractPLCommand("search", "Searches logs based on a query", listOf("s")) {
+class SearchSubCommand(val parent: MainCommand) : AbstractPLCommand("search", "Searches logs based on a query", listOf("s")) {
+
+    companion object {
+        val cache: MutableMap<UUID?, List<Log>> = mutableMapOf()
+    }
 
     override fun getDisplayName(rootCommandName: String): String = "$rootCommandName search &c<query>"
 
@@ -93,12 +96,10 @@ class SearchSubCommand : AbstractPLCommand("search", "Searches logs based on a q
             return
         }
 
-        // Display results to the user
-        user.sendMessage("&7--------- &bSearch Results &7---------")
-        results.forEach {
-            val mm = MiniMessage.miniMessage()
-            user.sendMessage(mm.deserialize("<hover:show_text:'${TimeUtil.timestampToDate(it.timestamp)}'><gray>[${TimeUtil.formatTimeAgo(it.timestamp)}]</hover> " +
-                    "<aqua>${Bukkit.getOfflinePlayer(it.playerUUID).name}<gray>: ${it.message}"))
+        cache.put(if (user.isConsole()) null else user.getPlayerOrNull()!!.uniqueId, results)
+
+        parent.subCommands.firstOrNull { it.info.name == "page" }?.execute(user, arrayOf("1"), commandName) ?: run {
+            user.sendMessage("&cThere was an error trying to paginate the results. Pagination command not found")
         }
     }
 

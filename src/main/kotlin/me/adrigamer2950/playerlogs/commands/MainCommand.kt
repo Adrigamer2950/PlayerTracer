@@ -5,6 +5,7 @@ import me.adrigamer2950.adriapi.api.command.AbstractCommand
 import me.adrigamer2950.adriapi.api.user.User
 import me.adrigamer2950.playerlogs.PlayerLogsPlugin
 import me.adrigamer2950.playerlogs.commands.subcommands.HelpSubCommand
+import me.adrigamer2950.playerlogs.commands.subcommands.PageSubCommand
 import me.adrigamer2950.playerlogs.commands.subcommands.SearchSubCommand
 import me.adrigamer2950.playerlogs.util.add
 
@@ -20,7 +21,8 @@ class MainCommand : AbstractCommand(
     init {
         subCommands.add(
             HelpSubCommand(this),
-            SearchSubCommand()
+            SearchSubCommand(this),
+            PageSubCommand()
         )
     }
 
