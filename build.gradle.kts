@@ -113,7 +113,7 @@ modrinth {
         .map { it.trim() }
     loaders.set(modrinthLoaders)
 
-    syncBodyFrom = rootProject.file("README.md").readText()
+    syncBodyFrom = rootProject.file("README_MODRINTH.md").readText()
 }
 
 hangarPublish {
