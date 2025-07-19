@@ -1,6 +1,6 @@
 # PlayerLogs
 <p align="center">
-    <img src="./logo.jpg" height="200" alt="Logo" />
+    <img src="https://github.com/Adrigamer2950/PlayerLogs/blob/master/logo_200x.jpg?raw=true" alt="Logo" />
 </p>
 
 Learn what are your players up to
@@ -23,7 +23,7 @@ to a more detailed list of actions a player is doing, and has done.
 > This plugin is **not** compatible with CraftBukkit, Bukkit or Spigot servers. Please use Paper or its forks
 
 > [!CAUTION]
-> This plugin has active support for Minecraft 1.17+. So, if you are using a lower version, you will not receive any support
+> This plugin has active support for Minecraft 1.17+. So, if you are using a lower version, you will not receive **any** support
 
 # TODOs
 - [ ] Store logs in a database (MySQL/MariaDB, SQLite, H2)
