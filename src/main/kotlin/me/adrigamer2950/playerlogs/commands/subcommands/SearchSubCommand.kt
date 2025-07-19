@@ -3,9 +3,9 @@ package me.adrigamer2950.playerlogs.commands.subcommands
 import kotlinx.coroutines.Dispatchers
 import me.adrigamer2950.adriapi.api.user.User
 import me.adrigamer2950.playerlogs.PlayerLogsPlugin
+import me.adrigamer2950.playerlogs.api.logs.Log
 import me.adrigamer2950.playerlogs.commands.AbstractPLCommand
 import me.adrigamer2950.playerlogs.commands.MainCommand
-import me.adrigamer2950.playerlogs.logs.Log
 import me.adrigamer2950.playerlogs.logs.LogQuery
 import me.adrigamer2950.playerlogs.util.TimeUtil
 import me.adrigamer2950.playerlogs.util.launchCoroutine

@@ -1,6 +1,7 @@
 package me.adrigamer2950.playerlogs.logs
 
 import me.adrigamer2950.playerlogs.PlayerLogsPlugin
+import me.adrigamer2950.playerlogs.api.logs.Log
 import java.sql.Timestamp
 import java.util.*
 import kotlin.reflect.KClass

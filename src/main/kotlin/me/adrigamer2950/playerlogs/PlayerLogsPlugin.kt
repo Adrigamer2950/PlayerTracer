@@ -1,10 +1,15 @@
 package me.adrigamer2950.playerlogs
 
+import com.google.gson.Gson
 import me.adrigamer2950.adriapi.api.APIPlugin
+import me.adrigamer2950.playerlogs.api.PlayerLogs
+import me.adrigamer2950.playerlogs.api.logs.Log
 import me.adrigamer2950.playerlogs.database.impl.H2Database
 import me.adrigamer2950.playerlogs.logs.*
+import org.bukkit.plugin.Plugin
+import kotlin.reflect.KClass
 
-class PlayerLogsPlugin : APIPlugin() {
+class PlayerLogsPlugin : APIPlugin(), PlayerLogs {
 
     companion object {
         lateinit var instance: PlayerLogsPlugin
@@ -22,7 +27,7 @@ class PlayerLogsPlugin : APIPlugin() {
 
         val preLoadTime = System.currentTimeMillis()
 
-        this.logsProvider.registerLog(JoinServerLog::class, LeaveServerLog::class, ChatLog::class, CommandLog::class)
+        this.logsProvider.registerLog(this, JoinServerLog::class, LeaveServerLog::class, ChatLog::class, CommandLog::class)
 
         database.connect()
 
@@ -50,5 +55,26 @@ class PlayerLogsPlugin : APIPlugin() {
 
     override fun onUnload() {
         logger.info("&cDisabled")
+    }
+
+    override fun registerLog(
+        plugin: Plugin,
+        vararg classes: KClass<out Log>,
+        jsonParser: Gson
+    ) {
+        logsProvider.registerLog(plugin, *classes, jsonParser = jsonParser)
+    }
+
+    override fun registerLog(
+        plugin: Plugin,
+        vararg classes: Pair<KClass<out Log>, Gson>
+    ) {
+        classes.forEach {
+            logsProvider.registerLog(plugin, it.first, jsonParser = it.second)
+        }
+    }
+
+    override fun addLog(log: Log) {
+        logsManager.addLog(log)
     }
 }

@@ -2,17 +2,20 @@ package me.adrigamer2950.playerlogs.logs
 
 import com.google.gson.Gson
 import me.adrigamer2950.adriapi.api.logger.Logger
+import me.adrigamer2950.playerlogs.api.logs.Log
+import me.adrigamer2950.playerlogs.api.logs.LogInfo
+import org.bukkit.plugin.Plugin
 import kotlin.reflect.KClass
 
 class LogsProvider(private val logger: Logger) {
 
-    val logs: MutableSet<LogGsonPair> = mutableSetOf()
+    val logs: MutableSet<LogClassInfo> = mutableSetOf()
 
     /**
      * @throws IllegalArgumentException If the class is not a valid log class or if its id is already registered
      */
     @Throws(IllegalArgumentException::class)
-    fun registerLog(vararg classes: KClass<out Log>, jsonParser: Gson = Gson()) {
+    fun registerLog(plugin: Plugin, vararg classes: KClass<out Log>, jsonParser: Gson = Gson()) {
         classes.forEach {
             if (isLogRegistered(it)) return@forEach
 
@@ -26,7 +29,7 @@ class LogsProvider(private val logger: Logger) {
                 throw IllegalArgumentException("A log type with ID '${getId(it)}' is already registered: ${duplicated.`class`.qualifiedName}")
             }
 
-            logs.add(LogGsonPair(it, jsonParser))
+            logs.add(LogClassInfo(it, jsonParser, plugin))
 
             logger.debug("Registered log ${it.qualifiedName} with id ${getId(it)}")
         }
@@ -73,4 +76,4 @@ class LogsProvider(private val logger: Logger) {
     fun getLogClassById(id: String): KClass<out Log>? = logs.firstOrNull { getId(it.`class`) == id }?.`class`
 }
 
-class LogGsonPair(val `class`: KClass<out Log>, val gson: Gson)
+class LogClassInfo(val `class`: KClass<out Log>, val gson: Gson, val plugin: Plugin)

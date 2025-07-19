@@ -4,8 +4,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import me.adrigamer2950.adriapi.api.logger.Logger
 import me.adrigamer2950.playerlogs.PlayerLogsPlugin
+import me.adrigamer2950.playerlogs.api.logs.Log
 import me.adrigamer2950.playerlogs.database.tables.LogsTable
-import me.adrigamer2950.playerlogs.logs.Log
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.inList

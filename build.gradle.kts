@@ -16,44 +16,51 @@ plugins {
 
 val versionIsBeta = (properties["version"] as String).lowercase().contains("beta")
 
-group = "me.adrigamer2950"
+group = "me.adrigamer2950.playerlogs"
 version = properties["version"] as String +
         if (versionIsBeta)
             "-${getGitCommitHash()}"
         else ""
 
-repositories {
-    mavenCentral()
-    maven("https://repo.papermc.io/repository/maven-public/") {
-        name = "papermc-repo"
+allprojects {
+    apply(plugin = "org.jetbrains.kotlin.jvm")
+
+    val targetJavaVersion = (properties["java-version"] as String).toInt()
+
+    kotlin {
+        jvmToolchain(targetJavaVersion)
     }
-    maven("https://repo.devadri.es/repository/dev/") {
-        name = "devadri"
+
+    repositories {
+        mavenCentral()
+        maven("https://repo.papermc.io/repository/maven-public/") {
+            name = "papermc-repo"
+        }
+        maven("https://repo.devadri.es/repository/dev/") {
+            name = "devadri"
+        }
+    }
+
+    dependencies {
+        compileOnly(rootProject.libs.jetbrains.annotations)
+
+        compileOnly(rootProject.libs.paper.api)
+
+        implementation(rootProject.libs.adriapi)
+
+        implementation(kotlin("stdlib-jdk8"))
     }
 }
 
 dependencies {
-    compileOnly(libs.jetbrains.annotations)
+    implementation(project(":api"))
 
-    compileOnly(libs.paper.api)
-
-    implementation(libs.adriapi)
-
-    implementation(kotlin("stdlib-jdk8"))
-
-    // Database
-    implementation(libs.exposed.core)
-    implementation(libs.exposed.crypt)
-    implementation(libs.exposed.dao)
-    implementation(libs.exposed.jdbc)
-    implementation(libs.exposed.json)
-    implementation(libs.h2)
-}
-
-val targetJavaVersion = (properties["java-version"] as String).toInt()
-
-kotlin {
-    jvmToolchain(targetJavaVersion)
+    compileOnly(libs.exposed.core)
+    compileOnly(libs.exposed.crypt)
+    compileOnly(libs.exposed.dao)
+    compileOnly(libs.exposed.jdbc)
+    compileOnly(libs.exposed.json)
+    compileOnly(libs.h2)
 }
 
 bukkit {
@@ -72,10 +79,6 @@ tasks.build {
 
 tasks.shadowJar {
     archiveClassifier.set("")
-}
-
-kotlin {
-    jvmToolchain(targetJavaVersion)
 }
 
 fun getJarFile(): File? {

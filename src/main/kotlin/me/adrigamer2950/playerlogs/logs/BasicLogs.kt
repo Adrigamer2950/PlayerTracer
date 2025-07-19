@@ -2,27 +2,16 @@
 
 package me.adrigamer2950.playerlogs.logs
 
+import me.adrigamer2950.playerlogs.api.logs.AbstractLog
+import me.adrigamer2950.playerlogs.api.logs.LogInfo
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer
-import java.sql.Timestamp
-import java.time.Instant
-import org.bukkit.OfflinePlayer
 import org.bukkit.entity.Player
-
-/**
- * Represents a log entry.
- * It MUST have a static field called `info` of type [LogInfo] that contains basic information about the log
- */
-abstract class Log(val message: String, player: OfflinePlayer, val timestamp: Long) {
-    constructor(message: String, player: OfflinePlayer) : this(message, player, Timestamp.from(Instant.now()).time)
-
-    val playerUUID = player.uniqueId // Player's UUID
-}
 
 /**
  * Represents a log entry relating a player joining the server.
  */
-class JoinServerLog(player: Player) : Log("Joined the server", player) {
+class JoinServerLog(player: Player) : AbstractLog("Joined the server", player) {
 
     companion object {
         @JvmField
@@ -33,7 +22,7 @@ class JoinServerLog(player: Player) : Log("Joined the server", player) {
 /**
  * Represents a log entry relating a player leaving the server.
  */
-class LeaveServerLog(player: Player) : Log("Left the server", player) {
+class LeaveServerLog(player: Player) : AbstractLog("Left the server", player) {
 
     companion object {
         @JvmField
@@ -44,7 +33,7 @@ class LeaveServerLog(player: Player) : Log("Left the server", player) {
 /**
  * Represents a log entry relating a player chatting.
  */
-class ChatLog(player: Player, chatMessage: String) : Log("Chat: $chatMessage", player) {
+class ChatLog(player: Player, chatMessage: String) : AbstractLog("Chat: $chatMessage", player) {
     constructor(player: Player, chatMessage: Component) : this(player, LegacyComponentSerializer.legacyAmpersand().serialize(chatMessage))
 
     companion object {
@@ -56,7 +45,7 @@ class ChatLog(player: Player, chatMessage: String) : Log("Chat: $chatMessage", p
 /**
  * Represents a log entry relating a player executing a command.
  */
-class CommandLog(player: Player, command: String) : Log("Executed command: $command", player) {
+class CommandLog(player: Player, command: String) : AbstractLog("Executed command: $command", player) {
 
     companion object {
         @JvmField
