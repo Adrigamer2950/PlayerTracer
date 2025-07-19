@@ -19,9 +19,15 @@ to a more detailed list of actions a player is doing, and has done.
 > [!CAUTION]
 > You need Java 17+ to use this plugin. If you are using a lower version consider upgrading
 
+> [!CAUTION]
+> This plugin is **not** compatible with CraftBukkit, Bukkit or Spigot servers. Please use Paper or its forks
+
+> [!CAUTION]
+> This plugin has active support for Minecraft 1.17+. So, if you are using a lower version, you will not receive any support
+
 # TODOs
 - [ ] Store logs in a database (MySQL/MariaDB, SQLite, H2)
-- [ ] In-Game Log viewer
+- [ ] In-Game Log viewer (GUI & Command)
 - [ ] API
 - [ ] Modules (extensions which could be used to add more logs
   without the needing of a separate plugin. Similar to how PlaceholderAPI works)
