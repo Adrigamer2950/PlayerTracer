@@ -107,13 +107,14 @@ class SearchSubCommand(val parent: MainCommand) : AbstractPLCommand("search", "S
             // Get results
             val results = LogQuery(uuids.toTypedArray(), actions, after).getResults()
 
+            searching.remove(searcherUUID)
+
             if (results.isEmpty()) {
                 user.sendMessage("&cNo data found")
                 return@launchCoroutine
             }
 
             cache.put(searcherUUID, results)
-            searching.remove(searcherUUID)
 
             parent.subCommands.firstOrNull { it.info.name == "page" }?.execute(user, arrayOf("1"), commandName) ?: run {
                 user.sendMessage("&cThere was an error trying to paginate the results. Pagination command not found")
