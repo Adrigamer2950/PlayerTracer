@@ -1,6 +1,7 @@
 package me.adrigamer2950.playertracer.api.logs
 
 import org.bukkit.OfflinePlayer
+import org.bukkit.entity.Player
 import java.sql.Timestamp
 import java.time.Instant
 import java.util.UUID
@@ -20,9 +21,9 @@ interface Log {
  * Abstract implementation of [Log].
  * Implementations of this class MUST have a static field called `metadata` of type [LogData] that contains basic metadata about the log
  */
-abstract class AbstractLog(override val message: String, player: OfflinePlayer, override val timestamp: Long) : Log {
+abstract class AbstractLog(override val message: String, player: Player, override val timestamp: Long) : Log {
 
-    constructor(message: String, player: OfflinePlayer) : this(message, player, Timestamp.from(Instant.now()).time)
+    constructor(message: String, player: Player) : this(message, player, Timestamp.from(Instant.now()).time)
 
     override val playerUUID = player.uniqueId // Player's UUID
 }
