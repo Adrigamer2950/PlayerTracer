@@ -3,7 +3,6 @@
 import io.papermc.hangarpublishplugin.model.Platforms
 import xyz.jpenilla.runpaper.task.RunServer
 import xyz.jpenilla.runtask.task.AbstractRun
-import java.io.ByteArrayOutputStream
 
 plugins {
     kotlin("jvm") version libs.versions.kotlin.get()
@@ -14,13 +13,8 @@ plugins {
     alias(libs.plugins.hangar.publish)
 }
 
-val versionIsBeta = (properties["version"] as String).lowercase().contains("beta")
-
-group = "me.adrigamer2950.playerlogs"
-version = properties["version"] as String +
-        if (versionIsBeta)
-            "-${getGitCommitHash()}"
-        else ""
+group = "me.adrigamer2950.playertracer"
+version = properties["version"] as String
 
 allprojects {
     apply(plugin = "org.jetbrains.kotlin.jvm")
@@ -84,17 +78,6 @@ tasks.shadowJar {
 fun getJarFile(): File? {
     val jarFile = File("./gh-assets").listFiles()?.firstOrNull { it.name.endsWith(".jar") }
     return jarFile
-}
-
-fun getGitCommitHash(): String {
-    val byteOut = ByteArrayOutputStream()
-
-    @Suppress("DEPRECATION") exec {
-        commandLine = "git rev-parse --short HEAD".split(" ")
-        standardOutput = byteOut
-    }
-
-    return String(byteOut.toByteArray()).trim()
 }
 
 modrinth {

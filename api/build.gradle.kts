@@ -62,7 +62,7 @@ if (System.getenv("NEXUS_USERNAME") != null) {
                 pom {
                     name = rootProject.name
                     description.set(parent?.properties?.get("description") as String)
-                    url = "https://github.com/Adrigamer2950/PlayerLogs"
+                    url = "https://github.com/Adrigamer2950/PlayerTracer"
 
                     licenses {
                         license {
@@ -79,12 +79,12 @@ if (System.getenv("NEXUS_USERNAME") != null) {
                     }
 
                     scm {
-                        url = "https://github.com/Adrigamer2950/PlayerLogs"
+                        url = "https://github.com/Adrigamer2950/PlayerTracer"
                     }
 
                     issueManagement {
                         system = "GitHub"
-                        url = "https://github.com/Adrigamer2950/PlayerLogs/issues"
+                        url = "https://github.com/Adrigamer2950/PlayerTracer/issues"
                     }
                 }
             }

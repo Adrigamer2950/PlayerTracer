@@ -1,6 +1,6 @@
-# PlayerLogs
+# PlayerTracer
 <p align="center">
-    <img src="https://github.com/Adrigamer2950/PlayerLogs/blob/master/logo_200x.jpg?raw=true" alt="Logo" />
+    <img src="https://github.com/Adrigamer2950/PlayerTracer/blob/master/logo_200x.jpg?raw=true" alt="Logo" />
 </p>
 
 Learn what are your players up to
