@@ -49,12 +49,12 @@ allprojects {
 dependencies {
     implementation(project(":api"))
 
-    compileOnly(libs.exposed.core)
-    compileOnly(libs.exposed.crypt)
-    compileOnly(libs.exposed.dao)
-    compileOnly(libs.exposed.jdbc)
-    compileOnly(libs.exposed.json)
-    compileOnly(libs.h2)
+    implementation(libs.exposed.core)
+    implementation(libs.exposed.crypt)
+    implementation(libs.exposed.dao)
+    implementation(libs.exposed.jdbc)
+    implementation(libs.exposed.json)
+    implementation(libs.h2)
 }
 
 bukkit {
