@@ -3,7 +3,7 @@ package me.adrigamer2950.playertracer.logs
 import com.google.gson.Gson
 import me.adrigamer2950.adriapi.api.logger.Logger
 import me.adrigamer2950.playertracer.api.logs.Log
-import me.adrigamer2950.playertracer.api.logs.LogInfo
+import me.adrigamer2950.playertracer.api.logs.LogData
 import org.bukkit.plugin.Plugin
 import kotlin.reflect.KClass
 
@@ -54,23 +54,23 @@ class LogsProvider(private val logger: Logger) {
     }
 
     /**
-     * @throws NoSuchFieldException If the class does not have a static field called `INFO`
-     * @throws ClassCastException If the field is not of type LogInfo
+     * @throws NoSuchFieldException If the class does not have a static field called `metadata`
+     * @throws ClassCastException If the field is not of type LogData
      */
     @Throws(NoSuchFieldException::class)
     fun getId(`class`: KClass<out Log>): String {
         // Return the ID of the log class
-        return getInfo(`class`).id
+        return getData(`class`).id
     }
 
     /**
-     * @throws NoSuchFieldException If the class does not have a static field called `INFO`
-     * @throws ClassCastException If the field is not of type LogInfo
+     * @throws NoSuchFieldException If the class does not have a static field called `metadata`
+     * @throws ClassCastException If the field is not of type LogData
      */
     @Throws(NoSuchFieldException::class, ClassCastException::class)
-    fun getInfo(`class`: KClass<out Log>): LogInfo {
+    fun getData(`class`: KClass<out Log>): LogData {
         // Return the ID of the log class
-        return `class`.java.getField("metadata").get(null) as LogInfo
+        return `class`.java.getField("metadata").get(null) as LogData
     }
 
     fun getLogClassById(id: String): KClass<out Log>? = logs.firstOrNull { getId(it.`class`) == id }?.`class`

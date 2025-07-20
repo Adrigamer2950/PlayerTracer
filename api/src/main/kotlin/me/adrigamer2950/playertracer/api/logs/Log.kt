@@ -7,7 +7,7 @@ import java.util.UUID
 
 /**
  * Represents a log entry.
- * It MUST have a static field called `metadata` of type [LogInfo] that contains basic metadata about the log
+ * It MUST have a static field called `metadata` of type [LogData] that contains basic metadata about the log
  */
 interface Log {
 
@@ -18,7 +18,7 @@ interface Log {
 
 /**
  * Abstract implementation of [Log].
- * Implementations of this class MUST have a static field called `metadata` of type [LogInfo] that contains basic metadata about the log
+ * Implementations of this class MUST have a static field called `metadata` of type [LogData] that contains basic metadata about the log
  */
 abstract class AbstractLog(override val message: String, player: OfflinePlayer, override val timestamp: Long) : Log {
 

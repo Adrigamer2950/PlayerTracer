@@ -16,7 +16,7 @@ class ActionListSubCommand : AbstractPLCommand("actionlist", "Lists all availabl
         user.sendMessage("&7--------- &bAction List &7--------- ")
 
         PlayerTracerPlugin.instance.logsProvider.logs.forEach {
-            val info = PlayerTracerPlugin.instance.logsProvider.getInfo(it.`class`)
+            val info = PlayerTracerPlugin.instance.logsProvider.getData(it.`class`)
 
             user.sendMessage("&b${info.id}&7: ${info.description}")
         }
