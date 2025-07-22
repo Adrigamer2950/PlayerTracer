@@ -11,7 +11,6 @@ import me.adrigamer2950.playertracer.commands.subcommands.SearchSubCommand
 import me.adrigamer2950.playertracer.commands.subcommands.TeleportSubCommand
 import me.adrigamer2950.playertracer.util.add
 
-// TODO: Add permissions
 @Suppress("unused")
 @AutoRegister
 class MainCommand : AbstractCommand(

@@ -7,6 +7,7 @@ import me.adrigamer2950.playertracer.api.logs.Log
 import me.adrigamer2950.playertracer.commands.AbstractPLCommand
 import me.adrigamer2950.playertracer.commands.MainCommand
 import me.adrigamer2950.playertracer.logs.LogQuery
+import me.adrigamer2950.playertracer.util.Permission
 import me.adrigamer2950.playertracer.util.TimeUtil
 import me.adrigamer2950.playertracer.util.launchCoroutine
 import org.bukkit.Bukkit
@@ -25,6 +26,11 @@ class SearchSubCommand(val parent: MainCommand) : AbstractPLCommand("search", "S
     override fun getDisplayName(rootCommandName: String): String = "$rootCommandName search &c<query>"
 
     override fun execute(user: User, args: Array<out String>, commandName: String) {
+        if (!Permission.SEARCH.isGrantedTo(user)) {
+            user.sendMessage("&cYou don't have permission to use this command")
+            return
+        }
+
         if (args.isEmpty()) {
             user.sendMessage("&cUsage: /${getDisplayName(commandName)}")
             return

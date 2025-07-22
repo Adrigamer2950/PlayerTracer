@@ -2,6 +2,7 @@ package me.adrigamer2950.playertracer.commands.subcommands
 
 import me.adrigamer2950.adriapi.api.user.User
 import me.adrigamer2950.playertracer.commands.AbstractPLCommand
+import me.adrigamer2950.playertracer.util.Permission
 import org.bukkit.Bukkit
 import org.bukkit.Location
 
@@ -16,6 +17,11 @@ class TeleportSubCommand : AbstractPLCommand("tp", "Teleports you to a specified
     ) {
         if (user.isConsole()) {
             user.sendMessage("&cThis command cannot be used from the console.")
+            return
+        }
+
+        if (!Permission.TELEPORT.isGrantedTo(user)) {
+            user.sendMessage("&cYou don't have permission to use this command")
             return
         }
 

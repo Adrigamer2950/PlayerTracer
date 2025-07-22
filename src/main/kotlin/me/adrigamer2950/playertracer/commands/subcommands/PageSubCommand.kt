@@ -3,6 +3,7 @@ package me.adrigamer2950.playertracer.commands.subcommands
 import me.adrigamer2950.adriapi.api.user.User
 import me.adrigamer2950.playertracer.commands.AbstractPLCommand
 import me.adrigamer2950.playertracer.util.Constants.PAGE_SIZE
+import me.adrigamer2950.playertracer.util.Permission
 import me.adrigamer2950.playertracer.util.TimeUtil
 import net.kyori.adventure.text.event.ClickEvent
 import net.kyori.adventure.text.minimessage.MiniMessage
@@ -59,16 +60,17 @@ class PageSubCommand : AbstractPLCommand("page", "Shows the specified page of th
                 )
             )
 
-            val teleportCommand =
-                "/$commandName tp ${it.location.worldName} ${it.location.x} ${it.location.y} ${it.location.z}"
+            if (Permission.TELEPORT.isGrantedTo(user)) {
+                val teleportCommand =
+                    "/$commandName tp ${it.location.worldName} ${it.location.x} ${it.location.y} ${it.location.z}"
 
-            val space = " ".repeat(time.length)
+                val space = " ".repeat(time.length)
 
-            // TODO: Check for teleport permission
-            user.sendMessage(
-                mm.deserialize("<hover:show_text:'$teleportCommand'><gray>$space (${it.location.worldName}/x${it.location.x}/y${it.location.y}/z${it.location.z})</hover>")
-                    .clickEvent(ClickEvent.runCommand(teleportCommand))
-            )
+                user.sendMessage(
+                    mm.deserialize("<hover:show_text:'$teleportCommand'><gray>$space (${it.location.worldName}/x${it.location.x}/y${it.location.y}/z${it.location.z})</hover>")
+                        .clickEvent(ClickEvent.runCommand(teleportCommand))
+                )
+            }
         }
         user.sendMessage("&7--------- &bEnd of results &7---------")
     }
