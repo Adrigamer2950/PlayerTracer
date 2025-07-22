@@ -79,7 +79,7 @@ abstract class LogsDatabase(protected val plugin: PlayerTracerPlugin) {
                     logs.add(plugin.logsProvider.decodeFromJson(it[LogsTable.data], Class.forName(it[LogsTable.`class`]).kotlin as KClass<out Log>))
                 }
 
-            return@transaction logs
+            return@transaction logs.reversed()
         }
     }
 
