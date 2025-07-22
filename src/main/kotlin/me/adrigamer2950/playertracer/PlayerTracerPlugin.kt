@@ -9,6 +9,8 @@ import me.adrigamer2950.playertracer.logs.*
 import org.bukkit.plugin.Plugin
 import kotlin.reflect.KClass
 
+// TODO: config.yml
+// TODO: messages.yml
 class PlayerTracerPlugin : APIPlugin(), PlayerTracer {
 
     companion object {
