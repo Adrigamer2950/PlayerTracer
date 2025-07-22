@@ -8,6 +8,7 @@ import me.adrigamer2950.playertracer.commands.subcommands.ActionListSubCommand
 import me.adrigamer2950.playertracer.commands.subcommands.HelpSubCommand
 import me.adrigamer2950.playertracer.commands.subcommands.PageSubCommand
 import me.adrigamer2950.playertracer.commands.subcommands.SearchSubCommand
+import me.adrigamer2950.playertracer.commands.subcommands.TeleportSubCommand
 import me.adrigamer2950.playertracer.util.add
 
 // TODO: Add permissions
@@ -25,7 +26,8 @@ class MainCommand : AbstractCommand(
             HelpSubCommand(this),
             SearchSubCommand(this),
             PageSubCommand(),
-            ActionListSubCommand()
+            ActionListSubCommand(),
+            TeleportSubCommand()
         )
     }
 

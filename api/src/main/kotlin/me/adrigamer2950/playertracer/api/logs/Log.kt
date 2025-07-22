@@ -1,6 +1,6 @@
 package me.adrigamer2950.playertracer.api.logs
 
-import org.bukkit.OfflinePlayer
+import me.adrigamer2950.playertracer.api.location.Location
 import org.bukkit.entity.Player
 import java.sql.Timestamp
 import java.time.Instant
@@ -15,6 +15,7 @@ interface Log {
     val message: String
     val playerUUID: UUID
     val timestamp: Long
+    val location: Location
 }
 
 /**
@@ -26,4 +27,6 @@ abstract class AbstractLog(override val message: String, player: Player, overrid
     constructor(message: String, player: Player) : this(message, player, Timestamp.from(Instant.now()).time)
 
     override val playerUUID = player.uniqueId // Player's UUID
+
+    override val location = Location.fromBukkitLocation(player.location)
 }

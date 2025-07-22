@@ -4,6 +4,7 @@ import me.adrigamer2950.adriapi.api.user.User
 import me.adrigamer2950.playertracer.commands.AbstractPLCommand
 import me.adrigamer2950.playertracer.util.Constants.PAGE_SIZE
 import me.adrigamer2950.playertracer.util.TimeUtil
+import net.kyori.adventure.text.event.ClickEvent
 import net.kyori.adventure.text.minimessage.MiniMessage
 import org.bukkit.Bukkit
 
@@ -38,7 +39,8 @@ class PageSubCommand : AbstractPLCommand("page", "Shows the specified page of th
             return
         }
 
-        val pagedLogs = logs.subList(0,
+        val pagedLogs = logs.subList(
+            0,
             if (pageNumber * PAGE_SIZE > logs.size) logs.size else pageNumber * PAGE_SIZE
         )
 
@@ -47,8 +49,26 @@ class PageSubCommand : AbstractPLCommand("page", "Shows the specified page of th
         user.sendMessage("&7Page $pageNumber of $totalPages")
         pagedLogs.forEach {
             val mm = MiniMessage.miniMessage()
-            user.sendMessage(mm.deserialize("<hover:show_text:'${TimeUtil.timestampToDate(it.timestamp)}'><gray>[${TimeUtil.formatTimeAgo(it.timestamp)}]</hover> " +
-                    "<aqua>${Bukkit.getOfflinePlayer(it.playerUUID).name}<gray>: ${it.message}"))
+
+            val time = "[${TimeUtil.formatTimeAgo(it.timestamp)}]"
+
+            user.sendMessage(
+                mm.deserialize(
+                    "<hover:show_text:'${TimeUtil.timestampToDate(it.timestamp)}'><gray>$time</hover> " +
+                            "<aqua>${Bukkit.getOfflinePlayer(it.playerUUID).name}<gray>: ${it.message}"
+                )
+            )
+
+            val teleportCommand =
+                "/$commandName tp ${it.location.worldName} ${it.location.x} ${it.location.y} ${it.location.z}"
+
+            val space = " ".repeat(time.length)
+
+            // TODO: Check for teleport permission
+            user.sendMessage(
+                mm.deserialize("<hover:show_text:'$teleportCommand'><gray>$space (${it.location.worldName}/x${it.location.x}/y${it.location.y}/z${it.location.z})</hover>")
+                    .clickEvent(ClickEvent.runCommand(teleportCommand))
+            )
         }
         user.sendMessage("&7--------- &bEnd of results &7---------")
     }
