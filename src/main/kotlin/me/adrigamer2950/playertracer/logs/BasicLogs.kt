@@ -45,7 +45,7 @@ class ChatLog(player: Player, chatMessage: String) : AbstractLog("Chat: $chatMes
 /**
  * Represents a log entry relating a player executing a command.
  */
-class CommandLog(player: Player, command: String) : AbstractLog("Executed command: $command", player) {
+class CommandLog(player: Player, command: String) : AbstractLog("Command: $command", player) {
 
     companion object {
         @JvmField
