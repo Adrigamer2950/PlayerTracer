@@ -34,9 +34,9 @@ class PlayerTracerPlugin : APIPlugin(), PlayerTracer {
 
         val preLoadTime = System.currentTimeMillis()
 
-        this.logsProvider.registerLog(this, JoinServerLog::class, LeaveServerLog::class, ChatLog::class, CommandLog::class)
-
         database.connect()
+
+        this.logsProvider.registerLog(this, JoinServerLog::class, LeaveServerLog::class, ChatLog::class, CommandLog::class)
 
         logger.info("&6Loaded in ${System.currentTimeMillis() - preLoadTime}ms")
     }
