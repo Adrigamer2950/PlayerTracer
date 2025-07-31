@@ -1,16 +1,13 @@
 package me.adrigamer2950.playertracer.commands.subcommands
 
-import kotlinx.coroutines.Dispatchers
 import me.adrigamer2950.adriapi.api.user.User
 import me.adrigamer2950.playertracer.PlayerTracerPlugin
 import me.adrigamer2950.playertracer.api.PlayerTracer
 import me.adrigamer2950.playertracer.api.logs.Log
 import me.adrigamer2950.playertracer.commands.AbstractPLCommand
 import me.adrigamer2950.playertracer.commands.MainCommand
-import me.adrigamer2950.playertracer.logs.LogQuery
 import me.adrigamer2950.playertracer.util.Permission
 import me.adrigamer2950.playertracer.util.TimeUtil
-import me.adrigamer2950.playertracer.util.launchCoroutine
 import org.bukkit.Bukkit
 import java.sql.Timestamp
 import java.util.*
