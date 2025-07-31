@@ -1,12 +1,17 @@
 package me.adrigamer2950.playertracer
 
 import com.google.gson.Gson
+import kotlinx.coroutines.Dispatchers
 import me.adrigamer2950.adriapi.api.APIPlugin
 import me.adrigamer2950.playertracer.api.PlayerTracer
 import me.adrigamer2950.playertracer.api.logs.Log
 import me.adrigamer2950.playertracer.database.impl.H2Database
 import me.adrigamer2950.playertracer.logs.*
+import me.adrigamer2950.playertracer.util.launchCoroutine
 import org.bukkit.plugin.Plugin
+import java.sql.Timestamp
+import java.util.UUID
+import java.util.concurrent.CompletableFuture
 import kotlin.reflect.KClass
 
 // TODO: config.yml
@@ -78,5 +83,21 @@ class PlayerTracerPlugin : APIPlugin(), PlayerTracer {
 
     override fun addLog(log: Log) {
         logsManager.addLog(log)
+    }
+
+    override fun getLogs(
+        uuids: Array<UUID>,
+        actions: List<KClass<out Log>>,
+        after: Timestamp?
+    ): CompletableFuture<List<Log>> {
+        val future = CompletableFuture<List<Log>>()
+
+        launchCoroutine(Dispatchers.Default) {
+            val logs = LogQuery(uuids, actions, after).getResults()
+
+            future.complete(logs)
+        }
+
+        return future
     }
 }
