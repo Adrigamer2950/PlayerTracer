@@ -98,18 +98,13 @@ tasks.shadowJar {
     archiveClassifier.set("")
 }
 
-fun getJarFile(): File? {
-    val jarFile = File("./gh-assets").listFiles()?.firstOrNull { it.name.endsWith(".jar") }
-    return jarFile
-}
-
 modrinth {
     token = System.getenv("MODRINTH_TOKEN")
     projectId = properties["modrinth-id"] as String
     versionNumber = version as String
     versionName = rootProject.name + " " + version
     versionType = properties["modrinth-type"] as String
-    uploadFile.set(getJarFile())
+    uploadFile.set(tasks.shadowJar.get().archiveFile)
 
     gameVersions.set(
         (properties["modrinth-version"] as String)
@@ -133,7 +128,7 @@ hangarPublish {
         apiKey.set(System.getenv("HANGAR_API_TOKEN"))
         platforms {
             register(Platforms.PAPER) {
-                jar.set(getJarFile())
+                jar.set(tasks.shadowJar.get().archiveFile)
 
                 val versions: List<String> = (properties["hangar-version"] as String)
                     .split(",")
