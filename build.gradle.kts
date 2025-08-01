@@ -1,6 +1,7 @@
 @file:Suppress("VulnerableLibrariesLocal")
 
 import io.papermc.hangarpublishplugin.model.Platforms
+import net.minecrell.pluginyml.bukkit.BukkitPluginDescription
 import xyz.jpenilla.runpaper.task.RunServer
 import xyz.jpenilla.runtask.task.AbstractRun
 
@@ -65,6 +66,28 @@ bukkit {
     website = properties["website"] as String
     description = properties["description"] as String
     foliaSupported = true
+
+    permissions {
+        register("playertracer.admin") {
+            description = "All permissions"
+            default = BukkitPluginDescription.Permission.Default.OP
+
+            children = listOf(
+                "playertracer.search",
+                "playertracer.teleport"
+            )
+        }
+
+        register("playertracer.search") {
+            description = "Allows to search logs"
+            default = BukkitPluginDescription.Permission.Default.OP
+        }
+
+        register("playertracer.teleport") {
+            description = "Allows to teleport to players"
+            default = BukkitPluginDescription.Permission.Default.OP
+        }
+    }
 }
 
 tasks.build {
@@ -127,6 +150,8 @@ tasks.named<RunServer>("runServer").configure {
     downloadPlugins {
         // ViaVersion
         hangar("ViaVersion", "5.2.0")
+
+        modrinth("luckperms", "v5.5.0-bukkit")
     }
 }
 
