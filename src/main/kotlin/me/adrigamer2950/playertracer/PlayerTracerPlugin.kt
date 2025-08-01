@@ -93,9 +93,13 @@ class PlayerTracerPlugin : APIPlugin(), PlayerTracer {
         val future = CompletableFuture<List<Log>>()
 
         launchCoroutine(Dispatchers.Default) {
-            val logs = LogQuery(uuids, actions, after).getResults()
+            try {
+                val logs = LogQuery(uuids, actions, after).getResults()
 
-            future.complete(logs)
+                future.complete(logs)
+            } catch (e: Exception) {
+                future.completeExceptionally(e)
+            }
         }
 
         return future

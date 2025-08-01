@@ -108,8 +108,6 @@ class SearchSubCommand(val parent: MainCommand) : AbstractPLCommand("search", "S
         searching.add(searcherUUID)
 
         (plugin as PlayerTracer).getLogs(uuids.toTypedArray(), actions, after).thenAccept { results ->
-            searching.remove(searcherUUID)
-
             if (results.isEmpty()) {
                 user.sendMessage("&cNo data found")
                 return@thenAccept
@@ -120,7 +118,13 @@ class SearchSubCommand(val parent: MainCommand) : AbstractPLCommand("search", "S
             parent.subCommands.firstOrNull { it.info.name == "page" }?.execute(user, arrayOf("1"), commandName) ?: run {
                 user.sendMessage("&cThere was an error trying to paginate the results. Pagination command not found")
             }
+        }.exceptionally {
+            user.sendMessage("&cAn error occurred while searching logs: ${it.message}")
+            plugin.logger.error("&cAn error occurred while searching logs", it)
+            null
         }
+
+        searching.remove(searcherUUID)
     }
 
     override fun tabComplete(user: User, args: Array<out String>, commandName: String): List<String> {
