@@ -66,7 +66,12 @@ dependencies {
     compileOnly(libs.exposed.core)
     compileOnly(libs.exposed.dao)
     compileOnly(libs.exposed.jdbc)
-    compileOnly(libs.h2)
+
+    runtimeOnly(libs.h2)
+    runtimeOnly(libs.sqlite)
+    runtimeOnly(libs.mysql)
+    runtimeOnly(libs.mariadb)
+    runtimeOnly(libs.postgresql)
 
     compileOnly(libs.boosted.yaml)
 }
@@ -200,6 +205,30 @@ tasks.register("generateBuildConstants") {
                     .addProperty(
                         PropertySpec.builder("H2_VERSION", String::class)
                             .initializer("%S", libs.versions.h2.get())
+                            .addModifiers(KModifier.CONST)
+                            .build()
+                    )
+                    .addProperty(
+                        PropertySpec.builder("SQLITE_VERSION", String::class)
+                            .initializer("%S", libs.versions.sqlite.get())
+                            .addModifiers(KModifier.CONST)
+                            .build()
+                    )
+                    .addProperty(
+                        PropertySpec.builder("MYSQL_VERSION", String::class)
+                            .initializer("%S", libs.versions.mysql.get())
+                            .addModifiers(KModifier.CONST)
+                            .build()
+                    )
+                    .addProperty(
+                        PropertySpec.builder("MARIADB_VERSION", String::class)
+                            .initializer("%S", libs.versions.mariadb.get())
+                            .addModifiers(KModifier.CONST)
+                            .build()
+                    )
+                    .addProperty(
+                        PropertySpec.builder("POSTGRESQL_VERSION", String::class)
+                            .initializer("%S", libs.versions.postgresql.get())
                             .addModifiers(KModifier.CONST)
                             .build()
                     )

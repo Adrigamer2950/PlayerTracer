@@ -2,11 +2,10 @@ package me.adrigamer2950.playertracer.database.impl
 
 import me.adrigamer2950.playertracer.database.LogsDatabase
 import org.jetbrains.exposed.sql.Database
-import java.io.File
 
-class H2Database : LogsDatabase() {
+class SQLiteDatabase : LogsDatabase() {
 
     override fun initializeDatabase() {
-        database = Database.connect("jdbc:h2:file:${File(plugin.dataFolder, "database").absolutePath}", driver = "org.h2.Driver")
+        database = Database.connect("jdbc:sqlite:${plugin.dataFolder.resolve("database").absolutePath}", driver = "org.sqlite.JDBC")
     }
 }

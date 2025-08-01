@@ -6,12 +6,17 @@ import me.adrigamer2950.adriapi.api.APIPlugin
 import me.adrigamer2950.adriapi.lib.libby.Library
 import me.adrigamer2950.playertracer.api.PlayerTracer
 import me.adrigamer2950.playertracer.api.logs.Log
+import me.adrigamer2950.playertracer.database.LogsDatabase
 import me.adrigamer2950.playertracer.database.impl.H2Database
+import me.adrigamer2950.playertracer.database.impl.SQLiteDatabase
+import me.adrigamer2950.playertracer.database.impl.remote.MariaDBDatabase
+import me.adrigamer2950.playertracer.database.impl.remote.MySQLDatabase
+import me.adrigamer2950.playertracer.database.impl.remote.PostgreSQLDatabase
 import me.adrigamer2950.playertracer.logs.*
 import me.adrigamer2950.playertracer.util.launchCoroutine
 import org.bukkit.plugin.Plugin
 import java.sql.Timestamp
-import java.util.UUID
+import java.util.*
 import java.util.concurrent.CompletableFuture
 import kotlin.reflect.KClass
 
@@ -25,7 +30,7 @@ class PlayerTracerPlugin : APIPlugin(), PlayerTracer {
 
     val logsProvider = LogsProvider(this.logger)
     val logsManager = LogsManager(this)
-    val database = H2Database(this)
+    lateinit var database: LogsDatabase
 
     override fun onPreLoad() {
         // Enabled while still in development
@@ -40,6 +45,26 @@ class PlayerTracerPlugin : APIPlugin(), PlayerTracer {
                     .groupId("com.h2database")
                     .artifactId("h2")
                     .version(BuildConstants.H2_VERSION)
+                    .build(),
+                Library.builder()
+                    .groupId("org.xerial")
+                    .artifactId("sqlite-jdbc")
+                    .version(BuildConstants.SQLITE_VERSION)
+                    .build(),
+                Library.builder()
+                    .groupId("mysql")
+                    .artifactId("mysql-connector-java")
+                    .version(BuildConstants.MYSQL_VERSION)
+                    .build(),
+                Library.builder()
+                    .groupId("org.mariadb.jdbc")
+                    .artifactId("mariadb-java-client")
+                    .version(BuildConstants.MARIADB_VERSION)
+                    .build(),
+                Library.builder()
+                    .groupId("org.postgresql")
+                    .artifactId("postgresql")
+                    .version(BuildConstants.POSTGRESQL_VERSION)
                     .build(),
                 Library.builder()
                     .groupId("org.jetbrains.kotlin")
@@ -66,13 +91,26 @@ class PlayerTracerPlugin : APIPlugin(), PlayerTracer {
         } catch (e: Exception) {
             logger.error("&cError loading libraries. Shutting down...", e)
             server.pluginManager.disablePlugin(this)
+            return
         }
 
         Config.init()
 
-        database.connect()
+        database = when (Config.Database.driver) {
+            Config.Database.Driver.H2 -> H2Database()
+            Config.Database.Driver.SQLITE -> SQLiteDatabase()
+            Config.Database.Driver.MYSQL -> MySQLDatabase()
+            Config.Database.Driver.MARIADB -> MariaDBDatabase()
+            Config.Database.Driver.POSTGRESQL -> PostgreSQLDatabase()
+        }
 
-        this.logsProvider.registerLog(this, JoinServerLog::class, LeaveServerLog::class, ChatLog::class, CommandLog::class)
+        this.logsProvider.registerLog(
+            this,
+            JoinServerLog::class,
+            LeaveServerLog::class,
+            ChatLog::class,
+            CommandLog::class
+        )
 
         logger.info("&6Loaded in ${System.currentTimeMillis() - preLoadTime}ms")
     }

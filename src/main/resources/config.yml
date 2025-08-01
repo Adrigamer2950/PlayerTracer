@@ -1,4 +1,12 @@
 database:
-  # Can be H2, SQLITE
+  # Can be H2, SQLite, MySQL, MariaDB, PostgreSQL
   # Not case-sensitive
   driver: H2
+
+  # Only useful for remote databases (MySQL, MariaDB, PostgreSQL, etc..)
+  remote:
+    hostname: localhost
+    port: 3306
+    database: playertracer
+    username: root
+    password: ""

@@ -17,22 +17,23 @@ import java.util.*
 import kotlin.reflect.KClass
 import kotlin.reflect.full.isSubclassOf
 
-// TODO: Add support for SQLite, MySQL, etc..
-abstract class LogsDatabase(protected val plugin: PlayerTracerPlugin) {
+abstract class LogsDatabase {
+
+    protected val plugin: PlayerTracerPlugin = PlayerTracerPlugin.instance
 
     private val logger: Logger = plugin.logger
 
     lateinit var database: Database
 
-    // Must be overridden. The overridden method should assign a value
-    // to the `database` field, then call super.connect()
-    open fun connect() {
-        if (!::database.isInitialized) {
-            throw IllegalStateException("This method wasn't overridden properly. " +
-                    "The overridden method must assign a value to the 'database' field, " +
-                    "then call super.connect()")
-        }
+    init {
+        // Initialize database details and make initial connection
+        initializeDatabase()
+        connect()
+    }
 
+    abstract fun initializeDatabase()
+
+    fun connect() {
         // Force initial connection to the database and check if connection was successful
         try {
             transaction(database) {
