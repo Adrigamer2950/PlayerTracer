@@ -1,5 +1,9 @@
 @file:Suppress("VulnerableLibrariesLocal")
 
+import com.squareup.kotlinpoet.FileSpec
+import com.squareup.kotlinpoet.KModifier
+import com.squareup.kotlinpoet.PropertySpec
+import com.squareup.kotlinpoet.TypeSpec
 import io.papermc.hangarpublishplugin.model.Platforms
 import net.minecrell.pluginyml.bukkit.BukkitPluginDescription
 import xyz.jpenilla.runpaper.task.RunServer
@@ -12,6 +16,15 @@ plugins {
     alias(libs.plugins.run.server)
     alias(libs.plugins.modrinth)
     alias(libs.plugins.hangar.publish)
+}
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath(libs.kotlinpoet)
+    }
 }
 
 group = "me.adrigamer2950.playertracer"
@@ -50,12 +63,10 @@ allprojects {
 dependencies {
     implementation(project(":api"))
 
-    implementation(libs.exposed.core)
-    implementation(libs.exposed.crypt)
-    implementation(libs.exposed.dao)
-    implementation(libs.exposed.jdbc)
-    implementation(libs.exposed.json)
-    implementation(libs.h2)
+    compileOnly(libs.exposed.core)
+    compileOnly(libs.exposed.dao)
+    compileOnly(libs.exposed.jdbc)
+    compileOnly(libs.h2)
 }
 
 bukkit {
@@ -171,4 +182,53 @@ tasks.withType(AbstractRun::class) {
         "-Dusing.aikars.flags=https://mcflags.emc.gs", "-Daikars.new.flags=true"
     )
 
+}
+
+tasks.register("generateBuildConstants") {
+    doLast {
+        val fileSpec = FileSpec.builder("me.adrigamer2950.playertracer", "BuildConstants")
+            .addType(
+                TypeSpec.objectBuilder("BuildConstants")
+                    .addProperty(
+                        PropertySpec.builder("VERSION", String::class)
+                            .initializer("%S", rootProject.version as String)
+                            .addModifiers(KModifier.CONST)
+                            .build()
+                    )
+                    .addProperty(
+                        PropertySpec.builder("H2_VERSION", String::class)
+                            .initializer("%S", libs.versions.h2.get())
+                            .addModifiers(KModifier.CONST)
+                            .build()
+                    )
+                    .addProperty(
+                        PropertySpec.builder("KOTLIN_VERSION", String::class)
+                            .initializer("%S", libs.versions.kotlin.get())
+                            .addModifiers(KModifier.CONST)
+                            .build()
+                    )
+                    .addProperty(
+                        PropertySpec.builder("EXPOSED_VERSION", String::class)
+                            .initializer("%S", libs.versions.exposed.get())
+                            .addModifiers(KModifier.CONST)
+                            .build()
+                    )
+                    .build()
+            )
+            .build()
+
+        val generatedDir = layout.buildDirectory.dir("generated/templates").get().asFile
+        fileSpec.writeTo(generatedDir)
+    }
+}
+
+tasks.named("compileKotlin") {
+    dependsOn(tasks.named("generateBuildConstants"))
+}
+
+val generatedDir = layout.buildDirectory.dir("generated/templates").get().asFile
+
+sourceSets.main {
+    java.srcDirs("src/main/java")
+    kotlin.srcDirs("src/main/kotlin", generatedDir)
 }

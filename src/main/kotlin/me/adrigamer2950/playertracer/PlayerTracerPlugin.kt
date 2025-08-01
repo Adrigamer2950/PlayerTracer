@@ -3,6 +3,7 @@ package me.adrigamer2950.playertracer
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import me.adrigamer2950.adriapi.api.APIPlugin
+import me.adrigamer2950.adriapi.lib.libby.Library
 import me.adrigamer2950.playertracer.api.PlayerTracer
 import me.adrigamer2950.playertracer.api.logs.Log
 import me.adrigamer2950.playertracer.database.impl.H2Database
@@ -33,6 +34,35 @@ class PlayerTracerPlugin : APIPlugin(), PlayerTracer {
         instance = this
 
         val preLoadTime = System.currentTimeMillis()
+
+        try {
+            libraryManager.loadLibraries(
+                Library.builder()
+                    .groupId("com.h2database")
+                    .artifactId("h2")
+                    .version(BuildConstants.H2_VERSION)
+                    .build(),
+                Library.builder()
+                    .groupId("org.jetbrains.kotlin")
+                    .artifactId("kotlin-reflect")
+                    .version(BuildConstants.KOTLIN_VERSION)
+                    .build()
+            )
+
+            listOf("core", "dao", "jdbc").forEach {
+                libraryManager.loadLibraries(
+                    Library.builder()
+                        .groupId("org.jetbrains.exposed")
+                        .artifactId("exposed-$it")
+                        .version(BuildConstants.EXPOSED_VERSION)
+                        .resolveTransitiveDependencies(true)
+                        .build()
+                )
+            }
+        } catch (e: Exception) {
+            logger.error("&cError loading libraries. Shutting down...", e)
+            server.pluginManager.disablePlugin(this)
+        }
 
         database.connect()
 
