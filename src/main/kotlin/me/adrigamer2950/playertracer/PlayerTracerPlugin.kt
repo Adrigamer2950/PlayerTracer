@@ -15,7 +15,6 @@ import java.util.UUID
 import java.util.concurrent.CompletableFuture
 import kotlin.reflect.KClass
 
-// TODO: config.yml
 // TODO: messages.yml
 class PlayerTracerPlugin : APIPlugin(), PlayerTracer {
 
@@ -46,6 +45,11 @@ class PlayerTracerPlugin : APIPlugin(), PlayerTracer {
                     .groupId("org.jetbrains.kotlin")
                     .artifactId("kotlin-reflect")
                     .version(BuildConstants.KOTLIN_VERSION)
+                    .build(),
+                Library.builder()
+                    .groupId("dev.dejvokep")
+                    .artifactId("boosted-yaml")
+                    .version(BuildConstants.BOOSTED_YAML_VERSION)
                     .build()
             )
 
@@ -63,6 +67,8 @@ class PlayerTracerPlugin : APIPlugin(), PlayerTracer {
             logger.error("&cError loading libraries. Shutting down...", e)
             server.pluginManager.disablePlugin(this)
         }
+
+        Config.init()
 
         database.connect()
 

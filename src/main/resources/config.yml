@@ -1,0 +1,4 @@
+database:
+  # Can be H2, SQLITE
+  # Not case-sensitive
+  driver: H2

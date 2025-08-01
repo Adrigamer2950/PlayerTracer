@@ -67,6 +67,8 @@ dependencies {
     compileOnly(libs.exposed.dao)
     compileOnly(libs.exposed.jdbc)
     compileOnly(libs.h2)
+
+    compileOnly(libs.boosted.yaml)
 }
 
 bukkit {
@@ -210,6 +212,12 @@ tasks.register("generateBuildConstants") {
                     .addProperty(
                         PropertySpec.builder("EXPOSED_VERSION", String::class)
                             .initializer("%S", libs.versions.exposed.get())
+                            .addModifiers(KModifier.CONST)
+                            .build()
+                    )
+                    .addProperty(
+                        PropertySpec.builder("BOOSTED_YAML_VERSION", String::class)
+                            .initializer("%S", libs.versions.boosted.yaml.get())
                             .addModifiers(KModifier.CONST)
                             .build()
                     )
