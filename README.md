@@ -26,7 +26,7 @@ to a more detailed list of actions a player is doing, and has done.
 > This plugin has active support for Minecraft 1.17+. So, if you are using a lower version, you will not receive **any** support
 
 # TODOs
-- [ ] Store logs in a database (MySQL/MariaDB, SQLite, H2)
+- [x] Store logs in a database (MySQL/MariaDB, SQLite, H2)
 - [ ] In-Game Log viewer (GUI & Command)
 - [ ] API
 - [ ] Modules (extensions which could be used to add more logs
