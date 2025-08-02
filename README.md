@@ -31,3 +31,4 @@ to a more detailed list of actions a player is doing, and has done.
 - [ ] API
 - [ ] Modules (extensions which could be used to add more logs
   without the needing of a separate plugin. Similar to how PlaceholderAPI works)
+- [ ] Purge system (automatically and manually)
