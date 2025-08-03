@@ -8,6 +8,8 @@ import me.adrigamer2950.playertracer.commands.AbstractPLCommand
 import me.adrigamer2950.playertracer.commands.MainCommand
 import me.adrigamer2950.playertracer.util.Permission
 import me.adrigamer2950.playertracer.util.TimeUtil
+import me.adrigamer2950.playertracer.viewmode.ViewMode
+import me.adrigamer2950.playertracer.viewmode.ViewModeManager
 import org.bukkit.Bukkit
 import java.sql.Timestamp
 import java.util.*
@@ -113,10 +115,17 @@ class SearchSubCommand(val parent: MainCommand) : AbstractPLCommand("search", "S
                 return@thenAccept
             }
 
-            cache.put(searcherUUID, results)
+            when (ViewModeManager.get(searcherUUID)) {
+                ViewMode.GUI -> {
+                    TODO("Yet to be implemented")
+                }
+                ViewMode.CHAT -> {
+                    cache.put(searcherUUID, results)
 
-            parent.subCommands.firstOrNull { it.info.name == "page" }?.execute(user, arrayOf("1"), commandName) ?: run {
-                user.sendMessage("&cThere was an error trying to paginate the results. Pagination command not found")
+                    parent.subCommands.firstOrNull { it.info.name == "page" }?.execute(user, arrayOf("1"), commandName) ?: run {
+                        user.sendMessage("&cThere was an error trying to paginate the results. Pagination command not found")
+                    }
+                }
             }
         }.exceptionally {
             user.sendMessage("&cAn error occurred while searching logs: ${it.message}")

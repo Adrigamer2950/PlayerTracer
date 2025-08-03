@@ -14,6 +14,7 @@ import me.adrigamer2950.playertracer.database.impl.remote.MySQLDatabase
 import me.adrigamer2950.playertracer.database.impl.remote.PostgreSQLDatabase
 import me.adrigamer2950.playertracer.logs.*
 import me.adrigamer2950.playertracer.util.launchCoroutine
+import me.adrigamer2950.playertracer.viewmode.ViewModeManager
 import org.bukkit.plugin.Plugin
 import java.sql.Timestamp
 import java.util.*
@@ -112,6 +113,8 @@ class PlayerTracerPlugin : APIPlugin(), PlayerTracer {
             CommandLog::class
         )
 
+        ViewModeManager.init()
+
         logger.info("&6Loaded in ${System.currentTimeMillis() - preLoadTime}ms")
     }
 
@@ -135,6 +138,8 @@ class PlayerTracerPlugin : APIPlugin(), PlayerTracer {
     }
 
     override fun onUnload() {
+        ViewModeManager.save()
+
         logger.info("&cDisabled")
     }
 
