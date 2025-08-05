@@ -6,6 +6,7 @@ import me.adrigamer2950.playertracer.api.PlayerTracer
 import me.adrigamer2950.playertracer.api.logs.Log
 import me.adrigamer2950.playertracer.commands.AbstractPLCommand
 import me.adrigamer2950.playertracer.commands.MainCommand
+import me.adrigamer2950.playertracer.gui.LogResultsGUI
 import me.adrigamer2950.playertracer.util.Permission
 import me.adrigamer2950.playertracer.util.TimeUtil
 import me.adrigamer2950.playertracer.viewmode.ViewMode
@@ -117,7 +118,9 @@ class SearchSubCommand(val parent: MainCommand) : AbstractPLCommand("search", "S
 
             when (ViewModeManager.get(searcherUUID)) {
                 ViewMode.GUI -> {
-                    TODO("Yet to be implemented")
+                    plugin.scheduler.run {
+                        LogResultsGUI(user, results).openInventory()
+                    }
                 }
                 ViewMode.CHAT -> {
                     cache.put(searcherUUID, results)

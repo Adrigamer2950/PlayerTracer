@@ -40,6 +40,8 @@ class ViewModeSubCommand : AbstractPLCommand("viewmode", "Changes your log viewe
         }
 
         ViewModeManager.set(user.getPlayerOrNull()!!.uniqueId, viewMode)
+
+        user.sendMessage("&aView mode set to &6${viewMode.name.lowercase()}")
     }
 
     override fun tabComplete(user: User, args: Array<out String>, commandName: String): List<String> {
