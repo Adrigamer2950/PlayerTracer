@@ -19,7 +19,7 @@ object ViewModeManager {
     fun init() {
         yaml = YamlDocument.create(
             File(PlayerTracerPlugin.instance.dataFolder, "viewmodes.yml"),
-            PlayerTracerPlugin.instance::class.java.getResourceAsStream("viewmodes.yml") ?: throw IllegalStateException("viewmodes.yml not found in plugin resources"),
+            PlayerTracerPlugin.instance::class.java.classLoader.getResourceAsStream("viewmodes.yml") ?: throw IllegalStateException("viewmodes.yml not found in plugin resources"),
             LoaderSettings.builder().setAutoUpdate(true).build()
         )
 
