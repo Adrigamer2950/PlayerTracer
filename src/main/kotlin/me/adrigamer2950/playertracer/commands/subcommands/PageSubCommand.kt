@@ -5,8 +5,8 @@ import me.adrigamer2950.playertracer.commands.AbstractPLCommand
 import me.adrigamer2950.playertracer.util.Constants.PAGE_SIZE
 import me.adrigamer2950.playertracer.util.Permission
 import me.adrigamer2950.playertracer.util.TimeUtil
+import me.adrigamer2950.playertracer.util.miniMessage
 import net.kyori.adventure.text.event.ClickEvent
-import net.kyori.adventure.text.minimessage.MiniMessage
 import org.bukkit.Bukkit
 
 class PageSubCommand : AbstractPLCommand("page", "Shows the specified page of the current search", listOf("p")) {
@@ -49,12 +49,10 @@ class PageSubCommand : AbstractPLCommand("page", "Shows the specified page of th
         user.sendMessage("&7--------- &bSearch Results &7---------")
         user.sendMessage("&7Page $pageNumber of $totalPages")
         pagedLogs.forEach {
-            val mm = MiniMessage.miniMessage()
-
             val time = "[${TimeUtil.formatTimeAgo(it.timestamp)}]"
 
             user.sendMessage(
-                mm.deserialize(
+                miniMessage(
                     "<hover:show_text:'${TimeUtil.timestampToDate(it.timestamp)}'><gray>$time</hover> " +
                             "<aqua>${Bukkit.getOfflinePlayer(it.playerUUID).name}<gray>: ${it.message}"
                 )
@@ -67,7 +65,7 @@ class PageSubCommand : AbstractPLCommand("page", "Shows the specified page of th
                 val space = " ".repeat(time.length)
 
                 user.sendMessage(
-                    mm.deserialize("<hover:show_text:'$teleportCommand'><gray>$space (${it.location.worldName}/x${it.location.x}/y${it.location.y}/z${it.location.z})</hover>")
+                    miniMessage("<hover:show_text:'$teleportCommand'><gray>$space (${it.location.worldName}/x${it.location.x}/y${it.location.y}/z${it.location.z})</hover>")
                         .clickEvent(ClickEvent.runCommand(teleportCommand))
                 )
             }
