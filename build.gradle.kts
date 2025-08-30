@@ -162,7 +162,7 @@ tasks.named<RunServer>("runServer").configure {
 
     downloadPlugins {
         // ViaVersion
-        hangar("ViaVersion", "5.2.0")
+        hangar("ViaVersion", "5.4.2")
 
         modrinth("luckperms", "v5.5.0-bukkit")
     }
