@@ -1,6 +1,7 @@
 package me.adrigamer2950.playertracer.commands.subcommands
 
 import me.adrigamer2950.adriapi.api.user.User
+import me.adrigamer2950.playertracer.PlayerTracerPlugin
 import me.adrigamer2950.playertracer.commands.AbstractPLCommand
 import me.adrigamer2950.playertracer.util.Constants.PAGE_SIZE
 import me.adrigamer2950.playertracer.util.Permission
@@ -33,7 +34,7 @@ class PageSubCommand : AbstractPLCommand("page", "Shows the specified page of th
             return
         }
 
-        val totalPages = (logs.size / PAGE_SIZE).toInt() + if (logs.size % PAGE_SIZE > 0) 1 else 0
+        val totalPages = (logs.size / PAGE_SIZE) + if (logs.size % PAGE_SIZE > 0) 1 else 0
 
         if (pageNumber < 1 || pageNumber > totalPages) {
             user.sendMessage("&cInvalid page number. Please provide a number between 1 and $totalPages")
@@ -50,11 +51,12 @@ class PageSubCommand : AbstractPLCommand("page", "Shows the specified page of th
         user.sendMessage("&7Page $pageNumber of $totalPages")
         pagedLogs.forEach {
             val time = "[${TimeUtil.formatTimeAgo(it.timestamp)}]"
+            val data = PlayerTracerPlugin.instance.logsProvider.getData(it::class)
 
             user.sendMessage(
                 miniMessage(
                     "<hover:show_text:'${TimeUtil.timestampToDate(it.timestamp)}'><gray>$time</hover> " +
-                            "<aqua>${Bukkit.getOfflinePlayer(it.playerUUID).name}<gray>: ${it.message}"
+                            "<aqua>${Bukkit.getOfflinePlayer(it.playerUUID).name}<gray> | <white>${data.displayName}</white>: ${it.message}"
                 )
             )
 

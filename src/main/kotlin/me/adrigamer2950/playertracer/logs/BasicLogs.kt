@@ -33,7 +33,7 @@ class LeaveServerLog(player: Player) : AbstractLog("Left the server", player) {
 /**
  * Represents a log entry relating a player chatting.
  */
-class ChatLog(player: Player, chatMessage: String) : AbstractLog("Chat: $chatMessage", player) {
+class ChatLog(player: Player, chatMessage: String) : AbstractLog(chatMessage, player) {
     constructor(player: Player, chatMessage: Component) : this(player, LegacyComponentSerializer.legacyAmpersand().serialize(chatMessage))
 
     companion object {
@@ -45,7 +45,7 @@ class ChatLog(player: Player, chatMessage: String) : AbstractLog("Chat: $chatMes
 /**
  * Represents a log entry relating a player executing a command.
  */
-class CommandLog(player: Player, command: String) : AbstractLog("Command: $command", player) {
+class CommandLog(player: Player, command: String) : AbstractLog(command, player) {
 
     companion object {
         @JvmField
