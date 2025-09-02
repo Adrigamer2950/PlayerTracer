@@ -1,7 +1,6 @@
 package me.adrigamer2950.playertracer.viewmode
 
 import dev.dejvokep.boostedyaml.YamlDocument
-import dev.dejvokep.boostedyaml.settings.loader.LoaderSettings
 import me.adrigamer2950.playertracer.PlayerTracerPlugin
 import java.io.File
 import java.util.UUID
@@ -19,27 +18,29 @@ object ViewModeManager {
     fun init() {
         yaml = YamlDocument.create(
             File(PlayerTracerPlugin.instance.dataFolder, "viewmodes.yml"),
-            PlayerTracerPlugin.instance::class.java.classLoader.getResourceAsStream("viewmodes.yml") ?: throw IllegalStateException("viewmodes.yml not found in plugin resources"),
-            LoaderSettings.builder().setAutoUpdate(true).build()
+            PlayerTracerPlugin.instance::class.java.classLoader.getResourceAsStream("viewmodes.yml") ?: throw IllegalStateException("viewmodes.yml not found in plugin resources")
         )
 
         yaml.reload()
 
-        yaml.getSection("players")?.let {
-            for (entry in it.keys) {
-                val uuid = UUID.fromString(entry as String)
-                val modeName = it.getString(entry) ?: continue
-                val mode = ViewMode.entries.find { it.name.equals(modeName, true) } ?: continue
+        yaml.getSection("players")?.let { section ->
+            section.keys.forEach { key ->
+                val uuid = runCatching { UUID.fromString(key.toString()) }.getOrNull() ?: return@forEach
+                val mode = ViewMode.entries.find { it.name.equals(section.getString(key.toString()), true) } ?: return@forEach
+
                 players[uuid] = mode
             }
-        } ?: run {
-            yaml.set("players", emptyMap<String, String>())
         }
     }
 
     @JvmStatic
     fun save() {
-        yaml.set("players", players.mapValues { it.value.name })
+        yaml.remove("players")
+
+        for ((uuid, mode) in players) {
+            yaml.set("players.$uuid", mode.name)
+        }
+
         yaml.save()
     }
 
