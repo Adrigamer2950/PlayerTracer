@@ -2,7 +2,7 @@ package me.adrigamer2950.playertracer.database
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import me.adrigamer2950.adriapi.api.logger.Logger
+import me.devadri.obsidian.logger.Logger
 import me.adrigamer2950.playertracer.PlayerTracerPlugin
 import me.adrigamer2950.playertracer.api.logs.Log
 import me.adrigamer2950.playertracer.database.tables.LogsTable

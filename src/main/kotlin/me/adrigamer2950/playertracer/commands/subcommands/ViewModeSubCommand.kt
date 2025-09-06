@@ -1,10 +1,12 @@
 package me.adrigamer2950.playertracer.commands.subcommands
 
-import me.adrigamer2950.adriapi.api.user.User
+import me.devadri.obsidian.user.User
 import me.adrigamer2950.playertracer.commands.AbstractPLCommand
 import me.adrigamer2950.playertracer.util.Permission
 import me.adrigamer2950.playertracer.viewmode.ViewMode
 import me.adrigamer2950.playertracer.viewmode.ViewModeManager
+import me.devadri.obsidian.asPlayer
+import me.devadri.obsidian.isConsole
 
 class ViewModeSubCommand : AbstractPLCommand("viewmode", "Changes your log viewer type", listOf("vm")) {
 
@@ -39,7 +41,7 @@ class ViewModeSubCommand : AbstractPLCommand("viewmode", "Changes your log viewe
             }
         }
 
-        ViewModeManager.set(user.getPlayerOrNull()!!.uniqueId, viewMode)
+        ViewModeManager.set(user.asPlayer()!!.uniqueId, viewMode)
 
         user.sendMessage("&aView mode set to &6${viewMode.name.lowercase()}")
     }

@@ -54,7 +54,7 @@ allprojects {
 
         compileOnly(rootProject.libs.paper.api)
 
-        implementation(rootProject.libs.adriapi)
+        implementation(rootProject.libs.obsidian)
 
         implementation(kotlin("stdlib-jdk8"))
     }

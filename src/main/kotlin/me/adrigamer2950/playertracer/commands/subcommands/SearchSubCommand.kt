@@ -1,6 +1,6 @@
 package me.adrigamer2950.playertracer.commands.subcommands
 
-import me.adrigamer2950.adriapi.api.user.User
+import me.devadri.obsidian.user.User
 import me.adrigamer2950.playertracer.PlayerTracerPlugin
 import me.adrigamer2950.playertracer.api.PlayerTracer
 import me.adrigamer2950.playertracer.api.logs.Log
@@ -11,6 +11,8 @@ import me.adrigamer2950.playertracer.util.Permission
 import me.adrigamer2950.playertracer.util.TimeUtil
 import me.adrigamer2950.playertracer.viewmode.ViewMode
 import me.adrigamer2950.playertracer.viewmode.ViewModeManager
+import me.devadri.obsidian.asPlayer
+import me.devadri.obsidian.isConsole
 import org.bukkit.Bukkit
 import java.sql.Timestamp
 import java.util.*
@@ -97,7 +99,7 @@ class SearchSubCommand(val parent: MainCommand) : AbstractPLCommand("search", "S
             return
         }
 
-        val searcherUUID = if (user.isConsole()) null else user.getPlayerOrNull()!!.uniqueId
+        val searcherUUID = if (user.isConsole()) null else user.asPlayer()!!.uniqueId
 
         if (searching.contains(searcherUUID)) {
             user.sendMessage("&cYou are already searching logs. Please wait for the previous search to finish")
@@ -119,7 +121,7 @@ class SearchSubCommand(val parent: MainCommand) : AbstractPLCommand("search", "S
             when (ViewModeManager.get(searcherUUID)) {
                 ViewMode.GUI -> {
                     plugin.scheduler.run {
-                        LogResultsGUI(user, results).openInventory()
+                        LogResultsGUI(results).openFor(user.asPlayer()!!)
                     }
                 }
                 ViewMode.CHAT -> {

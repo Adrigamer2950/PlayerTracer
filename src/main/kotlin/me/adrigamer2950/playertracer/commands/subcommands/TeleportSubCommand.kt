@@ -1,8 +1,10 @@
 package me.adrigamer2950.playertracer.commands.subcommands
 
-import me.adrigamer2950.adriapi.api.user.User
+import me.devadri.obsidian.user.User
 import me.adrigamer2950.playertracer.commands.AbstractPLCommand
 import me.adrigamer2950.playertracer.util.Permission
+import me.devadri.obsidian.asPlayer
+import me.devadri.obsidian.isConsole
 import org.bukkit.Bukkit
 import org.bukkit.Location
 
@@ -50,6 +52,6 @@ class TeleportSubCommand : AbstractPLCommand("tp", "Teleports you to a specified
             return
         }
 
-        user.getPlayerOrNull()!!.teleportAsync(Location(world, x, y, z))
+        user.asPlayer()!!.teleportAsync(Location(world, x, y, z))
     }
 }

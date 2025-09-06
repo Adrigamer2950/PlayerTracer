@@ -1,6 +1,7 @@
 package me.adrigamer2950.playertracer.util
 
-import me.adrigamer2950.adriapi.api.user.User
+import me.devadri.obsidian.isConsole
+import me.devadri.obsidian.user.User
 
 @JvmInline
 value class Permission(val permission: String) {

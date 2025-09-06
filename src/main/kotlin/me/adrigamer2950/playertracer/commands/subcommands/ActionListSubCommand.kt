@@ -1,6 +1,6 @@
 package me.adrigamer2950.playertracer.commands.subcommands
 
-import me.adrigamer2950.adriapi.api.user.User
+import me.devadri.obsidian.user.User
 import me.adrigamer2950.playertracer.PlayerTracerPlugin
 import me.adrigamer2950.playertracer.commands.AbstractPLCommand
 

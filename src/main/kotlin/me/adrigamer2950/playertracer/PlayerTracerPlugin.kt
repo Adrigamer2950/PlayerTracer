@@ -2,8 +2,6 @@ package me.adrigamer2950.playertracer
 
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
-import me.adrigamer2950.adriapi.api.APIPlugin
-import me.adrigamer2950.adriapi.lib.libby.Library
 import me.adrigamer2950.playertracer.api.PlayerTracer
 import me.adrigamer2950.playertracer.api.logs.Log
 import me.adrigamer2950.playertracer.database.LogsDatabase
@@ -15,6 +13,8 @@ import me.adrigamer2950.playertracer.database.impl.remote.PostgreSQLDatabase
 import me.adrigamer2950.playertracer.logs.*
 import me.adrigamer2950.playertracer.util.launchCoroutine
 import me.adrigamer2950.playertracer.viewmode.ViewModeManager
+import me.devadri.obsidian.ObsidianPlugin
+import me.devadri.obsidian.lib.libby.Library
 import org.bukkit.plugin.Plugin
 import java.sql.Timestamp
 import java.util.*
@@ -22,7 +22,7 @@ import java.util.concurrent.CompletableFuture
 import kotlin.reflect.KClass
 
 // TODO: messages.yml
-class PlayerTracerPlugin : APIPlugin(), PlayerTracer {
+class PlayerTracerPlugin : ObsidianPlugin(), PlayerTracer {
 
     companion object {
         lateinit var instance: PlayerTracerPlugin

@@ -1,7 +1,7 @@
 package me.adrigamer2950.playertracer.commands.subcommands
 
-import me.adrigamer2950.adriapi.api.command.Command
-import me.adrigamer2950.adriapi.api.user.User
+import me.devadri.obsidian.command.Command
+import me.devadri.obsidian.user.User
 import me.adrigamer2950.playertracer.commands.AbstractPLCommand
 
 class HelpSubCommand(private val parent: Command) : AbstractPLCommand("help", "Shows all available commands") {

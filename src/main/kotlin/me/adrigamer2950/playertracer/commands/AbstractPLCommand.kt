@@ -1,6 +1,6 @@
 package me.adrigamer2950.playertracer.commands
 
-import me.adrigamer2950.adriapi.api.command.AbstractCommand
+import me.devadri.obsidian.command.AbstractCommand
 import me.adrigamer2950.playertracer.PlayerTracerPlugin
 
 abstract class AbstractPLCommand(

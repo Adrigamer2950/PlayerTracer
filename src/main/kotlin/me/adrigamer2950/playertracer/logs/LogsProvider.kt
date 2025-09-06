@@ -1,7 +1,7 @@
 package me.adrigamer2950.playertracer.logs
 
 import com.google.gson.Gson
-import me.adrigamer2950.adriapi.api.logger.Logger
+import me.devadri.obsidian.logger.Logger
 import me.adrigamer2950.playertracer.api.logs.Log
 import me.adrigamer2950.playertracer.api.logs.LogData
 import org.bukkit.plugin.Plugin

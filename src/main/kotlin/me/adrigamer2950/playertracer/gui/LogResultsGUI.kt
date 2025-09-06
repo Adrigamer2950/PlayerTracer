@@ -1,16 +1,15 @@
 package me.adrigamer2950.playertracer.gui
 
-import me.adrigamer2950.adriapi.api.inventory.InventorySize
-import me.adrigamer2950.adriapi.api.item.ItemBuilder
-import me.adrigamer2950.adriapi.api.user.User
+import me.devadri.obsidian.inventory.InventorySize
+import me.devadri.obsidian.item.ItemBuilder
+import me.devadri.obsidian.user.User
 import me.adrigamer2950.playertracer.PlayerTracerPlugin
 import me.adrigamer2950.playertracer.api.logs.Log
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.minimessage.MiniMessage
 import org.bukkit.Material
 
-class LogResultsGUI(user: User, results: List<Log>) : PaginatedInventory(
-    user,
+class LogResultsGUI(results: List<Log>) : PaginatedInventory(
     MiniMessage.miniMessage().deserialize("<blue>Log Results"),
     InventorySize.SIX_ROWS
 ) {
@@ -38,8 +37,8 @@ class LogResultsGUI(user: User, results: List<Log>) : PaginatedInventory(
         }
     }
 
-    override fun setupInventory() {
-        var stack = ItemBuilder.builder()
+    override fun setup() {
+        val stack = ItemBuilder.builder()
             .material(Material.GRAY_STAINED_GLASS_PANE)
             .name(Component.text(" "))
             .build()

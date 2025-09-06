@@ -1,12 +1,14 @@
 package me.adrigamer2950.playertracer.commands.subcommands
 
-import me.adrigamer2950.adriapi.api.user.User
+import me.devadri.obsidian.user.User
 import me.adrigamer2950.playertracer.PlayerTracerPlugin
 import me.adrigamer2950.playertracer.commands.AbstractPLCommand
 import me.adrigamer2950.playertracer.util.Constants.PAGE_SIZE
 import me.adrigamer2950.playertracer.util.Permission
 import me.adrigamer2950.playertracer.util.TimeUtil
 import me.adrigamer2950.playertracer.util.miniMessage
+import me.devadri.obsidian.asPlayer
+import me.devadri.obsidian.isConsole
 import net.kyori.adventure.text.event.ClickEvent
 import org.bukkit.Bukkit
 
@@ -19,7 +21,7 @@ class PageSubCommand : AbstractPLCommand("page", "Shows the specified page of th
         args: Array<out String>,
         commandName: String
     ) {
-        val logs = SearchSubCommand.cache[if (user.isConsole()) null else user.getPlayerOrNull()!!.uniqueId] ?: run {
+        val logs = SearchSubCommand.cache[if (user.isConsole()) null else user.asPlayer()!!.uniqueId] ?: run {
             user.sendMessage("&cNo search results found. Please run a search first.")
             return
         }

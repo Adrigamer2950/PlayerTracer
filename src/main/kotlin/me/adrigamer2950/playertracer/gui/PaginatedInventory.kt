@@ -1,14 +1,12 @@
 package me.adrigamer2950.playertracer.gui
 
-import me.adrigamer2950.adriapi.api.inventory.Inventory
-import me.adrigamer2950.adriapi.api.inventory.InventorySize
-import me.adrigamer2950.adriapi.api.item.ItemBuilder
-import me.adrigamer2950.adriapi.api.user.User
+import me.devadri.obsidian.inventory.Inventory
+import me.devadri.obsidian.inventory.InventorySize
+import me.devadri.obsidian.item.ItemBuilder
 import me.adrigamer2950.playertracer.PlayerTracerPlugin
 import net.kyori.adventure.text.Component
 
-abstract class PaginatedInventory(user: User, title: Component, size: InventorySize) : Inventory(
-    user,
+abstract class PaginatedInventory(title: Component, size: InventorySize) : Inventory(
     title,
     PlayerTracerPlugin.instance,
     size
