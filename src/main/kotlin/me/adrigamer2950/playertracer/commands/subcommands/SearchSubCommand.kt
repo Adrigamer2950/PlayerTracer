@@ -120,7 +120,7 @@ class SearchSubCommand(val parent: MainCommand) : AbstractPLCommand("search", "S
 
             when (ViewModeManager.get(searcherUUID)) {
                 ViewMode.GUI -> {
-                    plugin.scheduler.run {
+                    plugin.scheduler.sync().run {
                         LogResultsGUI(results).openFor(user.asPlayer()!!)
                     }
                 }
