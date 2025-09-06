@@ -39,7 +39,7 @@ class SearchSubCommand(val parent: MainCommand) : AbstractPLCommand("search", "S
             return
         }
 
-        var uuids = mutableListOf<UUID>()
+        val uuids = mutableListOf<UUID>()
         val actions = mutableListOf<KClass<out Log>>()
         var after: Timestamp? = null
         var afterS: String? = null

@@ -2,7 +2,6 @@ package me.adrigamer2950.playertracer.gui
 
 import me.devadri.obsidian.inventory.InventorySize
 import me.devadri.obsidian.item.ItemBuilder
-import me.devadri.obsidian.user.User
 import me.adrigamer2950.playertracer.PlayerTracerPlugin
 import me.adrigamer2950.playertracer.api.logs.Log
 import net.kyori.adventure.text.Component
