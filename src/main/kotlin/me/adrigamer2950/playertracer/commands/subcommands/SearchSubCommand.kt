@@ -54,12 +54,12 @@ class SearchSubCommand(val parent: MainCommand) : AbstractPLCommand("search", "S
                 val player = if (possibleUUID != null) {
                     Bukkit.getOfflinePlayer(possibleUUID)
                 } else {
-                    // Otherwise, find the player by name if it's cached (has joined the server before)
-                    Bukkit.getOfflinePlayerIfCached(playerInfo)
+                    // Otherwise, find the player by name if it's cached (has joined the server before) or is online
+                    Bukkit.getPlayer(playerInfo) ?: Bukkit.getOfflinePlayerIfCached(playerInfo)
                 }
 
                 // Check if player has been found. If not, send an error to the user
-                if (player == null || !player.hasPlayedBefore()) {
+                if (player == null || (!player.hasPlayedBefore() && !player.isOnline)) {
                     user.sendMessage("&cNo player found with name/uuid: &6$playerInfo&c. Please check if the player has joined the server before")
                     return
                 }
