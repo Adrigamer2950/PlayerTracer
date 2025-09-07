@@ -1,6 +1,6 @@
 # PlayerTracer
 <p align="center">
-    <img src="./logo_200x.jpg?raw=true" alt="Logo" />
+    <img src="https://github.com/Adrigamer2950/PlayerTracer/blob/master/logo_200x.jpg?raw=true" alt="Logo" />
 </p>
 
 Learn what are your players up to
@@ -29,7 +29,7 @@ to a more detailed list of actions a player is doing, and has done.
 - Store logs in a database (MySQL/MariaDB, SQLite, H2)
 - Search logs by player name, action and date
 - View logs in chat
-- (Not implemented yet) View logs in a nice GUI
+- View logs in a nice GUI
 - (Not implemented yet) Receive logs in real time through chat
 - (Not implemented yet) API to let plugin developers register their own logs
 - (Not implemented yet) Purge system (manually and automatically)
@@ -58,7 +58,7 @@ to verify that information or just to collect evidence against them.
 
 # TODOs
 - [x] Store logs in a database (MySQL/MariaDB, SQLite, H2)
-- [ ] In-Game Log viewer (GUI & Command)
+- [x] In-Game Log viewer (GUI & Command)
 - [ ] Receive logs in real time through chat
 - [ ] API
 - [ ] Purge system (automatically and manually)
