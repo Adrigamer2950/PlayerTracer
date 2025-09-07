@@ -67,11 +67,11 @@ dependencies {
     compileOnly(libs.exposed.dao)
     compileOnly(libs.exposed.jdbc)
 
-    runtimeOnly(libs.h2)
-    runtimeOnly(libs.sqlite)
-    runtimeOnly(libs.mysql)
-    runtimeOnly(libs.mariadb)
-    runtimeOnly(libs.postgresql)
+    compileOnly(libs.h2)
+    compileOnly(libs.sqlite)
+    compileOnly(libs.mysql)
+    compileOnly(libs.mariadb)
+    compileOnly(libs.postgresql)
 
     compileOnly(libs.boosted.yaml)
 }
