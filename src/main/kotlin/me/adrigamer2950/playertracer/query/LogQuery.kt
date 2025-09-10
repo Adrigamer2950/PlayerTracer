@@ -1,9 +1,9 @@
-package me.adrigamer2950.playertracer.logs
+package me.adrigamer2950.playertracer.query
 
 import me.adrigamer2950.playertracer.PlayerTracerPlugin
 import me.adrigamer2950.playertracer.api.logs.Log
 import java.sql.Timestamp
-import java.util.*
+import java.util.UUID
 import kotlin.reflect.KClass
 
 class LogQuery(

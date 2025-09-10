@@ -11,6 +11,7 @@ import me.adrigamer2950.playertracer.database.impl.remote.MariaDBDatabase
 import me.adrigamer2950.playertracer.database.impl.remote.MySQLDatabase
 import me.adrigamer2950.playertracer.database.impl.remote.PostgreSQLDatabase
 import me.adrigamer2950.playertracer.logs.*
+import me.adrigamer2950.playertracer.query.LogQuery
 import me.adrigamer2950.playertracer.util.launchCoroutine
 import me.adrigamer2950.playertracer.viewmode.ViewModeManager
 import me.devadri.obsidian.ObsidianPlugin
