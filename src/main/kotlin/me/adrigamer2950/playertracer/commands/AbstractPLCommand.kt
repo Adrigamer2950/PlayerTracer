@@ -16,4 +16,6 @@ abstract class AbstractPLCommand(
 ) {
 
     abstract fun getDisplayName(rootCommandName: String): String
+
+    override val plugin: PlayerTracerPlugin = super.plugin as PlayerTracerPlugin
 }

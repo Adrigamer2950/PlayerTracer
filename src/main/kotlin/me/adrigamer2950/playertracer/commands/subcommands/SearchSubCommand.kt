@@ -2,7 +2,6 @@ package me.adrigamer2950.playertracer.commands.subcommands
 
 import me.devadri.obsidian.user.User
 import me.adrigamer2950.playertracer.PlayerTracerPlugin
-import me.adrigamer2950.playertracer.api.PlayerTracer
 import me.adrigamer2950.playertracer.api.logs.Log
 import me.adrigamer2950.playertracer.commands.AbstractPLCommand
 import me.adrigamer2950.playertracer.commands.MainCommand
@@ -88,7 +87,6 @@ class SearchSubCommand(val parent: MainCommand) : AbstractPLCommand("search", "S
             }
         }
 
-        // Basic checks
         if (uuids.isEmpty()) {
             user.sendMessage("&cYou must specify a user with 'u:' prefix")
             return
@@ -112,7 +110,7 @@ class SearchSubCommand(val parent: MainCommand) : AbstractPLCommand("search", "S
 
         searching.add(searcherUUID)
 
-        (plugin as PlayerTracer).getLogs(uuids.toTypedArray(), actions, after).thenAccept { results ->
+        plugin.getLogs(uuids.toTypedArray(), actions, after).thenAccept { results ->
             if (results.isEmpty()) {
                 user.sendMessage("&cNo data found")
                 return@thenAccept
