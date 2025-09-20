@@ -1,7 +1,6 @@
 package me.adrigamer2950.playertracer.commands.subcommands
 
 import me.devadri.obsidian.user.User
-import me.adrigamer2950.playertracer.PlayerTracerPlugin
 import me.adrigamer2950.playertracer.commands.AbstractPLCommand
 import me.adrigamer2950.playertracer.util.Constants.PAGE_SIZE
 import me.adrigamer2950.playertracer.util.Permission
@@ -53,7 +52,7 @@ class PageSubCommand : AbstractPLCommand("page", "Shows the specified page of th
         user.sendMessage("&7Page $pageNumber of $totalPages")
         pagedLogs.forEach {
             val time = "[${TimeUtil.formatTimeAgo(it.timestamp)}]"
-            val data = PlayerTracerPlugin.instance.logsProvider.getData(it::class)
+            val data = plugin.logsProvider.getData(it::class)
 
             user.sendMessage(
                 miniMessage(
