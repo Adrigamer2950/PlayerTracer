@@ -110,6 +110,7 @@ class SearchSubCommand(val parent: MainCommand) : AbstractPLCommand("search", "S
 
         searching.add(searcherUUID)
 
+        // Search logs asynchronously
         plugin.getLogs(uuids.toTypedArray(), actions, after).thenAccept { results ->
             if (results.isEmpty()) {
                 user.sendMessage("&cNo data found")
@@ -118,13 +119,15 @@ class SearchSubCommand(val parent: MainCommand) : AbstractPLCommand("search", "S
 
             when (ViewModeManager.get(searcherUUID)) {
                 ViewMode.GUI -> {
+                    // Use main thread to open inventory
                     plugin.scheduler.sync().run {
                         LogResultsGUI(results).openFor(user.asPlayer()!!)
                     }
                 }
                 ViewMode.CHAT -> {
-                    cache.put(searcherUUID, results)
+                    cache[searcherUUID] = results
 
+                    // Execute '/playertracer page 1'
                     parent.subCommands.firstOrNull { it.info.name == "page" }?.execute(user, arrayOf("1"), commandName) ?: run {
                         user.sendMessage("&cThere was an error trying to paginate the results. Pagination command not found")
                     }
