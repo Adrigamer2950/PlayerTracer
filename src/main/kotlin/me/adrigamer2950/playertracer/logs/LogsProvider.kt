@@ -1,9 +1,11 @@
 package me.adrigamer2950.playertracer.logs
 
 import com.google.gson.Gson
+import me.adrigamer2950.playertracer.api.event.LogClassRegisteredEvent
 import me.devadri.obsidian.logger.Logger
 import me.adrigamer2950.playertracer.api.logs.Log
 import me.adrigamer2950.playertracer.api.logs.LogData
+import org.bukkit.Bukkit
 import org.bukkit.plugin.Plugin
 import kotlin.reflect.KClass
 
@@ -30,6 +32,8 @@ class LogsProvider(private val logger: Logger) {
             }
 
             logs.add(LogClassInfo(it, jsonParser, plugin))
+
+            Bukkit.getPluginManager().callEvent(LogClassRegisteredEvent(it.java))
 
             logger.debug("Registered log ${it.qualifiedName} with id ${getId(it)}")
         }
