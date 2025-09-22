@@ -6,16 +6,14 @@ import me.adrigamer2950.playertracer.api.logs.Log
 import me.adrigamer2950.playertracer.commands.AbstractPLCommand
 import me.adrigamer2950.playertracer.commands.MainCommand
 import me.adrigamer2950.playertracer.gui.LogResultsGUI
+import me.adrigamer2950.playertracer.query.QueryHandler
 import me.adrigamer2950.playertracer.util.Permission
-import me.adrigamer2950.playertracer.util.TimeUtil
 import me.adrigamer2950.playertracer.viewmode.ViewMode
 import me.adrigamer2950.playertracer.viewmode.ViewModeManager
 import me.devadri.obsidian.asPlayer
 import me.devadri.obsidian.isConsole
 import org.bukkit.Bukkit
-import java.sql.Timestamp
 import java.util.*
-import kotlin.reflect.KClass
 
 class SearchSubCommand(val parent: MainCommand) : AbstractPLCommand("search", "Searches logs based on a query", listOf("s")) {
 
@@ -38,64 +36,7 @@ class SearchSubCommand(val parent: MainCommand) : AbstractPLCommand("search", "S
             return
         }
 
-        val uuids = mutableListOf<UUID>()
-        val actions = mutableListOf<KClass<out Log>>()
-        var after: Timestamp? = null
-        var afterS: String? = null
-
-        // Parse args into UUIDs and actions to search for
-        args.forEach {
-            if (it.startsWith("u:")) {
-                val playerInfo = it.removePrefix("u:") // Name or UUID
-                val possibleUUID = getPlayerUuidFromString(playerInfo)
-
-                // If [playerInfo] is a valid UUID, find the player by UUID
-                val player = if (possibleUUID != null) {
-                    Bukkit.getOfflinePlayer(possibleUUID)
-                } else {
-                    // Otherwise, find the player by name if it's cached (has joined the server before) or is online
-                    Bukkit.getPlayer(playerInfo) ?: Bukkit.getOfflinePlayerIfCached(playerInfo)
-                }
-
-                // Check if player has been found. If not, send an error to the user
-                if (player == null || (!player.hasPlayedBefore() && !player.isOnline)) {
-                    user.sendMessage("&cNo player found with name/uuid: &6$playerInfo&c. Please check if the player has joined the server before")
-                    return
-                }
-
-                uuids.add(player.uniqueId)
-            } else if (it.startsWith("a:")) {
-                val id = it.removePrefix("a:")
-
-                PlayerTracerPlugin.instance.logsProvider.getLogClassById(id)?.let {
-                    actions.add(it)
-                } ?: run {
-                    user.sendMessage("&cNo action found with ID $id")
-                    return
-                }
-            } else if (it.startsWith("t:")) {
-                if (after != null) {
-                    user.sendMessage("&cYou can only use the 't:' prefix once in a query")
-                    return
-                }
-
-                afterS = it.removePrefix("t:")
-                after = TimeUtil.parseDuration(afterS)
-            } else {
-                user.sendMessage("&cInvalid query part: $it")
-                return
-            }
-        }
-
-        if (uuids.isEmpty()) {
-            user.sendMessage("&cYou must specify a user with 'u:' prefix")
-            return
-        }
-
-        if (actions.isEmpty()) {
-            user.sendMessage("&cYou must specify at least one action with 'a:' prefix")
-            return
-        }
+        val query = QueryHandler.handleQuery(user, args) ?: return
 
         val searcherUUID = if (user.isConsole()) null else user.asPlayer()!!.uniqueId
 
@@ -105,13 +46,13 @@ class SearchSubCommand(val parent: MainCommand) : AbstractPLCommand("search", "S
         }
 
         user.sendMessage(
-            "&7Searching logs asynchronously for &6${uuids.size} &7player(s) with &6${actions.size} &7action(s)${if (afterS != null) " after &6$afterS" else ""}&7... This may take a while",
+            "&7Searching logs asynchronously for &6${query.uuids.size} &7player(s) with &6${query.actions.size} &7action(s)${if (query.afterS != null) " after &6${query.afterS}" else ""}&7... This may take a while",
         )
 
         searching.add(searcherUUID)
 
         // Search logs asynchronously
-        plugin.getLogs(uuids.toTypedArray(), actions, after).thenAccept { results ->
+        plugin.getLogs(query).thenAccept { results ->
             if (results.isEmpty()) {
                 user.sendMessage("&cNo data found")
                 return@thenAccept
@@ -169,13 +110,5 @@ class SearchSubCommand(val parent: MainCommand) : AbstractPLCommand("search", "S
         } else {
             super.tabComplete(user, args, commandName)
         }.filter { it.startsWith(args.last()) }
-    }
-
-    fun getPlayerUuidFromString(uuid: String): UUID? {
-        return try {
-            UUID.fromString(uuid)
-        } catch (_: IllegalArgumentException) {
-            null
-        }
     }
 }

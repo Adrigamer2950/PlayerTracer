@@ -169,12 +169,14 @@ class PlayerTracerPlugin : ObsidianPlugin(), PlayerTracer {
         uuids: Array<UUID>,
         actions: List<KClass<out Log>>,
         after: Timestamp?
-    ): CompletableFuture<List<Log>> {
+    ): CompletableFuture<List<Log>> = getLogs(LogQuery(uuids, actions, after))
+
+    internal fun getLogs(query: LogQuery): CompletableFuture<List<Log>> {
         val future = CompletableFuture<List<Log>>()
 
         launchCoroutine(Dispatchers.Default) {
             try {
-                val logs = LogQuery(uuids, actions, after).getResults()
+                val logs = query.getResults()
 
                 future.complete(logs)
             } catch (e: Exception) {

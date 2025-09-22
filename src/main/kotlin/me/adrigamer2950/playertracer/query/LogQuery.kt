@@ -9,7 +9,8 @@ import kotlin.reflect.KClass
 class LogQuery(
     val uuids: Array<UUID>,
     val actions: List<KClass<out Log>>,
-    val after: Timestamp? = null
+    val after: Timestamp? = null,
+    val afterS: String? = null
 ) {
 
     init {
