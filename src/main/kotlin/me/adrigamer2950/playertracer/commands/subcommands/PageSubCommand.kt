@@ -57,7 +57,7 @@ class PageSubCommand : AbstractPLCommand("page", "Shows the specified page of th
             user.sendMessage(
                 miniMessage(
                     "<hover:show_text:'${TimeUtil.timestampToDate(it.timestamp)}'><gray>$time</hover> " +
-                            "<aqua>${Bukkit.getOfflinePlayer(it.playerUUID).name}<gray> | <white>${data.displayName}</white>: ${it.message}"
+                            "<aqua>${it.offlinePlayer.name}<gray> | <white>${data.displayName}</white>: ${it.message}"
                 )
             )
 

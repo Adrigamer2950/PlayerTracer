@@ -1,6 +1,8 @@
 package me.adrigamer2950.playertracer.api.logs
 
 import me.adrigamer2950.playertracer.api.location.Location
+import org.bukkit.Bukkit
+import org.bukkit.OfflinePlayer
 import org.bukkit.entity.Player
 import java.sql.Timestamp
 import java.time.Instant
@@ -16,6 +18,12 @@ interface Log {
     val playerUUID: UUID
     val timestamp: Long
     val location: Location
+
+    val player: Player?
+        get() = Bukkit.getPlayer(playerUUID)
+
+    val offlinePlayer: OfflinePlayer
+        get() = Bukkit.getOfflinePlayer(playerUUID)
 }
 
 /**
