@@ -1,7 +1,9 @@
 package me.adrigamer2950.playertracer.logs
 
 import me.adrigamer2950.playertracer.PlayerTracerPlugin
+import me.adrigamer2950.playertracer.api.event.LogAddEvent
 import me.adrigamer2950.playertracer.api.logs.Log
+import org.bukkit.Bukkit
 
 class LogsManager(private val plugin: PlayerTracerPlugin) {
 
@@ -10,5 +12,7 @@ class LogsManager(private val plugin: PlayerTracerPlugin) {
             throw IllegalArgumentException("Log class isn't registered")
 
         plugin.database.addLog(log)
+
+        Bukkit.getPluginManager().callEvent(LogAddEvent(log))
     }
 }
