@@ -11,5 +11,5 @@ class LogClassRegisteredEvent(val klass: Class<out Log>) : Event() {
         val handlers = HandlerList()
     }
 
-    override fun getHandlers(): HandlerList = handlers
+    override fun getHandlers(): HandlerList = Companion.handlers
 }
