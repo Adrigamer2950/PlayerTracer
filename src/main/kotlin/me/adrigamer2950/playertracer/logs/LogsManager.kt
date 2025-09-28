@@ -13,6 +13,8 @@ class LogsManager(private val plugin: PlayerTracerPlugin) {
 
         plugin.database.addLog(log)
 
-        Bukkit.getPluginManager().callEvent(LogAddEvent(log))
+        plugin.scheduler.async().run {
+            Bukkit.getPluginManager().callEvent(LogAddEvent(log))
+        }
     }
 }

@@ -4,7 +4,7 @@ import me.adrigamer2950.playertracer.api.logs.Log
 import org.bukkit.event.Event
 import org.bukkit.event.HandlerList
 
-class LogAddEvent(val log: Log) : Event() {
+class LogAddEvent(val log: Log) : Event(true) {
 
     companion object {
         @JvmStatic
