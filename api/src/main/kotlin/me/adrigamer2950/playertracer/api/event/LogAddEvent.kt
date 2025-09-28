@@ -8,8 +8,8 @@ class LogAddEvent(val log: Log) : Event() {
 
     companion object {
         @JvmStatic
-        val handlers = HandlerList()
+        val handlerList = HandlerList()
     }
 
-    override fun getHandlers(): HandlerList = Companion.handlers
+    override fun getHandlers(): HandlerList = handlerList
 }
