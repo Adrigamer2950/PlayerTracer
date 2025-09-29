@@ -105,6 +105,11 @@ bukkit {
             description = "Allows to teleport to players"
             default = BukkitPluginDescription.Permission.Default.OP
         }
+
+        register("playertracer.track") {
+            description = "Allows to track player's logs"
+            default = BukkitPluginDescription.Permission.Default.OP
+        }
     }
 }
 
