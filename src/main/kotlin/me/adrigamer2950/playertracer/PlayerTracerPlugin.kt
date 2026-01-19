@@ -4,6 +4,7 @@ import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import me.adrigamer2950.playertracer.api.PlayerTracer
 import me.adrigamer2950.playertracer.api.logs.Log
+import me.adrigamer2950.playertracer.api.logs.LogData
 import me.adrigamer2950.playertracer.database.LogsDatabase
 import me.adrigamer2950.playertracer.database.impl.H2Database
 import me.adrigamer2950.playertracer.database.impl.SQLiteDatabase
@@ -169,9 +170,9 @@ class PlayerTracerPlugin : ObsidianPlugin(), PlayerTracer {
         uuids: Array<UUID>,
         actions: List<KClass<out Log>>,
         after: Timestamp?
-    ): CompletableFuture<List<Log>> = getLogs(LogQuery(uuids, actions, after))
+    ): CompletableFuture<List<Log>> = getLogsWithFuture(LogQuery(uuids, actions, after))
 
-    internal fun getLogs(query: LogQuery): CompletableFuture<List<Log>> {
+    internal fun getLogsWithFuture(query: LogQuery): CompletableFuture<List<Log>> {
         val future = CompletableFuture<List<Log>>()
 
         launchCoroutine(Dispatchers.Default) {
@@ -185,5 +186,19 @@ class PlayerTracerPlugin : ObsidianPlugin(), PlayerTracer {
         }
 
         return future
+    }
+
+    internal suspend fun getLogs(query: LogQuery): List<Log> {
+        return query.getResults()
+    }
+
+    override suspend fun getLogsAsync(
+        uuids: Array<UUID>,
+        actions: List<KClass<out Log>>,
+        after: Timestamp?
+    ): List<Log> = getLogs(LogQuery(uuids, actions, after))
+
+    override fun getLogData(logClass: KClass<out Log>): LogData {
+        return this.logsProvider.getData(logClass)
     }
 }

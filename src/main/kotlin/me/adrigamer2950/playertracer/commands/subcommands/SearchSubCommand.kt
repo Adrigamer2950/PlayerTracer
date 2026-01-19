@@ -52,7 +52,7 @@ class SearchSubCommand(val parent: MainCommand) : AbstractPLCommand("search", "S
         searching.add(searcherUUID)
 
         // Search logs asynchronously
-        plugin.getLogs(query).thenAccept { results ->
+        plugin.getLogsWithFuture(query).thenAccept { results ->
             if (results.isEmpty()) {
                 user.sendMessage("&cNo data found")
                 return@thenAccept
