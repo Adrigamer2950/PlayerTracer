@@ -119,6 +119,10 @@ tasks.build {
 
 tasks.shadowJar {
     archiveClassifier.set("")
+
+    dependencies {
+        relocate("me.devadri.obsidian", "me.devadri.playertracer.libs.obsidian")
+    }
 }
 
 modrinth {
