@@ -163,11 +163,14 @@ hangarPublish {
 }
 
 tasks.named<RunServer>("runServer").configure {
-    minecraftVersion("1.20.6")
+    minecraftVersion("1.21.11")
 
     downloadPlugins {
         // ViaVersion
-        hangar("ViaVersion", "5.4.2")
+        hangar("ViaVersion", "5.7.1")
+
+        // ViaBackwards
+        hangar("ViaBackwards", "5.7.1")
 
         modrinth("luckperms", "v5.5.0-bukkit")
     }
