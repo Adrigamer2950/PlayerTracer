@@ -1,0 +1,40 @@
+package me.devadri.playertracer.api.logs
+
+import me.devadri.playertracer.api.location.Location
+import org.bukkit.Bukkit
+import org.bukkit.OfflinePlayer
+import org.bukkit.entity.Player
+import java.sql.Timestamp
+import java.time.Instant
+import java.util.UUID
+
+/**
+ * Represents a log entry.
+ * It MUST have a static field called `metadata` of type [LogData] that contains basic metadata about the log
+ */
+interface Log {
+
+    val message: String
+    val playerUUID: UUID
+    val timestamp: Long
+    val location: Location
+
+    val player: Player?
+        get() = Bukkit.getPlayer(playerUUID)
+
+    val offlinePlayer: OfflinePlayer
+        get() = Bukkit.getOfflinePlayer(playerUUID)
+}
+
+/**
+ * Abstract implementation of [Log].
+ * Implementations of this class MUST have a static field called `metadata` of type [LogData] that contains basic metadata about the log
+ */
+abstract class AbstractLog(override val message: String, player: Player, override val timestamp: Long) : Log {
+
+    constructor(message: String, player: Player) : this(message, player, Timestamp.from(Instant.now()).time)
+
+    override val playerUUID = player.uniqueId // Player's UUID
+
+    override val location = Location.fromBukkitLocation(player.location)
+}

@@ -27,7 +27,7 @@ buildscript {
     }
 }
 
-group = "me.adrigamer2950.playertracer"
+group = "me.devadri.playertracer"
 version = properties["version"] as String
 
 allprojects {
@@ -201,7 +201,7 @@ tasks.withType(AbstractRun::class) {
 
 tasks.register("generateBuildConstants") {
     doLast {
-        val fileSpec = FileSpec.builder("me.adrigamer2950.playertracer", "BuildConstants")
+        val fileSpec = FileSpec.builder("me.devadri.playertracer", "BuildConstants")
             .addType(
                 TypeSpec.objectBuilder("BuildConstants")
                     .addProperty(
