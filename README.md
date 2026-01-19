@@ -30,7 +30,6 @@ to a more detailed list of actions a player is doing, and has done.
 - Search logs by player name, action and date
 - View logs in chat
 - View logs in a nice GUI
-- (Not implemented yet) Receive logs in real time through chat
 - (Not implemented yet) API to let plugin developers register their own logs
 - (Not implemented yet) Purge system (manually and automatically)
 
@@ -59,6 +58,5 @@ to verify that information or just to collect evidence against them.
 # TODOs
 - [x] Store logs in a database (MySQL/MariaDB, SQLite, H2)
 - [x] In-Game Log viewer (GUI & Command)
-- [ ] Receive logs in real time through chat
 - [ ] API
 - [ ] Purge system (automatically and manually)
