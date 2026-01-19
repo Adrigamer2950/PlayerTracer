@@ -5,11 +5,10 @@ import me.adrigamer2950.playertracer.commands.AbstractPLCommand
 import me.adrigamer2950.playertracer.util.Constants.PAGE_SIZE
 import me.adrigamer2950.playertracer.util.Permission
 import me.adrigamer2950.playertracer.util.TimeUtil
-import me.adrigamer2950.playertracer.util.miniMessage
+import me.adrigamer2950.playertracer.api.util.miniMessage
 import me.devadri.obsidian.asPlayer
 import me.devadri.obsidian.isConsole
 import net.kyori.adventure.text.event.ClickEvent
-import org.bukkit.Bukkit
 
 class PageSubCommand : AbstractPLCommand("page", "Shows the specified page of the current search", listOf("p")) {
 

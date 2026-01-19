@@ -5,7 +5,7 @@ import me.devadri.obsidian.item.ItemBuilder
 import me.adrigamer2950.playertracer.PlayerTracerPlugin
 import me.adrigamer2950.playertracer.api.location.Location
 import me.adrigamer2950.playertracer.api.logs.Log
-import me.adrigamer2950.playertracer.util.miniMessage
+import me.adrigamer2950.playertracer.api.util.miniMessage
 import me.devadri.obsidian.menu.button.MenuButton
 import me.devadri.obsidian.menu.coords.Coordinates
 import me.devadri.obsidian.menu.paginated.PaginatedMenu
