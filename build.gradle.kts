@@ -8,6 +8,7 @@ import io.papermc.hangarpublishplugin.model.Platforms
 import net.minecrell.pluginyml.bukkit.BukkitPluginDescription
 import xyz.jpenilla.runpaper.task.RunServer
 import xyz.jpenilla.runtask.task.AbstractRun
+import kotlin.reflect.KClass
 
 plugins {
     kotlin("jvm") version libs.versions.kotlin.get()
@@ -205,66 +206,29 @@ tasks.withType(AbstractRun::class) {
 
 tasks.register("generateBuildConstants") {
     doLast {
-        val fileSpec = FileSpec.builder("me.devadri.playertracer", "BuildConstants")
-            .addType(
-                TypeSpec.objectBuilder("BuildConstants")
-                    .addProperty(
-                        PropertySpec.builder("VERSION", String::class)
-                            .initializer("%S", rootProject.version as String)
-                            .addModifiers(KModifier.CONST)
-                            .build()
-                    )
-                    .addProperty(
-                        PropertySpec.builder("H2_VERSION", String::class)
-                            .initializer("%S", libs.versions.h2.get())
-                            .addModifiers(KModifier.CONST)
-                            .build()
-                    )
-                    .addProperty(
-                        PropertySpec.builder("SQLITE_VERSION", String::class)
-                            .initializer("%S", libs.versions.sqlite.get())
-                            .addModifiers(KModifier.CONST)
-                            .build()
-                    )
-                    .addProperty(
-                        PropertySpec.builder("MYSQL_VERSION", String::class)
-                            .initializer("%S", libs.versions.mysql.get())
-                            .addModifiers(KModifier.CONST)
-                            .build()
-                    )
-                    .addProperty(
-                        PropertySpec.builder("MARIADB_VERSION", String::class)
-                            .initializer("%S", libs.versions.mariadb.get())
-                            .addModifiers(KModifier.CONST)
-                            .build()
-                    )
-                    .addProperty(
-                        PropertySpec.builder("POSTGRESQL_VERSION", String::class)
-                            .initializer("%S", libs.versions.postgresql.get())
-                            .addModifiers(KModifier.CONST)
-                            .build()
-                    )
-                    .addProperty(
-                        PropertySpec.builder("KOTLIN_VERSION", String::class)
-                            .initializer("%S", libs.versions.kotlin.get())
-                            .addModifiers(KModifier.CONST)
-                            .build()
-                    )
-                    .addProperty(
-                        PropertySpec.builder("EXPOSED_VERSION", String::class)
-                            .initializer("%S", libs.versions.exposed.get())
-                            .addModifiers(KModifier.CONST)
-                            .build()
-                    )
-                    .addProperty(
-                        PropertySpec.builder("BOOSTED_YAML_VERSION", String::class)
-                            .initializer("%S", libs.versions.boosted.yaml.get())
-                            .addModifiers(KModifier.CONST)
-                            .build()
-                    )
+        val fileSpecBuilder = FileSpec.builder("me.devadri.playertracer", "BuildConstants")
+        val objectBuilder = TypeSpec.objectBuilder("BuildConstants")
+
+        listOf<Triple<String, KClass<out Any>, Any>>(
+            Triple("VERSION",   String::class, rootProject.version as String),
+            Triple("H2_VERSION", String::class, libs.versions.h2.get()),
+            Triple("SQLITE_VERSION", String::class, libs.versions.sqlite.get()),
+            Triple("MYSQL_VERSION", String::class, libs.versions.mysql.get()),
+            Triple("MARIADB_VERSION", String::class, libs.versions.mariadb.get()),
+            Triple("POSTGRESQL_VERSION", String::class, libs.versions.postgresql.get()),
+            Triple("KOTLIN_VERSION", String::class, libs.versions.kotlin.get()),
+            Triple("EXPOSED_VERSION", String::class, libs.versions.exposed.get()),
+            Triple("BOOSTED_YAML_VERSION", String::class, libs.versions.boosted.yaml.get()),
+        ).forEach {
+            objectBuilder.addProperty(
+                PropertySpec.builder(it.first, it.second)
+                    .initializer("%S", it.third)
+                    .addModifiers(KModifier.CONST)
                     .build()
             )
-            .build()
+        }
+        
+        val fileSpec = fileSpecBuilder.addType(objectBuilder.build()).build()
 
         val generatedDir = layout.buildDirectory.dir("generated/templates").get().asFile
         fileSpec.writeTo(generatedDir)
