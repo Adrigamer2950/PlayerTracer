@@ -64,10 +64,8 @@ class PageSubCommand : AbstractPLCommand("page", "Shows the specified page of th
                 val teleportCommand =
                     "/$commandName tp ${it.location.worldName} ${it.location.x} ${it.location.y} ${it.location.z}"
 
-                val space = " ".repeat(time.length)
-
                 user.sendMessage(
-                    miniMessage("<hover:show_text:'$teleportCommand'><gray>$space (${it.location.worldName}/x${it.location.x}/y${it.location.y}/z${it.location.z})</hover>")
+                    miniMessage("<hover:show_text:'$teleportCommand'><gray>   (${it.location.worldName}/x${it.location.x}/y${it.location.y}/z${it.location.z})</hover>")
                         .clickEvent(ClickEvent.runCommand(teleportCommand))
                 )
             }
