@@ -5,7 +5,7 @@ import me.devadri.playertracer.commands.AbstractPLCommand
 import me.devadri.playertracer.util.Constants.PAGE_SIZE
 import me.devadri.playertracer.util.Permission
 import me.devadri.playertracer.util.TimeUtil
-import me.devadri.playertracer.api.util.miniMessage
+import me.devadri.playertracer.util.miniMessage
 import me.devadri.obsidian.asPlayer
 import me.devadri.obsidian.isConsole
 import net.kyori.adventure.text.event.ClickEvent
