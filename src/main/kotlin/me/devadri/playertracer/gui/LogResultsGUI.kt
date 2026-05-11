@@ -38,7 +38,7 @@ class LogResultsGUI(results: List<Log>) : PaginatedMenu<Log>(
         if (!hasNextPage()) return@MenuButton
 
         currentPage++
-        super.setup()
+        setup()
     }
 
     override val previousPageButton: MenuButton = MenuButton(
@@ -51,16 +51,17 @@ class LogResultsGUI(results: List<Log>) : PaginatedMenu<Log>(
         if (!hasPreviousPage()) return@MenuButton
 
         currentPage--
-        super.setup()
+        setup()
     }
 
-    override val currentPageButton: MenuButton = MenuButton(
-        plugin,
-        ItemBuilder.builder()
-            .material(Material.PAPER)
-            .name(miniMessage("<aqua>Current Page: <gold>${currentPage + 1} / ${totalPages + 1}")),
-        CURRENT_PAGE_COORDS
-    )
+    override val currentPageButton: MenuButton
+        get() = MenuButton(
+            plugin,
+            ItemBuilder.builder()
+                .material(Material.PAPER)
+                .name(miniMessage("<aqua>Current Page: <gold>${currentPage + 1} / ${totalPages + 1}")),
+            CURRENT_PAGE_COORDS
+        )
 
     override val buttonForT: (Log) -> MenuButton = { log ->
         MenuButton(
@@ -126,6 +127,9 @@ class LogResultsGUI(results: List<Log>) : PaginatedMenu<Log>(
     }
 
     override fun setup() {
+        // Temp workaround
+        buttons.clear()
+
         val stack = ItemBuilder.builder()
             .material(Material.GRAY_STAINED_GLASS_PANE)
             .name(Component.text(" "))
