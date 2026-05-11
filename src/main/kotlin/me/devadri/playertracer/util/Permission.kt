@@ -14,7 +14,5 @@ value class Permission(val permission: String) {
         val SEARCH = Permission("playertracer.search")
 
         val TELEPORT = Permission("playertracer.teleport")
-
-        val TRACK = Permission("playertracer.track")
     }
 }
