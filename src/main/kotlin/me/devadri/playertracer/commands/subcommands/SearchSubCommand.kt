@@ -98,20 +98,30 @@ class SearchSubCommand(val parent: MainCommand) : AbstractPLCommand("search", "S
          *
          * All of this is filtered later to include results that start with the last arg
          */
-        return if (args.isEmpty() || args.last()
+        return when {
+            args.isEmpty() || args.last()
                 .isEmpty() || queries.any { it.startsWith(args.last()) && it != args.last() }
-        ) {
-            queries
-        } else if (args.last().startsWith("u:")) {
-            Bukkit.getOnlinePlayers().map { "u:${it.name}" }
-        } else if (args.last().startsWith("a:")) {
-            PlayerTracerPlugin.instance.logsProvider.logs.map {
-                PlayerTracerPlugin.instance.logsProvider.getId(it.`class`)
-            }.map { "a:$it" }
-        } else if (args.last().startsWith("t:")) {
-            listOf("1m", "1h", "1d", "1w").map { "t:$it" }
-        } else {
-            super.tabComplete(user, args, commandName)
+                -> {
+                queries
+            }
+
+            args.last().startsWith("u:") -> {
+                Bukkit.getOnlinePlayers().map { "u:${it.name}" }
+            }
+
+            args.last().startsWith("a:") -> {
+                PlayerTracerPlugin.instance.logsProvider.logs.map {
+                    PlayerTracerPlugin.instance.logsProvider.getId(it.`class`)
+                }.map { "a:$it" }
+            }
+
+            args.last().startsWith("t:") -> {
+                listOf("1m", "1h", "1d", "1w").map { "t:$it" }
+            }
+
+            else -> {
+                super.tabComplete(user, args, commandName)
+            }
         }.filter { it.startsWith(args.last()) }
     }
 }
