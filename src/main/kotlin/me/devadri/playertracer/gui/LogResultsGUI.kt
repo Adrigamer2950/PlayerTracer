@@ -66,12 +66,12 @@ class LogResultsGUI(results: List<Log>) : PaginatedMenu<Log>(
         MenuButton(
             plugin,
             run {
-                val data = PlayerTracerPlugin.instance.logsProvider.getData(log::class)
+                val displayName = PlayerTracerPlugin.instance.getLogDisplayName(log::class)
 
-                data.guiItem(
+                log.guiItem(
                     ItemBuilder.builder()
                         .material(Material.WRITABLE_BOOK)
-                        .name(miniMessage(data.displayName))
+                        .name(miniMessage(displayName))
                         .lore(
                             listOf(
                                 "<gold>Message</gold><gray>:</gray> <white>${log.message}",

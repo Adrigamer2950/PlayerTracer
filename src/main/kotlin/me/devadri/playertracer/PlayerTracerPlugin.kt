@@ -4,7 +4,6 @@ import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import me.devadri.playertracer.api.PlayerTracer
 import me.devadri.playertracer.api.logs.Log
-import me.devadri.playertracer.api.logs.LogData
 import me.devadri.playertracer.database.LogsDatabase
 import me.devadri.playertracer.database.impl.H2Database
 import me.devadri.playertracer.database.impl.SQLiteDatabase
@@ -17,6 +16,7 @@ import me.devadri.playertracer.util.launchCoroutine
 import me.devadri.playertracer.viewmode.ViewModeManager
 import me.devadri.obsidian.ObsidianPlugin
 import me.devadri.obsidian.lib.libby.Library
+import me.devadri.playertracer.api.logs.LogMetadata
 import org.bukkit.plugin.Plugin
 import java.sql.Timestamp
 import java.util.*
@@ -198,7 +198,15 @@ class PlayerTracerPlugin : ObsidianPlugin(), PlayerTracer {
         after: Timestamp?
     ): List<Log> = getLogs(LogQuery(uuids, actions, after))
 
-    override fun getLogData(logClass: KClass<out Log>): LogData {
-        return this.logsProvider.getData(logClass)
+    override fun getLogMetadata(logClass: KClass<out Log>): LogMetadata =
+        this.logsProvider.getData(logClass)
+
+    override fun getLogDisplayName(logClass: KClass<out Log>): String {
+        val metadata = getLogMetadata(logClass)
+
+        return if (metadata.displayName == "")
+            metadata.id.replaceFirstChar { it.uppercaseChar() }
+        else
+            metadata.displayName
     }
 }

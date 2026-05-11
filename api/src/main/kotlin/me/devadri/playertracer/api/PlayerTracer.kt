@@ -2,7 +2,7 @@ package me.devadri.playertracer.api
 
 import com.google.gson.Gson
 import me.devadri.playertracer.api.logs.Log
-import me.devadri.playertracer.api.logs.LogData
+import me.devadri.playertracer.api.logs.LogMetadata
 import org.bukkit.plugin.Plugin
 import java.sql.Timestamp
 import java.util.UUID
@@ -55,13 +55,21 @@ interface PlayerTracer {
     suspend fun getLogsAsync(uuids: Array<UUID>, actions: List<KClass<out Log>>, after: Timestamp? = null) : List<Log>
 
     /**
-     * Retrieves the [LogData] for the given log class
+     * Retrieves the [LogMetadata] for the given log class
      *
-     * @param logClass The log class to retrieve metadata for
-     * @return The [LogData] for the given log class
-     * @throws NoSuchFieldException If the class does not have a static field called `metadata`
-     * @throws ClassCastException If the field is not of type LogData
+     * @param logClass The log class to retrieve metadata from
+     * @return The [LogMetadata] for the given log class
+     * @throws IllegalStateException If the class is not annotated with [LogMetadata]
      */
     @Throws(NoSuchFieldException::class, ClassCastException::class)
-    fun getLogData(logClass: KClass<out Log>): LogData
+    fun getLogMetadata(logClass: KClass<out Log>): LogMetadata
+
+    /**
+     * Retrieves the Display Name for the given log class
+     *
+     * @param logClass The log class to retrieve the display name from
+     * @return The Display Name of the given log class
+     * @throws IllegalStateException If the class is not annotated with [LogMetadata]
+     */
+    fun getLogDisplayName(logClass: KClass<out Log>): String
 }

@@ -51,12 +51,12 @@ class PageSubCommand : AbstractPLCommand("page", "Shows the specified page of th
         user.sendMessage("&7Page $pageNumber of $totalPages")
         pagedLogs.forEach {
             val time = "[${TimeUtil.formatTimeAgo(it.timestamp)}]"
-            val data = plugin.logsProvider.getData(it::class)
+            val displayName = plugin.getLogDisplayName(it::class)
 
             user.sendMessage(
                 miniMessage(
                     "<hover:show_text:'${TimeUtil.timestampToDate(it.timestamp)}'><gray>$time</hover> " +
-                            "<aqua>${it.offlinePlayer.name}<gray> | <white>${data.displayName}</white>: ${it.message}"
+                            "<aqua>${it.offlinePlayer.name}<gray> | <white>$displayName</white>: ${it.message}"
                 )
             )
 

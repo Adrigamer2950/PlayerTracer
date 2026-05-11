@@ -1,13 +1,14 @@
 package me.devadri.playertracer.logs
 
 import com.google.gson.Gson
-import me.devadri.playertracer.api.event.LogRegisterEvent
 import me.devadri.obsidian.logger.Logger
+import me.devadri.playertracer.api.event.LogRegisterEvent
 import me.devadri.playertracer.api.logs.Log
-import me.devadri.playertracer.api.logs.LogData
+import me.devadri.playertracer.api.logs.LogMetadata
 import org.bukkit.Bukkit
 import org.bukkit.plugin.Plugin
 import kotlin.reflect.KClass
+import kotlin.reflect.full.findAnnotation
 
 class LogsProvider(private val logger: Logger) {
 
@@ -43,7 +44,8 @@ class LogsProvider(private val logger: Logger) {
 
     fun encodeToJson(log: Log): String {
         // Get class or throw an exception if not registered
-        val pair = logs.firstOrNull { it.`class` == log::class } ?: throw IllegalArgumentException("Log class ${log::class.qualifiedName} is not registered")
+        val pair = logs.firstOrNull { it.`class` == log::class }
+            ?: throw IllegalArgumentException("Log class ${log::class.qualifiedName} is not registered")
 
         // Encode object to JSON
         return pair.gson.toJson(log)
@@ -51,7 +53,8 @@ class LogsProvider(private val logger: Logger) {
 
     fun decodeFromJson(json: String, `class`: KClass<out Log>): Log {
         // Get class or throw an exception if not registered
-        val pair = logs.firstOrNull { it.`class` == `class` } ?: throw IllegalArgumentException("Log class ${`class`.qualifiedName} is not registered")
+        val pair = logs.firstOrNull { it.`class` == `class` }
+            ?: throw IllegalArgumentException("Log class ${`class`.qualifiedName} is not registered")
 
         // Decode object from JSON
         return pair.gson.fromJson(json, `class`.java)
@@ -63,19 +66,16 @@ class LogsProvider(private val logger: Logger) {
      */
     @Throws(NoSuchFieldException::class)
     fun getId(`class`: KClass<out Log>): String {
-        // Return the ID of the log class
         return getData(`class`).id
     }
 
     /**
-     * @throws NoSuchFieldException If the class does not have a static field called `metadata`
-     * @throws ClassCastException If the field is not of type LogData
+     * @throws IllegalStateException If the class is not annotated with [LogMetadata]
      */
-    @Throws(NoSuchFieldException::class, ClassCastException::class)
-    fun getData(`class`: KClass<out Log>): LogData {
-        // Return the ID of the log class
-        return `class`.java.getField("metadata").get(null) as LogData
-    }
+    @Throws(IllegalStateException::class)
+    fun getData(`class`: KClass<out Log>): LogMetadata =
+        `class`.findAnnotation<LogMetadata>()
+            ?: error("${`class`.simpleName} is not annotated with @LogMetadata")
 
     fun getLogClassById(id: String): KClass<out Log>? = logs.firstOrNull { getId(it.`class`) == id }?.`class`
 }

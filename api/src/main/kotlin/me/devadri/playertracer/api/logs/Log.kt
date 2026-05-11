@@ -1,5 +1,6 @@
 package me.devadri.playertracer.api.logs
 
+import me.devadri.obsidian.item.ItemBuilder
 import me.devadri.playertracer.api.location.Location
 import org.bukkit.Bukkit
 import org.bukkit.OfflinePlayer
@@ -10,7 +11,7 @@ import java.util.UUID
 
 /**
  * Represents a log entry.
- * It MUST have a static field called `metadata` of type [LogData] that contains basic metadata about the log
+ * Implementations of this interface must be annotated with [LogMetadata]
  */
 interface Log {
 
@@ -24,11 +25,14 @@ interface Log {
 
     val offlinePlayer: OfflinePlayer
         get() = Bukkit.getOfflinePlayer(playerUUID)
+
+    val guiItem: (ItemBuilder, Log) -> ItemBuilder
+        get() = { item, _ -> item }
 }
 
 /**
  * Abstract implementation of [Log].
- * Implementations of this class MUST have a static field called `metadata` of type [LogData] that contains basic metadata about the log
+ * Implementations of this class still must be annotated with [LogMetadata]
  */
 abstract class AbstractLog(override val message: String, player: Player, override val timestamp: Long) : Log {
 
