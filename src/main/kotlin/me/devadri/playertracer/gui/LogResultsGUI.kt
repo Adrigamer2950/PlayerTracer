@@ -2,14 +2,14 @@ package me.devadri.playertracer.gui
 
 import me.devadri.obsidian.inventory.InventorySize
 import me.devadri.obsidian.item.ItemBuilder
-import me.devadri.playertracer.PlayerTracerPlugin
-import me.devadri.playertracer.api.location.Location
-import me.devadri.playertracer.api.logs.Log
-import me.devadri.playertracer.util.miniMessage
 import me.devadri.obsidian.menu.button.MenuButton
 import me.devadri.obsidian.menu.coords.Coordinates
 import me.devadri.obsidian.menu.paginated.PaginatedMenu
 import me.devadri.obsidian.toUser
+import me.devadri.playertracer.PlayerTracerPlugin
+import me.devadri.playertracer.api.location.Location
+import me.devadri.playertracer.api.logs.Log
+import me.devadri.playertracer.util.miniMessage
 import net.kyori.adventure.text.Component
 import org.bukkit.Material
 import org.bukkit.NamespacedKey
@@ -66,32 +66,28 @@ class LogResultsGUI(results: List<Log>) : PaginatedMenu<Log>(
     override val buttonForT: (Log) -> MenuButton = { log ->
         MenuButton(
             plugin,
-            run {
-                val displayName = PlayerTracerPlugin.instance.getLogDisplayName(log::class)
-
-                log.guiItem(
-                    ItemBuilder.builder()
-                        .material(Material.WRITABLE_BOOK)
-                        .name(miniMessage(displayName))
-                        .lore(
-                            listOf(
-                                "<gold>Message</gold><gray>:</gray> <white>${log.message}",
-                                "<gold>Player UUID</gold><gray>:</gray> <white>${log.playerUUID}",
-                                "<gold>Location</gold><gray>:</gray> <white>${log.location.worldName} / ${log.location.x}x / ${log.location.y}y / ${log.location.z}z",
-                            ).map { msg -> miniMessage(msg) }
-                        ).addPersistentData(
-                            NamespacedKey(plugin, "location"),
-                            Location.PERSISTENT_DATA_TYPE,
-                            log.location
-                        ),
-                    log
-                ).addToLore(
-                    listOf(
-                        Component.empty(),
-                        miniMessage("<blue>Click to teleport</blue>")
-                    )
+            log.guiItem(
+                ItemBuilder.builder()
+                    .material(Material.WRITABLE_BOOK)
+                    .name(miniMessage(PlayerTracerPlugin.instance.getLogDisplayName(log::class)))
+                    .lore(
+                        listOf(
+                            "<gold>Message</gold><gray>:</gray> <white>${log.message}",
+                            "<gold>Player UUID</gold><gray>:</gray> <white>${log.playerUUID}",
+                            "<gold>Location</gold><gray>:</gray> <white>${log.location.worldName} / ${log.location.x}x / ${log.location.y}y / ${log.location.z}z",
+                        ).map { msg -> miniMessage(msg) }
+                    ).addPersistentData(
+                        NamespacedKey(plugin, "location"),
+                        Location.PERSISTENT_DATA_TYPE,
+                        log.location
+                    ),
+                log
+            ).addToLore(
+                listOf(
+                    Component.empty(),
+                    miniMessage("<blue>Click to teleport</blue>")
                 )
-            },
+            ),
             Coordinates(0, 0)
         ) { e, _, _ ->
             val location = e.currentItem!!.itemMeta.persistentDataContainer.get(
@@ -113,11 +109,11 @@ class LogResultsGUI(results: List<Log>) : PaginatedMenu<Log>(
 
     companion object {
         val glassSlots = intArrayOf(
-            0,  1,  2,  3,  4,  5,  6,  7,  8,
-            9,                              17,
-            18,                             26,
-            27,                             35,
-            36,                             44,
+            0, 1, 2, 3, 4, 5, 6, 7, 8,
+            9, 17,
+            18, 26,
+            27, 35,
+            36, 44,
             45, 46, 47, 48, 49, 50, 51, 52, 53
         )
 
