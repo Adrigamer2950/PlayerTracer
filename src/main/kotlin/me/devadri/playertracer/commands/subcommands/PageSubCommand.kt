@@ -19,10 +19,13 @@ class PageSubCommand : AbstractPLCommand("page", "Shows the specified page of th
         args: Array<out String>,
         commandName: String
     ) {
-        val logs = SearchSubCommand.cache[if (user.isConsole()) null else user.asPlayer()!!.uniqueId] ?: run {
+        val pair = SearchSubCommand.cache[if (user.isConsole()) null else user.asPlayer()!!.uniqueId] ?: run {
             user.sendMessage("&cNo search results found. Please run a search first.")
             return
         }
+
+        val logs = pair.first
+        val onlyOneType = pair.second
 
         if (args.isEmpty()) {
             user.sendMessage("&cUsage: /${getDisplayName(commandName)}")
@@ -36,7 +39,7 @@ class PageSubCommand : AbstractPLCommand("page", "Shows the specified page of th
 
         val totalPages = (logs.size / PAGE_SIZE) + if (logs.size % PAGE_SIZE > 0) 1 else 0
 
-        if (pageNumber < 1 || pageNumber > totalPages) {
+        if (pageNumber !in 1..totalPages) {
             user.sendMessage("&cInvalid page number. Please provide a number between 1 and $totalPages")
             return
         }
@@ -51,12 +54,12 @@ class PageSubCommand : AbstractPLCommand("page", "Shows the specified page of th
         user.sendMessage("&7Page $pageNumber of $totalPages")
         pagedLogs.forEach {
             val time = "[${TimeUtil.formatTimeAgo(it.timestamp)}]"
-            val displayName = plugin.getLogDisplayName(it::class)
+            val displayName = "<white>${plugin.getLogDisplayName(it::class)}</white>: "
 
             user.sendMessage(
                 miniMessage(
                     "<hover:show_text:'${TimeUtil.timestampToDate(it.timestamp)}'><gray>$time</hover> " +
-                            "<aqua>${it.offlinePlayer.name}<gray> | <white>$displayName</white>: ${it.message}"
+                            "<aqua>${it.offlinePlayer.name}<gray> | ${if (onlyOneType) "" else displayName}${it.message}"
                 )
             )
 

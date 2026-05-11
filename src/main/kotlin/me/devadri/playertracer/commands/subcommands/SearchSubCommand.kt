@@ -18,7 +18,7 @@ import java.util.*
 class SearchSubCommand(val parent: MainCommand) : AbstractPLCommand("search", "Searches logs based on a query", listOf("s")) {
 
     companion object {
-        val cache: MutableMap<UUID?, List<Log>> = mutableMapOf()
+        val cache: MutableMap<UUID?, Pair<List<Log>, Boolean /* Search query only has 1 log type */>> = mutableMapOf()
 
         val searching: MutableSet<UUID?> = mutableSetOf()
     }
@@ -66,7 +66,10 @@ class SearchSubCommand(val parent: MainCommand) : AbstractPLCommand("search", "S
                     }
                 }
                 ViewMode.CHAT -> {
-                    cache[searcherUUID] = results
+                    cache[searcherUUID] = Pair(
+                        results,
+                        query.actions.size == 1
+                    )
 
                     // Execute '/playertracer page 1'
                     parent.subCommands.firstOrNull { it.info.name == "page" }?.execute(user, arrayOf("1"), commandName) ?: run {
