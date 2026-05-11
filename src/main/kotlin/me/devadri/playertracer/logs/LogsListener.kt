@@ -2,6 +2,10 @@ package me.devadri.playertracer.logs
 
 import io.papermc.paper.event.player.AsyncChatEvent
 import me.devadri.playertracer.PlayerTracerPlugin
+import me.devadri.playertracer.api.logs.ChatLog
+import me.devadri.playertracer.api.logs.CommandLog
+import me.devadri.playertracer.api.logs.JoinServerLog
+import me.devadri.playertracer.api.logs.LeaveServerLog
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerCommandPreprocessEvent

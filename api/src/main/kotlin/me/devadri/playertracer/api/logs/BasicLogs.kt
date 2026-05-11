@@ -1,9 +1,7 @@
 @file:Suppress("unused")
 
-package me.devadri.playertracer.logs
+package me.devadri.playertracer.api.logs
 
-import me.devadri.playertracer.api.logs.AbstractLog
-import me.devadri.playertracer.api.logs.LogMetadata
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer
 import org.bukkit.entity.Player

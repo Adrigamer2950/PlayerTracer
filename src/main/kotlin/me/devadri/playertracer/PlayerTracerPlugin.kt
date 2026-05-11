@@ -16,6 +16,10 @@ import me.devadri.playertracer.util.launchCoroutine
 import me.devadri.playertracer.viewmode.ViewModeManager
 import me.devadri.obsidian.ObsidianPlugin
 import me.devadri.obsidian.lib.libby.Library
+import me.devadri.playertracer.api.logs.ChatLog
+import me.devadri.playertracer.api.logs.CommandLog
+import me.devadri.playertracer.api.logs.JoinServerLog
+import me.devadri.playertracer.api.logs.LeaveServerLog
 import me.devadri.playertracer.api.logs.LogMetadata
 import org.bukkit.plugin.Plugin
 import java.sql.Timestamp
