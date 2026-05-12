@@ -2,9 +2,8 @@ name: Build
 
 on:
   push:
-
-env:
-  COMMIT_MESSAGE: "${{ github.event.head_commit.message }}"
+    branches-ignore:
+      - 'renovate/**'
 
 jobs:
   build:
