@@ -20,7 +20,7 @@ h2 = "2.2.224"
 sqlite = "3.50.3.0"
 mysql = "8.0.30"
 mariadb = "3.3.1"
-postgresql = "42.7.3"
+postgresql = "42.7.11"
 
 [libraries]
 jetbrains-annotations = { group = "org.jetbrains", name = "annotations", version.ref = "jetbrains-annotations" }
