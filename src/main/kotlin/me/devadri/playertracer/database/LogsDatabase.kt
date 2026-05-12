@@ -1,11 +1,13 @@
 package me.devadri.playertracer.database
 
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.withContext
 import me.devadri.obsidian.logger.Logger
+import me.devadri.playertracer.Config
 import me.devadri.playertracer.PlayerTracerPlugin
 import me.devadri.playertracer.api.logs.Log
 import me.devadri.playertracer.database.tables.LogsTable
+import me.devadri.playertracer.util.launchCoroutine
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.inList
@@ -14,6 +16,7 @@ import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.transactions.transaction
 import java.util.*
+import java.util.concurrent.Executors
 import kotlin.reflect.KClass
 import kotlin.reflect.full.isSubclassOf
 
@@ -24,6 +27,8 @@ abstract class LogsDatabase {
     private val logger: Logger = plugin.logger
 
     lateinit var database: Database
+
+    private val dispatcher = Executors.newFixedThreadPool(Config.Database.threadLimit).asCoroutineDispatcher()
 
     init {
         // Initialize database details and make initial connection
@@ -48,45 +53,48 @@ abstract class LogsDatabase {
     }
 
     fun addLog(log: Log) {
-        transaction(database) {
-            // Insert data
-            LogsTable.insert {
-                it[playerUUID] = log.playerUUID.toString()
-                it[`class`] = log::class.qualifiedName as String
-                it[data] = plugin.logsProvider.encodeToJson(log)
+        launchCoroutine(dispatcher) {
+            transaction(database) {
+                LogsTable.insert {
+                    it[playerUUID] = log.playerUUID.toString()
+                    it[`class`] = log::class.qualifiedName as String
+                    it[data] = plugin.logsProvider.encodeToJson(log)
+                }
             }
         }
     }
 
     @Suppress("UNCHECKED_CAST")
-    fun getLogs(vararg uuids: UUID): List<Log> {
-        return transaction(database) {
-            val logs = mutableListOf<Log>()
+    suspend fun getLogs(vararg uuids: UUID): List<Log> {
+        return withContext(dispatcher) {
+            transaction(database) {
+                val logs = mutableListOf<Log>()
 
-            // Loop through all logs for the given player UUID and decode them
-            LogsTable.select(LogsTable.id, LogsTable.`class`, LogsTable.data)
-                .where(
-                    LogsTable.data.isNotNull() and LogsTable.`class`.isNotNull()
-                            and (LogsTable.playerUUID inList uuids.map { it.toString() }))
-                .mapNotNull {
-                    val `class` = Class.forName(it[LogsTable.`class`]).kotlin
+                // Loop through all logs for the given player UUID and decode them
+                LogsTable.select(LogsTable.id, LogsTable.`class`, LogsTable.data)
+                    .where(
+                        LogsTable.data.isNotNull() and LogsTable.`class`.isNotNull()
+                                and (LogsTable.playerUUID inList uuids.map { it.toString() })
+                    )
+                    .mapNotNull {
+                        val `class` = Class.forName(it[LogsTable.`class`]).kotlin
 
-                    if (!`class`.isSubclassOf(Log::class)) {
-                        throw IllegalArgumentException("Class ${it[LogsTable.`class`]} is not a subclass of Log")
+                        if (!`class`.isSubclassOf(Log::class)) {
+                            throw IllegalArgumentException("Class ${it[LogsTable.`class`]} is not a subclass of Log")
+                        }
+
+                        // Decode the log that is assumed to be registered in the logs provider
+                        // Otherwise, an error is thrown
+                        logs.add(
+                            plugin.logsProvider.decodeFromJson(
+                                it[LogsTable.data],
+                                Class.forName(it[LogsTable.`class`]).kotlin as KClass<out Log>
+                            )
+                        )
                     }
 
-                    // Decode the log that is assumed to be registered in the logs provider
-                    // Otherwise, an error is thrown
-                    logs.add(plugin.logsProvider.decodeFromJson(it[LogsTable.data], Class.forName(it[LogsTable.`class`]).kotlin as KClass<out Log>))
-                }
-
-            return@transaction logs.reversed()
-        }
-    }
-
-    suspend fun getLogsAsync(vararg uuids: UUID): List<Log> {
-        return withContext(Dispatchers.IO) {
-            getLogs(*uuids)
+                logs.reversed()
+            }
         }
     }
 }

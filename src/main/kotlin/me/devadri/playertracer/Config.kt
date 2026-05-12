@@ -6,6 +6,7 @@ import dev.dejvokep.boostedyaml.settings.general.GeneralSettings
 import dev.dejvokep.boostedyaml.settings.loader.LoaderSettings
 import dev.dejvokep.boostedyaml.settings.updater.UpdaterSettings
 import java.io.File
+import kotlin.properties.Delegates
 
 object Config {
 
@@ -33,6 +34,13 @@ object Config {
         Database.Remote.database = yaml.getString("database.remote.database")
         Database.Remote.username = yaml.getString("database.remote.username")
         Database.Remote.password = yaml.getString("database.remote.password")
+
+        Database.threadLimit = yaml.getInt("misc.thread-limit", 4)
+
+        if (Database.threadLimit < 1) {
+            PlayerTracerPlugin.instance.logger.warn("Thread limit cannot be lower than 1. Reverting to default (4)")
+            Database.threadLimit = 4
+        }
     }
 
     object Database {
@@ -65,5 +73,8 @@ object Config {
             lateinit var password: String
                 internal set
         }
+
+        var threadLimit by Delegates.notNull<Int>()
+            internal set
     }
 }

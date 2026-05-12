@@ -22,7 +22,7 @@ class LogQuery(
     }
 
     suspend fun getResults(): List<Log> {
-        return PlayerTracerPlugin.instance.database.getLogsAsync(*uuids).filter { log ->
+        return PlayerTracerPlugin.instance.database.getLogs(*uuids).filter { log ->
             actions.contains(log::class)
         }.filter { if (after != null) Timestamp(it.timestamp).after(after) else true }
     }
