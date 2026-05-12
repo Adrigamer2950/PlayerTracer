@@ -33,3 +33,9 @@ jobs:
         env:
           MODRINTH_TOKEN: "${{ secrets.MODRINTH_TOKEN }}"
         run: "./gradlew modrinth modrinthSyncBody"
+
+      - name: Publish Artifact
+        env:
+          NEXUS_USERNAME: "${{ secrets.NEXUS_USERNAME }}"
+          NEXUS_PASSWORD: "${{ secrets.NEXUS_PASSWORD }}"
+        run: "./gradlew :api:publish -PNEXUS_USERNAME=$NEXUS_USERNAME -PNEXUS_PASSWORD=$NEXUS_PASSWORD"
