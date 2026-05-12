@@ -1,7 +1,7 @@
 package me.devadri.playertracer.database.impl
 
 import me.devadri.playertracer.database.LogsDatabase
-import org.jetbrains.exposed.sql.Database
+import org.jetbrains.exposed.v1.jdbc.Database
 import java.io.File
 
 class H2Database : LogsDatabase() {

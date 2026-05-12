@@ -2,7 +2,7 @@ package me.devadri.playertracer.database.impl.remote
 
 import me.devadri.playertracer.Config
 import me.devadri.playertracer.database.LogsDatabase
-import org.jetbrains.exposed.sql.Database
+import org.jetbrains.exposed.v1.jdbc.Database
 
 abstract class RemoteDatabase(protected val type: String, protected val driver: String) : LogsDatabase() {
 
