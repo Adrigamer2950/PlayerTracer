@@ -114,10 +114,6 @@ bukkit {
     }
 }
 
-tasks.build {
-    finalizedBy("shadowJar")
-}
-
 tasks.shadowJar {
     archiveClassifier.set("")
 
