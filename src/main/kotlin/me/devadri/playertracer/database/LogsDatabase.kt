@@ -18,7 +18,6 @@ import org.jetbrains.exposed.v1.jdbc.select
 import org.jetbrains.exposed.v1.jdbc.transactions.transaction
 import java.util.*
 import java.util.concurrent.Executors
-import kotlin.reflect.KClass
 import kotlin.reflect.full.isSubclassOf
 
 abstract class LogsDatabase {
@@ -89,7 +88,7 @@ abstract class LogsDatabase {
                         logs.add(
                             plugin.logsProvider.decodeFromJson(
                                 it[LogsTable.data],
-                                Class.forName(it[LogsTable.`class`]).kotlin as KClass<out Log>
+                                Class.forName(it[LogsTable.`class`]) as Class<out Log>
                             )
                         )
                     }

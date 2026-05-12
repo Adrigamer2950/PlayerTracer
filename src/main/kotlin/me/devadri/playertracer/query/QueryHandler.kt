@@ -7,14 +7,13 @@ import me.devadri.obsidian.user.User
 import org.bukkit.Bukkit
 import java.sql.Timestamp
 import java.util.UUID
-import kotlin.reflect.KClass
 
 object QueryHandler {
 
     @JvmStatic
     internal fun handleQuery(user: User, args: Array<out String>): LogQuery? {
         val uuids = mutableListOf<UUID>()
-        val actions = mutableListOf<KClass<out Log>>()
+        val actions = mutableListOf<Class<out Log>>()
         var after: Timestamp? = null
         var afterS: String? = null
 

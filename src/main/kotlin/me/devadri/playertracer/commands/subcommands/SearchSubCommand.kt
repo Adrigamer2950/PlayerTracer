@@ -111,7 +111,7 @@ class SearchSubCommand(val parent: MainCommand) : AbstractPLCommand("search", "S
 
             args.last().startsWith("a:") -> {
                 PlayerTracerPlugin.instance.logsProvider.logs.map {
-                    PlayerTracerPlugin.instance.logsProvider.getId(it.`class`)
+                    PlayerTracerPlugin.instance.logsProvider.getId(it.clazz)
                 }.map { "a:$it" }
             }
 

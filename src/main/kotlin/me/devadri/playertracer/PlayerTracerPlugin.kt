@@ -25,7 +25,6 @@ import org.bukkit.plugin.Plugin
 import java.sql.Timestamp
 import java.util.*
 import java.util.concurrent.CompletableFuture
-import kotlin.reflect.KClass
 
 // TODO: messages.yml
 class PlayerTracerPlugin : ObsidianPlugin(), PlayerTracer {
@@ -113,10 +112,10 @@ class PlayerTracerPlugin : ObsidianPlugin(), PlayerTracer {
 
         this.logsProvider.registerLog(
             this,
-            JoinServerLog::class,
-            LeaveServerLog::class,
-            ChatLog::class,
-            CommandLog::class
+            JoinServerLog::class.java,
+            LeaveServerLog::class.java,
+            ChatLog::class.java,
+            CommandLog::class.java
         )
 
         ViewModeManager.init()
@@ -151,7 +150,7 @@ class PlayerTracerPlugin : ObsidianPlugin(), PlayerTracer {
 
     override fun registerLog(
         plugin: Plugin,
-        vararg classes: KClass<out Log>,
+        vararg classes: Class<out Log>,
         jsonParser: Gson
     ) {
         logsProvider.registerLog(plugin, *classes, jsonParser = jsonParser)
@@ -159,7 +158,7 @@ class PlayerTracerPlugin : ObsidianPlugin(), PlayerTracer {
 
     override fun registerLog(
         plugin: Plugin,
-        vararg classes: Pair<KClass<out Log>, Gson>
+        vararg classes: Pair<Class<out Log>, Gson>
     ) {
         classes.forEach {
             logsProvider.registerLog(plugin, it.first, jsonParser = it.second)
@@ -172,7 +171,7 @@ class PlayerTracerPlugin : ObsidianPlugin(), PlayerTracer {
 
     override fun getLogs(
         uuids: Array<UUID>,
-        actions: List<KClass<out Log>>,
+        actions: List<Class<out Log>>,
         after: Timestamp?
     ): CompletableFuture<List<Log>> = getLogsWithFuture(LogQuery(uuids, actions, after))
 
@@ -198,14 +197,14 @@ class PlayerTracerPlugin : ObsidianPlugin(), PlayerTracer {
 
     override suspend fun getLogsAsync(
         uuids: Array<UUID>,
-        actions: List<KClass<out Log>>,
+        actions: List<Class<out Log>>,
         after: Timestamp?
     ): List<Log> = getLogs(LogQuery(uuids, actions, after))
 
-    override fun getLogMetadata(logClass: KClass<out Log>): LogMetadata =
+    override fun getLogMetadata(logClass: Class<out Log>): LogMetadata =
         this.logsProvider.getData(logClass)
 
-    override fun getLogDisplayName(logClass: KClass<out Log>): String {
+    override fun getLogDisplayName(logClass: Class<out Log>): String {
         val metadata = getLogMetadata(logClass)
 
         return if (metadata.displayName == "")

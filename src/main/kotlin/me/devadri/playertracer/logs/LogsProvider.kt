@@ -7,7 +7,6 @@ import me.devadri.playertracer.api.logs.Log
 import me.devadri.playertracer.api.logs.LogMetadata
 import org.bukkit.Bukkit
 import org.bukkit.plugin.Plugin
-import kotlin.reflect.KClass
 import kotlin.reflect.full.findAnnotation
 
 class LogsProvider(private val logger: Logger) {
@@ -18,46 +17,46 @@ class LogsProvider(private val logger: Logger) {
      * @throws IllegalArgumentException If the class is not a valid log class or if its id is already registered
      */
     @Throws(IllegalArgumentException::class)
-    fun registerLog(plugin: Plugin, vararg classes: KClass<out Log>, jsonParser: Gson = Gson()) {
+    fun registerLog(plugin: Plugin, vararg classes: Class<out Log>, jsonParser: Gson = Gson()) {
         classes.forEach {
             if (isLogRegistered(it)) return@forEach
 
-            if (it.qualifiedName == null) {
+            if (it.kotlin.qualifiedName == null) {
                 throw IllegalArgumentException("Invalid log class. Must not be a local or a class of an anonymous object")
             }
 
-            val duplicated = logs.firstOrNull { log -> getId(log.`class`) == getId(it) }
+            val duplicated = logs.firstOrNull { log -> getId(log.clazz) == getId(it) }
 
             if (duplicated != null) {
-                throw IllegalArgumentException("A log type with ID '${getId(it)}' is already registered: ${duplicated.`class`.qualifiedName}")
+                throw IllegalArgumentException("A log type with ID '${getId(it)}' is already registered: ${duplicated.clazz.kotlin.qualifiedName}")
             }
 
             logs.add(LogClassInfo(it, jsonParser, plugin))
 
-            Bukkit.getPluginManager().callEvent(LogRegisterEvent(it.java))
+            Bukkit.getPluginManager().callEvent(LogRegisterEvent(it))
 
-            logger.debug("Registered log ${it.qualifiedName} with id ${getId(it)}")
+            logger.debug("Registered log ${it.kotlin.qualifiedName} with id ${getId(it)}")
         }
     }
 
-    fun isLogRegistered(clazz: KClass<out Log>): Boolean = logs.map { it.`class` }.contains(clazz)
+    fun isLogRegistered(clazz: Class<out Log>): Boolean = logs.map { it.clazz }.contains(clazz)
 
     fun encodeToJson(log: Log): String {
         // Get class or throw an exception if not registered
-        val pair = logs.firstOrNull { it.`class` == log::class }
+        val pair = logs.firstOrNull { it.clazz == log::class.java }
             ?: throw IllegalArgumentException("Log class ${log::class.qualifiedName} is not registered")
 
         // Encode object to JSON
         return pair.gson.toJson(log)
     }
 
-    fun decodeFromJson(json: String, `class`: KClass<out Log>): Log {
+    fun decodeFromJson(json: String, `class`: Class<out Log>): Log {
         // Get class or throw an exception if not registered
-        val pair = logs.firstOrNull { it.`class` == `class` }
-            ?: throw IllegalArgumentException("Log class ${`class`.qualifiedName} is not registered")
+        val pair = logs.firstOrNull { it.clazz == `class` }
+            ?: throw IllegalArgumentException("Log class ${`class`.kotlin.qualifiedName} is not registered")
 
         // Decode object from JSON
-        return pair.gson.fromJson(json, `class`.java)
+        return pair.gson.fromJson(json, `class`)
     }
 
     /**
@@ -65,7 +64,7 @@ class LogsProvider(private val logger: Logger) {
      * @throws ClassCastException If the field is not of type LogData
      */
     @Throws(NoSuchFieldException::class)
-    fun getId(`class`: KClass<out Log>): String {
+    fun getId(`class`: Class<out Log>): String {
         return getData(`class`).id
     }
 
@@ -73,11 +72,11 @@ class LogsProvider(private val logger: Logger) {
      * @throws IllegalStateException If the class is not annotated with [LogMetadata]
      */
     @Throws(IllegalStateException::class)
-    fun getData(`class`: KClass<out Log>): LogMetadata =
-        `class`.findAnnotation<LogMetadata>()
+    fun getData(`class`: Class<out Log>): LogMetadata =
+        `class`.kotlin.findAnnotation<LogMetadata>()
             ?: error("${`class`.simpleName} is not annotated with @LogMetadata")
 
-    fun getLogClassById(id: String): KClass<out Log>? = logs.firstOrNull { getId(it.`class`) == id }?.`class`
+    fun getLogClassById(id: String): Class<out Log>? = logs.firstOrNull { getId(it.clazz) == id }?.clazz
 }
 
-class LogClassInfo(val `class`: KClass<out Log>, val gson: Gson, val plugin: Plugin)
+class LogClassInfo(val clazz: Class<out Log>, val gson: Gson, val plugin: Plugin)

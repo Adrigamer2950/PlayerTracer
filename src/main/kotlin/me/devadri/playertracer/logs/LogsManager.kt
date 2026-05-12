@@ -8,7 +8,7 @@ import org.bukkit.Bukkit
 class LogsManager(private val plugin: PlayerTracerPlugin) {
 
     fun addLog(log: Log) {
-        if (!plugin.logsProvider.isLogRegistered(log::class))
+        if (!plugin.logsProvider.isLogRegistered(log::class.java))
             throw IllegalArgumentException("Log class isn't registered")
 
         plugin.database.addLog(log)

@@ -7,7 +7,6 @@ import org.bukkit.plugin.Plugin
 import java.sql.Timestamp
 import java.util.UUID
 import java.util.concurrent.CompletableFuture
-import kotlin.reflect.KClass
 
 interface PlayerTracer {
 
@@ -17,7 +16,7 @@ interface PlayerTracer {
      * @param plugin The plugin that owns the log
      * @param classes The log classes to register
      */
-    fun registerLog(plugin: Plugin, vararg classes: KClass<out Log>) {
+    fun registerLog(plugin: Plugin, vararg classes: Class<out Log>) {
         registerLog(plugin, classes = classes, Gson())
     }
 
@@ -28,7 +27,7 @@ interface PlayerTracer {
      * @param classes The log classes to register
      * @param jsonParser The JSON parser to use for serializing and deserializing the specified logs
      */
-    fun registerLog(plugin: Plugin, vararg classes: KClass<out Log>, jsonParser: Gson)
+    fun registerLog(plugin: Plugin, vararg classes: Class<out Log>, jsonParser: Gson)
 
     /**
      * Registers a log
@@ -36,7 +35,7 @@ interface PlayerTracer {
      * @param plugin The plugin that owns the log
      * @param classes The log classes to register + their respective JSON parsers
      */
-    fun registerLog(plugin: Plugin, vararg classes: Pair<KClass<out Log>, Gson>)
+    fun registerLog(plugin: Plugin, vararg classes: Pair<Class<out Log>, Gson>)
 
     /**
      * Adds a log to the database, triggering the LogAddEvent (async)
@@ -52,7 +51,7 @@ interface PlayerTracer {
      * @param after Optional timestamp to filter logs after a certain time
      * @return A [CompletableFuture] of the list of logs
      */
-    fun getLogs(uuids: Array<UUID>, actions: List<KClass<out Log>>, after: Timestamp? = null) : CompletableFuture<List<Log>>
+    fun getLogs(uuids: Array<UUID>, actions: List<Class<out Log>>, after: Timestamp? = null) : CompletableFuture<List<Log>>
 
     /**
      * Retrieves all logs for the given UUIDs and actions using Kotlin's coroutines
@@ -62,7 +61,7 @@ interface PlayerTracer {
      * @param after Optional timestamp to filter logs after a certain time
      * @return A [List] of logs
      */
-    suspend fun getLogsAsync(uuids: Array<UUID>, actions: List<KClass<out Log>>, after: Timestamp? = null) : List<Log>
+    suspend fun getLogsAsync(uuids: Array<UUID>, actions: List<Class<out Log>>, after: Timestamp? = null) : List<Log>
 
     /**
      * Retrieves the [LogMetadata] for the given log class
@@ -72,7 +71,7 @@ interface PlayerTracer {
      * @throws IllegalStateException If the class is not annotated with [LogMetadata]
      */
     @Throws(NoSuchFieldException::class, ClassCastException::class)
-    fun getLogMetadata(logClass: KClass<out Log>): LogMetadata
+    fun getLogMetadata(logClass: Class<out Log>): LogMetadata
 
     /**
      * Retrieves the Display Name for the given log class
@@ -81,5 +80,5 @@ interface PlayerTracer {
      * @return The Display Name of the given log class
      * @throws IllegalStateException If the class is not annotated with [LogMetadata]
      */
-    fun getLogDisplayName(logClass: KClass<out Log>): String
+    fun getLogDisplayName(logClass: Class<out Log>): String
 }

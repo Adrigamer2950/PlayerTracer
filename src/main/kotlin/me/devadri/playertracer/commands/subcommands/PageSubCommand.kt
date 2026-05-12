@@ -54,7 +54,7 @@ class PageSubCommand : AbstractPLCommand("page", "Shows the specified page of th
         user.sendMessage("&7Page $pageNumber of $totalPages")
         pagedLogs.forEach {
             val time = "[${TimeUtil.formatTimeAgo(it.timestamp)}]"
-            val displayName = "<white>${plugin.getLogDisplayName(it::class)}</white>: "
+            val displayName = "<white>${plugin.getLogDisplayName(it::class.java)}</white>: "
 
             user.sendMessage(
                 miniMessage(
