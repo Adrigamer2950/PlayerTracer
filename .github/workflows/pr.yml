@@ -26,3 +26,9 @@ jobs:
 
       - name: Build Artifact
         run: "chmod +x ./gradlew && ./gradlew build"
+
+      - name: Publish Artifact
+        env:
+          NEXUS_USERNAME: "${{ secrets.NEXUS_USERNAME }}"
+          NEXUS_PASSWORD: "${{ secrets.NEXUS_PASSWORD }}"
+        run: "./gradlew :api:publish -PNEXUS_USERNAME=$NEXUS_USERNAME -PNEXUS_PASSWORD=$NEXUS_PASSWORD"
