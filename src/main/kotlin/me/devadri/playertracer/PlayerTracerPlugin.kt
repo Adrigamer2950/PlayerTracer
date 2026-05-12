@@ -59,8 +59,8 @@ class PlayerTracerPlugin : ObsidianPlugin(), PlayerTracer {
                     .version(BuildConstants.SQLITE_VERSION)
                     .build(),
                 Library.builder()
-                    .groupId("mysql")
-                    .artifactId("mysql-connector-java")
+                    .groupId("com.mysql")
+                    .artifactId("mysql-connector-j")
                     .version(BuildConstants.MYSQL_VERSION)
                     .build(),
                 Library.builder()
