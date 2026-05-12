@@ -13,7 +13,7 @@ class HelpSubCommand(private val parent: Command) : AbstractPLCommand("help", "S
             "&e[] &7- &eOptional argument",
         )
 
-        parent.subCommands.filter { it is AbstractPLCommand }.map { it as AbstractPLCommand }.forEach {
+        parent.subCommands.filterIsInstance<AbstractPLCommand>().map { it }.forEach {
             user.sendMessage(
                 "&7/${it.getDisplayName(commandName)} &8- &7${it.description}"
             )
