@@ -18,7 +18,7 @@ run-server = "2.3.1"
 # Database drivers
 h2 = "2.2.224"
 sqlite = "3.50.3.0"
-mysql = "8.0.30"
+mysql = "8.0.33"
 mariadb = "3.3.1"
 postgresql = "42.7.11"
 
