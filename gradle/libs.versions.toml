@@ -19,7 +19,7 @@ run-server = "2.3.1"
 h2 = "2.4.240"
 sqlite = "3.50.3.0"
 mysql = "8.0.33"
-mariadb = "3.3.1"
+mariadb = "3.5.8"
 postgresql = "42.7.11"
 
 [libraries]
