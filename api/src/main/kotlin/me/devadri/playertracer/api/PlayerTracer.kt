@@ -16,9 +16,19 @@ interface PlayerTracer {
      * @throws IllegalArgumentException If the class is not a valid log class or if its id is already registered
      * @param plugin The plugin that owns the log
      * @param classes The log classes to register
+     */
+    fun registerLog(plugin: Plugin, vararg classes: KClass<out Log>) {
+        registerLog(plugin, classes = classes, Gson())
+    }
+
+    /**
+     * Registers a log
+     * @throws IllegalArgumentException If the class is not a valid log class or if its id is already registered
+     * @param plugin The plugin that owns the log
+     * @param classes The log classes to register
      * @param jsonParser The JSON parser to use for serializing and deserializing the specified logs
      */
-    fun registerLog(plugin: Plugin, vararg classes: KClass<out Log>, jsonParser: Gson = Gson())
+    fun registerLog(plugin: Plugin, vararg classes: KClass<out Log>, jsonParser: Gson)
 
     /**
      * Registers a log
