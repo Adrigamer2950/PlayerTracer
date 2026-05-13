@@ -16,21 +16,29 @@ class LogsListener(private val plugin: PlayerTracerPlugin) : Listener {
 
     @EventHandler
     fun onPlayerJoin(event: PlayerJoinEvent) {
-        plugin.logsManager.addLog(JoinServerLog(event.player))
+        if (plugin.logsProvider.isLogRegistered(JoinServerLog::class.java)) {
+            plugin.logsManager.addLog(JoinServerLog(event.player))
+        }
     }
 
     @EventHandler
     fun onPlayerQuit(event: PlayerQuitEvent) {
-        plugin.logsManager.addLog(LeaveServerLog(event.player))
+        if (plugin.logsProvider.isLogRegistered(LeaveServerLog::class.java)) {
+            plugin.logsManager.addLog(LeaveServerLog(event.player))
+        }
     }
 
     @EventHandler
     fun onPlayerChat(event: AsyncChatEvent) {
-        plugin.logsManager.addLog(ChatLog(event.player, event.message()))
+        if (plugin.logsProvider.isLogRegistered(ChatLog::class.java)) {
+            plugin.logsManager.addLog(ChatLog(event.player, event.message()))
+        }
     }
 
     @EventHandler
     fun onPlayerCommand(event: PlayerCommandPreprocessEvent) {
-        plugin.logsManager.addLog(CommandLog(event.player, event.message))
+        if (plugin.logsProvider.isLogRegistered(CommandLog::class.java)) {
+            plugin.logsManager.addLog(CommandLog(event.player, event.message))
+        }
     }
 }
