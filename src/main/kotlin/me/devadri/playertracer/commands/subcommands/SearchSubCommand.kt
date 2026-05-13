@@ -122,6 +122,6 @@ class SearchSubCommand(val parent: MainCommand) : AbstractPLCommand("search", "S
             else -> {
                 super.tabComplete(user, args, commandName)
             }
-        }.filter { it.startsWith(args.lastOrNull() ?: return@filter true) }
+        }.filter { it.lowercase().startsWith(args.lastOrNull()?.lowercase() ?: return@filter true) }
     }
 }
