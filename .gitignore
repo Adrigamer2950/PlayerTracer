@@ -117,3 +117,6 @@ gradle-app.setting
 
 # .kotlin
 .kotlin
+
+# Nextcloud
+.sync-exclude.lst
