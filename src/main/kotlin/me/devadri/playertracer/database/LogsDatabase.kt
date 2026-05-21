@@ -3,6 +3,7 @@ package me.devadri.playertracer.database
 import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.withContext
 import me.devadri.obsidian.logger.Logger
+import me.devadri.obsidian.util.ClassUtil
 import me.devadri.playertracer.Config
 import me.devadri.playertracer.PlayerTracerPlugin
 import me.devadri.playertracer.api.logs.Log
@@ -76,10 +77,10 @@ abstract class LogsDatabase {
                         LogsTable.data.isNotNull() and LogsTable.`class`.isNotNull()
                                 and (LogsTable.playerUUID inList uuids.map { it.toString() })
                     )
-                    .mapNotNull {
-                        val `class` = Class.forName(it[LogsTable.`class`]).kotlin
+                    .forEach {
+                        val `class` = ClassUtil.searchForClass(it[LogsTable.`class`]) as? Class<out Log> ?: return@forEach
 
-                        if (!`class`.isSubclassOf(Log::class)) {
+                        if (!`class`.kotlin.isSubclassOf(Log::class)) {
                             throw IllegalArgumentException("Class ${it[LogsTable.`class`]} is not a subclass of Log")
                         }
 
@@ -88,8 +89,8 @@ abstract class LogsDatabase {
                         logs.add(
                             plugin.logsProvider.decodeFromJson(
                                 it[LogsTable.data],
-                                Class.forName(it[LogsTable.`class`]) as Class<out Log>
-                            )
+                                `class`
+                            ) ?: return@forEach
                         )
                     }
 
