@@ -66,28 +66,38 @@ class LogResultsGUI(results: List<Log>) : PaginatedMenu<Log>(
     override val buttonForT: (Log) -> MenuButton = { log ->
         MenuButton(
             plugin,
-            log.guiItem(
-                ItemBuilder.builder()
+            run {
+                val builder = ItemBuilder.builder()
                     .material(Material.WRITABLE_BOOK)
                     .name(miniMessage(PlayerTracerPlugin.instance.getLogDisplayName(log::class.java)))
                     .lore(
                         listOf(
                             "<gold>Message</gold><gray>:</gray> <white>${log.message}",
                             "<gold>Player UUID</gold><gray>:</gray> <white>${log.playerUUID}",
-                            "<gold>Location</gold><gray>:</gray> <white>${log.location.worldName} / ${log.location.x}x / ${log.location.y}y / ${log.location.z}z",
+                        ).map { msg -> miniMessage(msg) }
+                    )
+
+                if (log.location != null) {
+                    val location = log.location!!
+
+                    builder.addToLore(
+                        listOf(
+                            "<gold>Location</gold><gray>:</gray> <white>${location.worldName} / ${location.x}x / ${location.y}y / ${location.z}z",
                         ).map { msg -> miniMessage(msg) }
                     ).addPersistentData(
                         NamespacedKey(plugin, "location"),
                         Location.PERSISTENT_DATA_TYPE,
-                        log.location
-                    ),
-                log
-            ).addToLore(
-                listOf(
-                    Component.empty(),
-                    miniMessage("<blue>Click to teleport</blue>")
+                        log.location!!
+                    )
+                }
+
+                log.guiItem(builder, log).addToLore(
+                    listOf(
+                        Component.empty(),
+                        miniMessage("<blue>Click to teleport</blue>")
+                    )
                 )
-            ),
+            },
             Coordinates(0, 0)
         ) { e, _, _ ->
             val location = e.currentItem!!.itemMeta.persistentDataContainer.get(

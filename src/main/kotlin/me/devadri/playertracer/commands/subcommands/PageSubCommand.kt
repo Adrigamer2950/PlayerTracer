@@ -63,12 +63,12 @@ class PageSubCommand : AbstractPLCommand("page", "Shows the specified page of th
                 )
             )
 
-            if (Permission.TELEPORT.isGrantedTo(user)) {
+            if (Permission.TELEPORT.isGrantedTo(user) && it.location != null) {
                 val teleportCommand =
-                    "/$commandName tp ${it.location.worldName} ${it.location.x} ${it.location.y} ${it.location.z}"
+                    "/$commandName tp ${it.location?.worldName} ${it.location?.x} ${it.location?.y} ${it.location?.z}"
 
                 user.sendMessage(
-                    miniMessage("<hover:show_text:'$teleportCommand'><gray>   (${it.location.worldName}/x${it.location.x}/y${it.location.y}/z${it.location.z})</hover>")
+                    miniMessage("<hover:show_text:'$teleportCommand'><gray>   (${it.location?.worldName}/x${it.location?.x}/y${it.location?.y}/z${it.location?.z})</hover>")
                         .clickEvent(ClickEvent.runCommand(teleportCommand))
                 )
             }

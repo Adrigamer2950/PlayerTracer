@@ -18,7 +18,7 @@ interface Log {
     val message: String
     val playerUUID: UUID
     val timestamp: Long
-    val location: Location
+    val location: Location?
 
     val player: Player?
         get() = Bukkit.getPlayer(playerUUID)
@@ -34,11 +34,13 @@ interface Log {
  * Abstract implementation of [Log].
  * Implementations of this class still must be annotated with [LogMetadata]
  */
-abstract class AbstractLog(override val message: String, player: Player, override val timestamp: Long) : Log {
+abstract class AbstractLog(override val message: String, player: OfflinePlayer, override val location: Location?, override val timestamp: Long) : Log {
 
-    constructor(message: String, player: Player) : this(message, player, Timestamp.from(Instant.now()).time)
+    constructor(message: String, player: OfflinePlayer, location: Location?) : this(message, player, location, Timestamp.from(Instant.now()).time)
+
+    constructor(message: String, player: OfflinePlayer) : this(message, player, null)
+
+    constructor(message: String, player: Player) : this(message, player, Location.fromBukkitLocation(player.location))
 
     override val playerUUID = player.uniqueId // Player's UUID
-
-    override val location = Location.fromBukkitLocation(player.location)
 }
