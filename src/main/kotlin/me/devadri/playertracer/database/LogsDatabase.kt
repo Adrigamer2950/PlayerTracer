@@ -1,7 +1,6 @@
 package me.devadri.playertracer.database
 
 import kotlinx.coroutines.asCoroutineDispatcher
-import kotlinx.coroutines.withContext
 import me.devadri.obsidian.logger.Logger
 import me.devadri.obsidian.util.ClassUtil
 import me.devadri.playertracer.Config
@@ -16,6 +15,7 @@ import org.jetbrains.exposed.v1.jdbc.Database
 import org.jetbrains.exposed.v1.jdbc.SchemaUtils
 import org.jetbrains.exposed.v1.jdbc.insert
 import org.jetbrains.exposed.v1.jdbc.select
+import org.jetbrains.exposed.v1.jdbc.transactions.suspendTransaction
 import org.jetbrains.exposed.v1.jdbc.transactions.transaction
 import java.util.*
 import java.util.concurrent.Executors
@@ -29,7 +29,7 @@ abstract class LogsDatabase {
 
     lateinit var database: Database
 
-    private val dispatcher = Executors.newFixedThreadPool(Config.Database.threadLimit).asCoroutineDispatcher()
+    internal val dispatcher = Executors.newFixedThreadPool(Config.Database.threadLimit).asCoroutineDispatcher()
 
     init {
         // Initialize database details and make initial connection
@@ -67,35 +67,51 @@ abstract class LogsDatabase {
 
     @Suppress("UNCHECKED_CAST")
     suspend fun getLogs(vararg uuids: UUID): List<Log> {
-        return withContext(dispatcher) {
-            transaction(database) {
-                val logs = mutableListOf<Log>()
+        val warnedAbout: MutableSet<Class<Any>> = mutableSetOf()
 
-                // Loop through all logs for the given player UUID and decode them
-                LogsTable.select(LogsTable.id, LogsTable.`class`, LogsTable.data)
-                    .where(
-                        LogsTable.data.isNotNull() and LogsTable.`class`.isNotNull()
-                                and (LogsTable.playerUUID inList uuids.map { it.toString() })
-                    )
-                    .forEach {
-                        val `class` = ClassUtil.searchForClass(it[LogsTable.`class`]) as? Class<out Log> ?: return@forEach
+        return suspendTransaction(database) {
+            val logs = mutableListOf<Log>()
 
-                        if (!`class`.kotlin.isSubclassOf(Log::class)) {
-                            throw IllegalArgumentException("Class ${it[LogsTable.`class`]} is not a subclass of Log")
+            // Loop through all logs for the given player UUID and decode them
+            LogsTable.select(LogsTable.id, LogsTable.`class`, LogsTable.data)
+                .where(
+                    LogsTable.data.isNotNull() and LogsTable.`class`.isNotNull()
+                            and (LogsTable.playerUUID inList uuids.map { it.toString() })
+                )
+                .forEach {
+                    val `class` = ClassUtil.searchForClass(it[LogsTable.`class`]) as? Class<out Log> ?: return@forEach
+
+                    // Warn server administrators and/or plugin developer that some log class is not a subclass of Log
+                    if (!`class`.kotlin.isSubclassOf(Log::class)) {
+                        if (!warnedAbout.contains(`class` as Class<Any>)) {
+                            logger.warn("Retrieved class '${`class`.name}' from logs database which isn't a subclass of Log (${Log::class.java.name})")
+                            warnedAbout.add(`class` as Class<Any>)
                         }
 
-                        // Decode the log that is assumed to be registered in the logs provider
-                        // Otherwise, an error is thrown
-                        logs.add(
-                            plugin.logsProvider.decodeFromJson(
-                                it[LogsTable.data],
-                                `class`
-                            ) ?: return@forEach
-                        )
+                        return@forEach
                     }
 
-                logs.reversed()
-            }
+                    // Decode the log that is assumed to be registered in the logs provider
+                    // Otherwise, an error is thrown
+                    val json = runCatching { plugin.logsProvider.decodeFromJson(
+                        it[LogsTable.data],
+                        `class`
+                    ) }
+
+                    // Warn server administrators and/or plugin developer that there was an issue decoding logs from JSON
+                    if (json.isFailure) {
+                        if (!warnedAbout.contains(`class` as Class<Any>)) {
+                            logger.warn(json.exceptionOrNull()?.message ?: "Log class '${`class`.name}' failed to be decoded from JSON")
+                            warnedAbout.add(`class` as Class<Any>)
+                        }
+
+                        return@forEach
+                    }
+
+                    logs.add(json.getOrNull() ?: return@forEach)
+                }
+
+            logs.reversed()
         }
     }
 }

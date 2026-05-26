@@ -1,7 +1,6 @@
 package me.devadri.playertracer
 
 import com.google.gson.Gson
-import kotlinx.coroutines.Dispatchers
 import me.devadri.playertracer.api.PlayerTracer
 import me.devadri.playertracer.api.logs.Log
 import me.devadri.playertracer.database.LogsDatabase
@@ -178,7 +177,7 @@ class PlayerTracerPlugin : ObsidianPlugin(), PlayerTracer {
     internal fun getLogsWithFuture(query: LogQuery): CompletableFuture<List<Log>> {
         val future = CompletableFuture<List<Log>>()
 
-        launchCoroutine(Dispatchers.Default) {
+        launchCoroutine(database.dispatcher) {
             try {
                 val logs = query.getResults()
 
