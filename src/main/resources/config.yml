@@ -11,7 +11,7 @@ database:
     username: root
     password: ""
 
-  # How many threads can be used to store and retrieve data from the database3
+  # How many threads can be used to store and retrieve data from the database
   # If you don't know what this does, don't touch it :)
   # Default: 4
   thread-limit: 4
