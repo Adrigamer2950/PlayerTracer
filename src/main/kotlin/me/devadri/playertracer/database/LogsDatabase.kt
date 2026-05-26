@@ -84,8 +84,11 @@ abstract class LogsDatabase {
                     // Warn server administrators and/or plugin developer that some log class is not a subclass of Log
                     if (!`class`.kotlin.isSubclassOf(Log::class)) {
                         if (!warnedAbout.contains(`class` as Class<Any>)) {
-                            logger.warn("Retrieved class '${`class`.name}' from logs database which isn't a subclass of Log (${Log::class.java.name})")
+                            val message = "Retrieved class '${`class`.name}' from logs database which isn't a subclass of Log (${Log::class.java.name})"
+
+                            logger.warn(message)
                             warnedAbout.add(`class` as Class<Any>)
+                            logs.add(DatabaseFailureLog(message))
                         }
 
                         return@forEach
@@ -101,8 +104,11 @@ abstract class LogsDatabase {
                     // Warn server administrators and/or plugin developer that there was an issue decoding logs from JSON
                     if (json.isFailure) {
                         if (!warnedAbout.contains(`class` as Class<Any>)) {
-                            logger.warn(json.exceptionOrNull()?.message ?: "Log class '${`class`.name}' failed to be decoded from JSON")
+                            val message = json.exceptionOrNull()?.message ?: "Log class '${`class`.name}' failed to be decoded from JSON"
+
+                            logger.warn(message)
                             warnedAbout.add(`class` as Class<Any>)
+                            logs.add(DatabaseFailureLog(message))
                         }
 
                         return@forEach

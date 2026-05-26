@@ -12,6 +12,8 @@ import me.devadri.playertracer.viewmode.ViewMode
 import me.devadri.playertracer.viewmode.ViewModeManager
 import me.devadri.obsidian.asPlayer
 import me.devadri.obsidian.isConsole
+import me.devadri.playertracer.database.DatabaseFailureLog
+import me.devadri.playertracer.util.miniMessage
 import org.bukkit.Bukkit
 import java.util.*
 
@@ -56,6 +58,20 @@ class SearchSubCommand(val parent: MainCommand) : AbstractPLCommand("search", "S
             if (results.isEmpty()) {
                 user.sendMessage("&cNo data found")
                 return@thenAccept
+            }
+
+            // Send error message if needed
+            val errorFilter = results.filterIsInstance<DatabaseFailureLog>()
+
+            if (errorFilter.isNotEmpty()) {
+                user.sendMessage(miniMessage("<red>There has been ${
+                    if (errorFilter.size > 1) "some errors"
+                    else "an error"
+                } while retrieving logs from database:</red>"))
+
+                errorFilter.forEach {
+                    user.sendMessage(miniMessage("<red>- ${it.message}</red>"))
+                }
             }
 
             when (ViewModeManager.get(searcherUUID)) {
