@@ -15,3 +15,10 @@ database:
   # If you don't know what this does, don't touch it :)
   # Default: 4
   thread-limit: 4
+
+# Some built-in logs
+logs:
+  join: true
+  leave: true
+  chat: true
+  command: true

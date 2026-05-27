@@ -15,10 +15,6 @@ import me.devadri.playertracer.util.launchCoroutine
 import me.devadri.playertracer.viewmode.ViewModeManager
 import me.devadri.obsidian.ObsidianPlugin
 import me.devadri.obsidian.lib.libby.Library
-import me.devadri.playertracer.api.logs.ChatLog
-import me.devadri.playertracer.api.logs.CommandLog
-import me.devadri.playertracer.api.logs.JoinServerLog
-import me.devadri.playertracer.api.logs.LeaveServerLog
 import me.devadri.playertracer.api.logs.LogMetadata
 import org.bukkit.plugin.Plugin
 import java.sql.Timestamp
@@ -40,6 +36,7 @@ class PlayerTracerPlugin : ObsidianPlugin(), PlayerTracer {
     override fun onPreLoad() {
         // Enabled while still in development
         debug = true
+
         instance = this
 
         val preLoadTime = System.currentTimeMillis()
@@ -109,13 +106,7 @@ class PlayerTracerPlugin : ObsidianPlugin(), PlayerTracer {
             Config.Database.Driver.POSTGRESQL -> PostgreSQLDatabase()
         }
 
-        this.logsProvider.registerLog(
-            this,
-            JoinServerLog::class.java,
-            LeaveServerLog::class.java,
-            ChatLog::class.java,
-            CommandLog::class.java
-        )
+        BuiltinLogsLoader.init()
 
         ViewModeManager.init()
 

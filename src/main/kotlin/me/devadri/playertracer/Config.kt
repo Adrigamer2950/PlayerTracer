@@ -26,14 +26,14 @@ object Config {
         yaml.reload()
 
         Database.driver = Database.Driver.entries.firstOrNull {
-            it.name == yaml.getString("database.driver").uppercase()
+            it.name == yaml.getString("database.driver", "H2").uppercase()
         } ?: throw IllegalArgumentException("Invalid database driver specified in config.yml: ${yaml.getString("database.driver")}")
 
-        Database.Remote.hostname = yaml.getString("database.remote.hostname")
-        Database.Remote.port = yaml.getString("database.remote.port")
-        Database.Remote.database = yaml.getString("database.remote.database")
-        Database.Remote.username = yaml.getString("database.remote.username")
-        Database.Remote.password = yaml.getString("database.remote.password")
+        Database.Remote.hostname = yaml.getString("database.remote.hostname", "localhost")
+        Database.Remote.port = yaml.getString("database.remote.port", "3306")
+        Database.Remote.database = yaml.getString("database.remote.database", "playertracer")
+        Database.Remote.username = yaml.getString("database.remote.username", "root")
+        Database.Remote.password = yaml.getString("database.remote.password", "")
 
         Database.threadLimit = yaml.getInt("misc.thread-limit", 4)
 
@@ -41,12 +41,16 @@ object Config {
             PlayerTracerPlugin.instance.logger.warn("Thread limit cannot be lower than 1. Reverting to default (4)")
             Database.threadLimit = 4
         }
+
+        Logs.JOIN = yaml.getBoolean("logs.join", true)
+        Logs.LEAVE = yaml.getBoolean("logs.leave", true)
+        Logs.CHAT = yaml.getBoolean("logs.chat", true)
+        Logs.COMMAND = yaml.getBoolean("logs.command", true)
     }
 
     object Database {
 
         lateinit var driver: Driver
-            internal set
 
         enum class Driver {
             H2,
@@ -59,22 +63,27 @@ object Config {
         object Remote {
 
             lateinit var hostname: String
-                internal set
 
             lateinit var port: String
-                internal set
 
             lateinit var database: String
-                internal set
 
             lateinit var username: String
-                internal set
 
             lateinit var password: String
-                internal set
         }
 
         var threadLimit by Delegates.notNull<Int>()
-            internal set
+    }
+
+    object Logs {
+
+        var JOIN by Delegates.notNull<Boolean>()
+
+        var LEAVE by Delegates.notNull<Boolean>()
+
+        var CHAT by Delegates.notNull<Boolean>()
+
+        var COMMAND by Delegates.notNull<Boolean>()
     }
 }
