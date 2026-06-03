@@ -1,6 +1,6 @@
 [versions]
 # Libraries
-kotlin = "2.3.21"
+kotlin = "2.4.0"
 jetbrains-annotations = "26.1.0"
 paper-api = "1.18.2-R0.1-SNAPSHOT"
 obsidian = "3.0.2"
