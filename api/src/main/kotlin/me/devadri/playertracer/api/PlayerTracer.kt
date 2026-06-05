@@ -8,10 +8,14 @@ import java.sql.Timestamp
 import java.util.UUID
 import java.util.concurrent.CompletableFuture
 
+/**
+ * Main interface for API
+ */
 interface PlayerTracer {
 
     /**
      * Registers a log
+     *
      * @throws IllegalArgumentException If the class is not a valid log class or if its id is already registered
      * @param plugin The plugin that owns the log
      * @param classes The log classes to register
@@ -22,6 +26,7 @@ interface PlayerTracer {
 
     /**
      * Registers a log
+     *
      * @throws IllegalArgumentException If the class is not a valid log class or if its id is already registered
      * @param plugin The plugin that owns the log
      * @param classes The log classes to register
@@ -31,6 +36,7 @@ interface PlayerTracer {
 
     /**
      * Registers a log
+     *
      * @throws IllegalArgumentException If the class is not a valid log class or if its id is already registered
      * @param plugin The plugin that owns the log
      * @param classes The log classes to register + their respective JSON parsers
@@ -38,7 +44,9 @@ interface PlayerTracer {
     fun registerLog(plugin: Plugin, vararg classes: Pair<Class<out Log>, Gson>)
 
     /**
-     * Adds a log to the database, triggering the LogAddEvent (async)
+     * Adds a log to the database, triggering the LogAddEvent (async) afterwards
+     *
+     * @param log The log desired to be added to the database
      */
     fun addLog(log: Log)
 

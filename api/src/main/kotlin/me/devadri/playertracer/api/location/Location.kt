@@ -5,6 +5,9 @@ import org.bukkit.persistence.PersistentDataType
 import kotlin.math.floor
 import kotlin.math.pow
 
+/**
+ * Simple class to store logs' location. Including the world's name and XYZ coordinates
+ */
 class Location(val worldName: String, x: Double, y: Double, z: Double) {
 
     val x: Double = truncateDouble(x)
@@ -22,8 +25,11 @@ class Location(val worldName: String, x: Double, y: Double, z: Double) {
             )
         }
 
+        /**
+         * Truncate doubles to only include 2 decimals
+         */
         @JvmStatic
-        private fun truncateDouble(double: Double): Double { // 2 decimals
+        private fun truncateDouble(double: Double): Double {
             val factor = 10.0.pow(2)
             return floor(double * factor) / factor
         }
@@ -45,6 +51,7 @@ class Location(val worldName: String, x: Double, y: Double, z: Double) {
             ): Location {
                 val l = primitive.split(":")
 
+                // XYZ coordinates fallback to 0.0 in case they aren't specified
                 val worldName = l[0]
                 val x = l[1].toDoubleOrNull() ?: 0.0
                 val y = l[2].toDoubleOrNull() ?: 0.0
