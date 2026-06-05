@@ -1,21 +1,24 @@
 package me.devadri.playertracer
 
 import com.google.gson.Gson
+import me.devadri.obsidian.ObsidianPlugin
+import me.devadri.obsidian.lib.libby.Library
 import me.devadri.playertracer.api.PlayerTracer
 import me.devadri.playertracer.api.logs.Log
+import me.devadri.playertracer.api.logs.LogMetadata
 import me.devadri.playertracer.database.LogsDatabase
 import me.devadri.playertracer.database.impl.H2Database
 import me.devadri.playertracer.database.impl.SQLiteDatabase
 import me.devadri.playertracer.database.impl.remote.MariaDBDatabase
 import me.devadri.playertracer.database.impl.remote.MySQLDatabase
 import me.devadri.playertracer.database.impl.remote.PostgreSQLDatabase
-import me.devadri.playertracer.logs.*
+import me.devadri.playertracer.logs.BuiltinLogsLoader
+import me.devadri.playertracer.logs.LogsListener
+import me.devadri.playertracer.logs.LogsManager
+import me.devadri.playertracer.logs.LogsProvider
 import me.devadri.playertracer.query.LogQuery
 import me.devadri.playertracer.util.launchCoroutine
 import me.devadri.playertracer.viewmode.ViewModeManager
-import me.devadri.obsidian.ObsidianPlugin
-import me.devadri.obsidian.lib.libby.Library
-import me.devadri.playertracer.api.logs.LogMetadata
 import org.bukkit.plugin.Plugin
 import java.sql.Timestamp
 import java.util.*
@@ -42,54 +45,38 @@ class PlayerTracerPlugin : ObsidianPlugin(), PlayerTracer {
         val preLoadTime = System.currentTimeMillis()
 
         try {
-            libraryManager.loadLibraries(
-                Library.builder()
-                    .groupId("com.h2database")
-                    .artifactId("h2")
-                    .version(BuildConstants.H2_VERSION)
-                    .build(),
-                Library.builder()
-                    .groupId("org.xerial")
-                    .artifactId("sqlite-jdbc")
-                    .version(BuildConstants.SQLITE_VERSION)
-                    .build(),
-                Library.builder()
-                    .groupId("com.mysql")
-                    .artifactId("mysql-connector-j")
-                    .version(BuildConstants.MYSQL_VERSION)
-                    .build(),
-                Library.builder()
-                    .groupId("org.mariadb.jdbc")
-                    .artifactId("mariadb-java-client")
-                    .version(BuildConstants.MARIADB_VERSION)
-                    .build(),
-                Library.builder()
-                    .groupId("org.postgresql")
-                    .artifactId("postgresql")
-                    .version(BuildConstants.POSTGRESQL_VERSION)
-                    .build(),
-                Library.builder()
-                    .groupId("org.jetbrains.kotlin")
-                    .artifactId("kotlin-reflect")
-                    .version(BuildConstants.KOTLIN_VERSION)
-                    .build(),
-                Library.builder()
-                    .groupId("dev.dejvokep")
-                    .artifactId("boosted-yaml")
-                    .version(BuildConstants.BOOSTED_YAML_VERSION)
-                    .build()
-            )
+            // TODO: Load libraries based on necessity. For example: If the plugin isn't using a MySQL database, there's no need to load that library.
+            // List of all runtime dependencies
+            listOf(
+                "com.h2database:h2:${BuildConstants.H2_VERSION}",
+                "org.xerial:sqlite-jdbc:${BuildConstants.SQLITE_VERSION}",
+                "com.mysql:mysql-connector-j:${BuildConstants.MYSQL_VERSION}",
+                "org.mariadb.jdbc:mariadb-java-client:${BuildConstants.MARIADB_VERSION}",
+                "org.postgresql:postgresql:${BuildConstants.POSTGRESQL_VERSION}",
+                "org.jetbrains.kotlin:kotlin-reflect:${BuildConstants.KOTLIN_VERSION}",
+                "dev.dejvokep:boosted-yaml:${BuildConstants.BOOSTED_YAML_VERSION}",
+                "org.jetbrains.exposed:exposed-core:${BuildConstants.EXPOSED_VERSION}:resolveTransitiveDependencies",
+                "org.jetbrains.exposed:exposed-dao:${BuildConstants.EXPOSED_VERSION}:resolveTransitiveDependencies",
+                "org.jetbrains.exposed:exposed-jdbc:${BuildConstants.EXPOSED_VERSION}:resolveTransitiveDependencies"
+            ).map { l ->
+                val list: List<String> = l.split(":")
 
-            listOf("core", "dao", "jdbc").forEach {
-                libraryManager.loadLibraries(
-                    Library.builder()
-                        .groupId("org.jetbrains.exposed")
-                        .artifactId("exposed-$it")
-                        .version(BuildConstants.EXPOSED_VERSION)
-                        .resolveTransitiveDependencies(true)
-                        .build()
-                )
-            }
+                // Shouldn't happen in any case, but whatever
+                if (list.size < 3) {
+                    logger.error("Library '$l' is using an incorrect format. Disabling plugin...")
+                    server.pluginManager.disablePlugin(this)
+                    return
+                }
+
+                val resolveTransitiveDependencies = list.size == 4 && list[3] == "resolveTransitiveDependencies"
+
+                Library.builder()
+                    .groupId(list[0])
+                    .artifactId(list[1])
+                    .version(list[2])
+                    .resolveTransitiveDependencies(resolveTransitiveDependencies)
+                    .build()
+            }.forEach { libraryManager.loadLibrary(it) }
         } catch (e: Exception) {
             logger.error("&cError loading libraries. Shutting down...", e)
             server.pluginManager.disablePlugin(this)
