@@ -159,7 +159,7 @@ class PlayerTracerPlugin : ObsidianPlugin(), PlayerTracer {
         logsManager.addLog(log)
     }
 
-    override fun getLogs(
+    override fun getLogsFuture(
         uuids: Array<UUID>,
         actions: List<Class<out Log>>,
         after: Timestamp?

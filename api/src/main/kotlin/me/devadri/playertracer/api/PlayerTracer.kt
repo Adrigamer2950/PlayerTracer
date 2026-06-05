@@ -51,7 +51,7 @@ interface PlayerTracer {
      * @param after Optional timestamp to filter logs after a certain time
      * @return A [CompletableFuture] of the list of logs
      */
-    fun getLogs(uuids: Array<UUID>, actions: List<Class<out Log>>, after: Timestamp? = null) : CompletableFuture<List<Log>>
+    fun getLogsFuture(uuids: Array<UUID>, actions: List<Class<out Log>>, after: Timestamp? = null) : CompletableFuture<List<Log>>
 
     /**
      * Retrieves all logs for the given UUIDs and actions using Kotlin's coroutines
