@@ -138,7 +138,7 @@ class PlayerTracerPlugin : ObsidianPlugin(), PlayerTracer {
         uuids: Array<UUID>,
         actions: List<Class<out Log>>,
         after: Timestamp?
-    ): CompletableFuture<List<Log>> = getLogsWithFuture(LogQuery(uuids, actions, after))
+    ): CompletableFuture<List<Log>> = getLogsWithFuture(LogQuery(uuids, actions.toMutableList(), after))
 
     internal fun getLogsWithFuture(query: LogQuery): CompletableFuture<List<Log>> {
         val future = CompletableFuture<List<Log>>()
@@ -164,7 +164,7 @@ class PlayerTracerPlugin : ObsidianPlugin(), PlayerTracer {
         uuids: Array<UUID>,
         actions: List<Class<out Log>>,
         after: Timestamp?
-    ): List<Log> = getLogs(LogQuery(uuids, actions, after))
+    ): List<Log> = getLogs(LogQuery(uuids, actions.toMutableList(), after))
 
     override fun getLogMetadata(logClass: Class<out Log>): LogMetadata =
         this.logsProvider.getData(logClass)

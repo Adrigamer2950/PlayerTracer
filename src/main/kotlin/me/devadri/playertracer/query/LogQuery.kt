@@ -8,7 +8,7 @@ import java.util.UUID
 
 class LogQuery(
     val uuids: Array<UUID>,
-    val actions: List<Class<out Log>>,
+    var actions: MutableList<Class<out Log>>,
     val after: Timestamp? = null,
     val afterS: String? = null
 ) {
@@ -16,6 +16,6 @@ class LogQuery(
     suspend fun getResults(): List<Log> {
         return PlayerTracerPlugin.instance.database.getLogs(*uuids).filter { log ->
             actions.contains(log::class.java) || log is DatabaseFailureLog
-        }.filter { if (after != null) Timestamp(it.timestamp).after(after) else true }
+        }.filter { after == null || Timestamp(it.timestamp).after(after) }
     }
 }

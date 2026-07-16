@@ -49,6 +49,7 @@ class PageSubCommand : AbstractPLCommand("page", "Shows the specified page of th
             if (pageNumber * PAGE_SIZE > logs.size) logs.size else pageNumber * PAGE_SIZE
         )
 
+        // TODO: Add page switch button
         // Display results to the user
         user.sendMessage("&7--------- &bSearch Results &7---------")
         user.sendMessage("&7Page $pageNumber of $totalPages")

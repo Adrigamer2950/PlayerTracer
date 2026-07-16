@@ -5,6 +5,7 @@ import me.devadri.obsidian.logger.Logger
 import me.devadri.playertracer.api.event.LogRegisterEvent
 import me.devadri.playertracer.api.logs.Log
 import me.devadri.playertracer.api.logs.LogMetadata
+import me.devadri.playertracer.api.logs.filter.LogQueryFilter
 import org.bukkit.Bukkit
 import org.bukkit.plugin.Plugin
 import kotlin.reflect.full.findAnnotation
@@ -77,6 +78,13 @@ class LogsProvider(private val logger: Logger) {
             ?: error("${`class`.simpleName} is not annotated with @LogMetadata")
 
     fun getLogClassById(id: String): Class<out Log>? = logs.firstOrNull { getId(it.clazz) == id }?.clazz
+    
+    fun getLogQueryFilterInstance(`class`: Class<out Log>): LogQueryFilter {
+        val data = getData(`class`)
+        val queryFilterClass = data.queryFilter
+        
+        return queryFilterClass.java.getDeclaredConstructor().newInstance()
+    }
 }
 
 class LogClassInfo(val clazz: Class<out Log>, val gson: Gson, val plugin: Plugin)

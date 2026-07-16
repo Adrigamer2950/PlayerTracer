@@ -1,5 +1,9 @@
 package me.devadri.playertracer.api.logs
 
+import me.devadri.playertracer.api.logs.filter.DefaultLogQueryFilter
+import me.devadri.playertracer.api.logs.filter.LogQueryFilter
+import kotlin.reflect.KClass
+
 /**
  * Annotation to store basic metadata for [Log] implementations.
  *
@@ -11,5 +15,6 @@ package me.devadri.playertracer.api.logs
 annotation class LogMetadata(
     val id: String,
     val description: String,
-    val displayName: String = ""
+    val displayName: String = "",
+    val queryFilter: KClass<out LogQueryFilter> = DefaultLogQueryFilter::class
 )

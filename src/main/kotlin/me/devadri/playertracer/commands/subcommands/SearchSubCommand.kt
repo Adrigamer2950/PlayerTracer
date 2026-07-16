@@ -12,6 +12,7 @@ import me.devadri.playertracer.viewmode.ViewMode
 import me.devadri.playertracer.viewmode.ViewModeManager
 import me.devadri.obsidian.asPlayer
 import me.devadri.obsidian.isConsole
+import me.devadri.obsidian.isPlayer
 import me.devadri.playertracer.database.DatabaseFailureLog
 import me.devadri.playertracer.util.miniMessage
 import org.bukkit.Bukkit
@@ -45,6 +46,13 @@ class SearchSubCommand(val parent: MainCommand) : AbstractPLCommand("search", "S
         if (searching.contains(searcherUUID)) {
             user.sendMessage("&cYou are already searching logs. Please wait for the previous search to finish")
             return
+        }
+
+        if (user.isPlayer()) {
+            // Remove all logs that aren't allowed to be queried by this player
+            query.actions.removeAll {
+                !plugin.logsProvider.getLogQueryFilterInstance(it).isAllowedToQuery(user.asPlayer()!!)
+            }
         }
 
         user.sendMessage(
