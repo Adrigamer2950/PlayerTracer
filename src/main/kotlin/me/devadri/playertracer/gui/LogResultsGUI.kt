@@ -108,7 +108,7 @@ class LogResultsGUI(results: List<Log>) : PaginatedMenu<Log>(
             val user = (e.whoClicked as? Player)?.toUser() ?: return@MenuButton
 
             plugin.commandManager.getCommandOrNull("playertracer")?.subCommands?.firstOrNull {
-                it.info.name == "tp"
+                it.metadata.name == "tp"
             }?.execute(
                 user,
                 arrayOf(location.worldName, "${location.x}", "${location.y}", "${location.z}"),

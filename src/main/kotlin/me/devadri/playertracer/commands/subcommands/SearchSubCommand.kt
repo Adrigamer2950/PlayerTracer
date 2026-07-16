@@ -88,7 +88,7 @@ class SearchSubCommand(val parent: MainCommand) : AbstractPLCommand("search", "S
                     )
 
                     // Execute '/playertracer page 1'
-                    parent.subCommands.firstOrNull { it.info.name == "page" }?.execute(user, arrayOf("1"), commandName) ?: run {
+                    parent.subCommands.firstOrNull { it.metadata.name == "page" }?.execute(user, arrayOf("1"), commandName) ?: run {
                         user.sendMessage("&cThere was an error trying to paginate the results. Pagination command not found")
                     }
                 }

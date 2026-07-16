@@ -45,7 +45,7 @@ allprojects {
         maven("https://repo.papermc.io/repository/maven-public/") {
             name = "papermc-repo"
         }
-        maven("https://repo.devadri.es/repository/releases") {
+        maven("https://repo.devadri.es/repository/dev") {
             name = "devadri"
         }
     }

@@ -42,8 +42,6 @@ class PlayerTracerPlugin : ObsidianPlugin(), PlayerTracer {
 
         instance = this
 
-        val preLoadTime = System.currentTimeMillis()
-
         try {
             // TODO: Load libraries based on necessity. For example: If the plugin isn't using a MySQL database, there's no need to load that library.
             // List of all runtime dependencies
@@ -96,13 +94,9 @@ class PlayerTracerPlugin : ObsidianPlugin(), PlayerTracer {
         BuiltinLogsLoader.init()
 
         ViewModeManager.init()
-
-        logger.info("&6Loaded in ${System.currentTimeMillis() - preLoadTime}ms")
     }
 
     override fun onPostLoad() {
-        val postLoadTime = System.currentTimeMillis()
-
         registerListener(LogsListener(this))
 
         listOf(
@@ -115,14 +109,10 @@ class PlayerTracerPlugin : ObsidianPlugin(), PlayerTracer {
         ).forEach {
             logger.warn(it)
         }
-
-        logger.info("&aEnabled in ${System.currentTimeMillis() - postLoadTime}ms")
     }
 
     override fun onUnload() {
         ViewModeManager.save()
-
-        logger.info("&cDisabled")
     }
 
     override fun registerLog(
