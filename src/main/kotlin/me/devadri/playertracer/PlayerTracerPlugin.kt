@@ -24,7 +24,6 @@ import java.sql.Timestamp
 import java.util.*
 import java.util.concurrent.CompletableFuture
 
-// TODO: messages.yml
 class PlayerTracerPlugin : ObsidianPlugin(), PlayerTracer {
 
     companion object {
@@ -43,7 +42,6 @@ class PlayerTracerPlugin : ObsidianPlugin(), PlayerTracer {
         instance = this
 
         try {
-            // TODO: Load libraries based on necessity. For example: If the plugin isn't using a MySQL database, there's no need to load that library.
             // List of all runtime dependencies
             listOf(
                 "com.h2database:h2:${BuildConstants.H2_VERSION}",

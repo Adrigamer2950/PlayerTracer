@@ -21,13 +21,11 @@ to a more detailed list of actions a player is doing, and has done.
 
 > ❗ This plugin has active support for Minecraft 1.17+. So, if you are using a lower version, you will not receive **any** support
 
-# Features (not all are implemented yet, check below for the TODO list)
+# Features (check TODO.md for not implemented features)
 - Store logs in a database (MySQL/MariaDB, SQLite, H2)
 - Search logs by player name, action and date
 - View logs in chat
 - View logs in a nice GUI
-- (Not implemented yet) API to let plugin developers register their own logs
-- (Not implemented yet) Purge system (manually and automatically)
 
 # "Why should I use this plugin?"
 This plugin is useful for server administrators / moderators who want to keep track of anything that a player does.
@@ -50,9 +48,3 @@ to verify that information or just to collect evidence against them.
 - `playertracer.search` - Grants access to the `/playertracer search` command
 - `playertracer.teleport` - Grants access to the `/playertracer tp` command
 - There's still some permissions yet to be implemented
-
-# TODOs
-- [x] Store logs in a database (MySQL/MariaDB, SQLite, H2)
-- [x] In-Game Log viewer (GUI & Command)
-- [ ] API
-- [ ] Purge system (automatically and manually)
