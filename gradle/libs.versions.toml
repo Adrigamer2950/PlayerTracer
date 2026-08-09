@@ -13,7 +13,7 @@ shadow = "9.5.1"
 plugin-yml = "0.6.0"
 minotaur = "2.+"
 hangar-publish-plugin = "0.1.4"
-run-server = "3.0.2"
+run-server = "3.1.0"
 
 # Database drivers
 h2 = "2.4.240"
